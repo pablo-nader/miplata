@@ -19,6 +19,7 @@ import { movementRoutes } from "./movements/http/movement-routes";
 import { peopleRoutes } from "./people/http/people-routes";
 import type { RecurringRepository } from "./recurring/application/recurring-repository";
 import { recurringRoutes } from "./recurring/http/recurring-routes";
+import { recurringCommitmentsFrom } from "./reports/application/recurring-commitments";
 import type { ReportRepository } from "./reports/application/report-repository";
 import type { RecurringCommitments } from "./reports/application/report-use-cases";
 import { reportRoutes } from "./reports/http/report-routes";
@@ -76,7 +77,13 @@ export function createApp({
         categories,
       }),
     )
-    .route("/reports", reportRoutes(resolveSession, { reports, recurring: recurringCommitments }))
+    .route(
+      "/reports",
+      reportRoutes(resolveSession, {
+        reports,
+        recurring: recurringCommitments ?? recurringCommitmentsFrom(recurring),
+      }),
+    )
     .route(
       "/statements",
       statementRoutes(resolveSession, {

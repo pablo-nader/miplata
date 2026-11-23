@@ -62,3 +62,4 @@ What becomes easier, harder, or constrained.
 | [0033](0033-statements-api.md) | Statements API | Accepted |
 | [0034](0034-recurring-movements-api.md) | Recurring movements API | Accepted |
 | [0035](0035-no-ui-previews.md) | No UI previews: every pull request merges on green CI | Accepted |
+| [0036](0036-committed-report-includes-recurring.md) | Committed report includes recurring movements | Accepted |

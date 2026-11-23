@@ -29,7 +29,7 @@ function call(cookie: string | undefined, method: string, path: string, body?: u
 }
 
 async function ok(response: Response, status = 200): Promise<Json> {
-  const body = (await response.json()) as Json;
+  const body = response.status === 204 ? {} : ((await response.json()) as Json);
   expect(response.status, JSON.stringify(body)).toBe(status);
   return body;
 }
@@ -86,6 +86,23 @@ function expense(user: User, changes: Json = {}) {
     amountMinor: 1_000_00,
     ...changes,
   };
+}
+
+async function defineRecurring(user: User, changes: Json = {}) {
+  const body = {
+    type: "expense",
+    frequency: "monthly",
+    dayOfMonth: 5,
+    amountMode: "fixed",
+    amountMinor: 200_00,
+    currency: "ARS",
+    accountId: user.cash,
+    categoryId: user.food,
+    description: "Rent",
+    startsOn: "2026-10-01",
+    ...changes,
+  };
+  return ok(await call(user.cookie, "POST", "/recurring", body), 201);
 }
 
 const get = (user: User, path: string) => call(user.cookie, "GET", `/reports${path}`);
@@ -483,5 +500,80 @@ describe("amounts that never count", () => {
         percentChange: 50,
       },
     ]);
+  });
+});
+
+describe("committed recurring movements", () => {
+  it("adds future recurring amounts to the installments of each month", async () => {
+    // Arrange
+    const user = await newUser();
+    await defineRecurring(user);
+    await record(
+      user,
+      expense(user, {
+        accountId: user.visa,
+        occurredOn: "2026-11-25",
+        amountMinor: 900_00,
+        installments: 3,
+      }),
+    );
+
+    // Act
+    const report = await ok(await get(user, "/committed?from=2026-12&months=3"));
+
+    // Assert
+    expect(report.months).toEqual([
+      { month: "2026-12", installmentsMinor: 300_00, recurringMinor: 200_00, totalMinor: 500_00 },
+      { month: "2027-01", installmentsMinor: 300_00, recurringMinor: 200_00, totalMinor: 500_00 },
+      { month: "2027-02", installmentsMinor: 300_00, recurringMinor: 200_00, totalMinor: 500_00 },
+    ]);
+  });
+
+  it("leaves out skipped occurrences, paused and income templates and respects currency and account", async () => {
+    // Arrange
+    harness.clock.today = "2026-12-04";
+    const user = await newUser();
+    const skipped = await defineRecurring(user, { description: "Skipped", amountMinor: 200_00 });
+    const occurrences = await ok(
+      await call(user.cookie, "GET", "/recurring/occurrences?type=expense"),
+    );
+    const december = occurrences.items.find(
+      (item: Json) => item.recurringId === skipped.id && item.dueOn === "2026-12-05",
+    );
+    await ok(await call(user.cookie, "POST", `/recurring/occurrences/${december.id}/skip`), 204);
+    await defineRecurring(user, { amountMinor: 50_00 });
+    await defineRecurring(user, { accountId: user.bank, amountMinor: 33_00 });
+    await defineRecurring(user, { amountMinor: 70_00, currency: "USD" });
+    const paused = await defineRecurring(user, { amountMinor: 11_00 });
+    await ok(await call(user.cookie, "POST", `/recurring/${paused.id}/pause`));
+    await defineRecurring(user, { type: "income", categoryId: user.salary, amountMinor: 999_00 });
+
+    // Act
+    const all = await ok(await get(user, "/committed?from=2026-12&months=2"));
+    const byAccount = await ok(
+      await get(user, `/committed?from=2026-12&months=1&accountId=${user.bank}`),
+    );
+    const dollars = await ok(await get(user, "/committed?from=2026-12&months=1&currency=USD"));
+
+    // Assert
+    expect(all.months.map((month: Json) => month.recurringMinor)).toEqual([
+      50_00 + 33_00,
+      200_00 + 50_00 + 33_00,
+    ]);
+    expect(byAccount.months[0].recurringMinor).toBe(33_00);
+    expect(dollars.months[0].recurringMinor).toBe(70_00);
+  });
+
+  it("never includes another user's recurring movements", async () => {
+    // Arrange
+    const owner = await newUser();
+    const stranger = await newUser();
+    await defineRecurring(owner);
+
+    // Act
+    const report = await ok(await get(stranger, "/committed?from=2026-12&months=2"));
+
+    // Assert
+    expect(report.months.every((month: Json) => month.recurringMinor === 0)).toBe(true);
   });
 });

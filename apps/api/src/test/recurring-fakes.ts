@@ -19,6 +19,7 @@ export const unusedRecurring: RecurringRepository = {
   pendingOccurrences: unused,
   findOccurrence: unused,
   skip: unused,
+  committedSchedule: unused,
 };
 
 type StoredRecurring = { userId: string; recurring: Recurring };
@@ -156,6 +157,31 @@ export function inMemoryRecurring() {
       return row && template
         ? { occurrence: occurrenceOf(row, template), status: row.status }
         : null;
+    },
+    async committedSchedule(userId, filter) {
+      const items = templates
+        .filter(
+          (item) =>
+            item.userId === userId &&
+            item.recurring.type === "expense" &&
+            item.recurring.currency === filter.currency &&
+            !item.recurring.isPaused &&
+            item.recurring.startsOn <= filter.to &&
+            (item.recurring.endsOn === null || item.recurring.endsOn >= filter.from) &&
+            (!filter.accountId || item.recurring.accountId === filter.accountId) &&
+            (!filter.categoryId || item.recurring.categoryId === filter.categoryId),
+        )
+        .map((item) => ({ recurring: item.recurring, estimateMinor: item.recurring.amountMinor }));
+      const resolved = occurrences
+        .filter(
+          (row) =>
+            row.userId === userId &&
+            row.status !== "pending" &&
+            row.dueOn >= filter.from &&
+            row.dueOn <= filter.to,
+        )
+        .map((row) => ({ recurringId: row.recurringId, dueOn: row.dueOn }));
+      return { items, resolved };
     },
     async skip(userId, occurrenceId) {
       const row = occurrences.find((item) => item.userId === userId && item.id === occurrenceId);
