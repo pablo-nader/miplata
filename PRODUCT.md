@@ -33,7 +33,7 @@ A private, personal finance log for a small circle of people: no ads, no bank li
 
 ## Brand Commitments
 - Name: miPlata. Logo: an "mP" monogram.
-- Visual direction: Buenos Aires subway signage (see docs/business/BD-0007). Palette pending.
+- Visual direction: Buenos Aires subway signage (see docs/business/BD-0007). Palette: Grafito, with light and dark themes (see docs/business/BD-0008).
 
 ## Evidence on Hand
 No real user data, testimonials or assets exist. Do not fabricate any.
