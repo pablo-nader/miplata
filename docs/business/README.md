@@ -42,3 +42,4 @@ Impact on users, cost, and technical design.
 | [BD-0013](BD-0013-currencies-and-exchange.md) | Currencies and exchange | Accepted |
 | [BD-0014](BD-0014-credit-card-statements-and-installments.md) | Credit card statements and installments | Accepted |
 | [BD-0015](BD-0015-statement-payment-charges-and-reconciliation.md) | Statement payment, charges and reconciliation | Accepted |
+| [BD-0016](BD-0016-recurring-movements.md) | Recurring movements | Accepted |
