@@ -1,6 +1,8 @@
 .placeholder-screen__header {
   padding: 18px var(--space-4) var(--space-2);
   padding-top: calc(18px + env(safe-area-inset-top, 0px));
+  padding-left: max(var(--space-4), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--space-4), env(safe-area-inset-right, 0px));
 }
 
 .placeholder-screen__title {
