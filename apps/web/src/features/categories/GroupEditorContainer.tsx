@@ -2,6 +2,7 @@ import { type CategoryGroupDto, NAME_MAX_LENGTH, normalizeName } from "@miplata/
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
+import { useOnline } from "../../shared/use-online";
 import { Button } from "../../ui/atoms/Button";
 import { EmptyState } from "../../ui/molecules/EmptyState";
 import { PlaceholderScreen } from "../placeholder/PlaceholderScreen";
@@ -17,6 +18,7 @@ function GroupEditorForm({ group }: FormProps) {
   const { t } = useTranslation();
   const label = useLabel();
   const navigate = useNavigate();
+  const online = useOnline();
   const initialName = group ? label(group) : "";
   const [name, setName] = useState(initialName);
   const [nameError, setNameError] = useState<string | undefined>(undefined);
@@ -74,6 +76,7 @@ function GroupEditorForm({ group }: FormProps) {
         busy,
         onSubmit: () => void submit(),
       }}
+      offlineMessage={online ? null : t("offline.saveDisabled")}
       errorMessage={failure ? failureMessage(failure, t) : null}
       remove={
         group

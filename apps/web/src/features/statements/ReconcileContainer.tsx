@@ -2,6 +2,7 @@ import type { Currency } from "@miplata/shared";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useOnline } from "../../shared/use-online";
 import { Button } from "../../ui/atoms/Button";
 import { formatMoney, localeForLanguage } from "../../ui/format/money";
 import { EmptyState } from "../../ui/molecules/EmptyState";
@@ -14,6 +15,7 @@ import { useStatementData } from "./useStatementData";
 
 export function ReconcileContainer() {
   const { t, i18n } = useTranslation();
+  const online = useOnline();
   const locale = localeForLanguage(i18n.language);
   const navigate = useNavigate();
   const { accountId = "" } = useParams();
@@ -132,6 +134,7 @@ export function ReconcileContainer() {
         }),
         fields: [field(currency, "total"), field(currency, "minimum")],
       }))}
+      offlineMessage={online ? null : t("offline.saveDisabled")}
       failure={failure}
       submit={{
         label: busy ? t("statements.reconcile.saving") : t("statements.reconcile.save"),

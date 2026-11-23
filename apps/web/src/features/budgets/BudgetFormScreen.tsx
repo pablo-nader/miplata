@@ -9,6 +9,7 @@ import {
 } from "../../ui/molecules/CategoryPicker";
 import { ConfirmPanel } from "../../ui/molecules/ConfirmPanel";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { SegmentedControl, type SegmentOption } from "../../ui/molecules/SegmentedControl";
 import type { NavAction } from "../../ui/organisms/nav";
@@ -56,6 +57,7 @@ export type BudgetFormScreenProps = {
     error?: string | undefined;
   };
   submit: { label: string; onSubmit: () => void; busy: boolean };
+  offlineMessage: string | null;
   errorMessage?: string | undefined;
   manage?:
     | {
@@ -90,6 +92,7 @@ export function BudgetFormScreen({
   currency,
   limit,
   submit,
+  offlineMessage,
   errorMessage,
   manage,
 }: BudgetFormScreenProps) {
@@ -147,8 +150,9 @@ export function BudgetFormScreen({
             {errorMessage}
           </p>
         ) : null}
+        {offlineMessage !== null ? <OfflineNote message={offlineMessage} /> : null}
         <div className="budget-form__submit">
-          <Button type="submit" disabled={submit.busy}>
+          <Button type="submit" disabled={submit.busy || offlineMessage !== null}>
             {submit.label}
           </Button>
         </div>

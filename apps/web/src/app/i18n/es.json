@@ -9,6 +9,7 @@
     "accounts": "Cuentas",
     "reports": "Reportes",
     "backHome": "Volver al inicio",
+    "backMenu": "Volver al menú",
     "newMovement": "Nuevo movimiento",
     "menu": "Menú"
   },
@@ -1006,5 +1007,20 @@
       "deleteFailed": "No pudimos eliminar el presupuesto."
     },
     "nearLimitTitle": "Presupuestos cerca del tope"
+  },
+  "offline": {
+    "banner": "Estás sin conexión. No se pueden cargar ni guardar datos hasta que vuelva la conexión.",
+    "saveDisabled": "Estás sin conexión: guardar no está disponible hasta que vuelva la conexión."
+  },
+  "install": {
+    "row": "Instalar la app",
+    "action": "Instalar app",
+    "dismiss": "Ahora no",
+    "installed": "La app ya está instalada.",
+    "hint": {
+      "title": "Instalá miPlata en tu pantalla de inicio",
+      "ios": "Tocá Compartir y después «Agregar a pantalla de inicio».",
+      "browser": "Abrí el menú del navegador y elegí «Instalar app»."
+    }
   }
 }

@@ -58,7 +58,13 @@ describe("Sidebar", () => {
   it("shows the brand, the main action first and the sections", () => {
     // Arrange
     renderInRouter(
-      <Sidebar label="Main navigation" brandName="miPlata" items={items} action={action} />,
+      <Sidebar
+        label="Main navigation"
+        brandName="miPlata"
+        items={items}
+        action={action}
+        menu={{ to: "/menu", label: "Menu" }}
+      />,
       "/accounts",
     );
 
@@ -67,7 +73,7 @@ describe("Sidebar", () => {
 
     // Assert
     expect(screen.getByText("miPlata")).toBeDefined();
-    expect(links).toEqual(["New movement", "Home", "Movements", "Accounts", "Reports"]);
+    expect(links).toEqual(["New movement", "Home", "Movements", "Accounts", "Reports", "Menu"]);
     expect(screen.getByRole("link", { current: "page" }).textContent).toBe("Accounts");
   });
 });

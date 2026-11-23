@@ -58,7 +58,7 @@ for (const [device, viewport] of Object.entries(viewports)) {
 
         // Assert
         await expect(navigation).toHaveCount(1);
-        await expect(navigation.getByRole("link")).toHaveCount(5);
+        await expect(navigation.getByRole("link")).toHaveCount(device === "phone" ? 5 : 6);
         await expect(navigation.getByRole("link", { name: "Nuevo movimiento" })).toBeVisible();
         if (device === "phone") {
           expect(box?.y ?? 0).toBeGreaterThan(viewport.height / 2);
@@ -87,7 +87,7 @@ for (const [device, viewport] of Object.entries(viewports)) {
         await page.goto("/home");
 
         // Act
-        await page.getByRole("link", { name: "Menú" }).click();
+        await page.locator(".signage-band").getByRole("link", { name: "Menú" }).click();
 
         // Assert
         await expect(page).toHaveURL(/\/menu$/);

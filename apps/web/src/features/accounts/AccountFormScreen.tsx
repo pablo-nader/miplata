@@ -4,6 +4,7 @@ import { FilterChip } from "../../ui/atoms/Chip";
 import { SectionLabel } from "../../ui/atoms/SectionLabel";
 import { Switch } from "../../ui/atoms/Switch";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
 import "./account-form.css";
@@ -56,6 +57,7 @@ export type AccountFormScreenProps = {
   personHint?: string | undefined;
   cardDays?: { closing: TextFieldData; due: TextFieldData } | undefined;
   submit: { label: string; onSubmit: () => void; busy: boolean };
+  offlineMessage: string | null;
   errorMessage?: string | undefined;
   manage?: ManageData | undefined;
 };
@@ -184,8 +186,9 @@ export function AccountFormScreen(props: AccountFormScreenProps) {
             {props.errorMessage}
           </p>
         ) : null}
+        {props.offlineMessage !== null ? <OfflineNote message={props.offlineMessage} /> : null}
         <div className="account-form__submit">
-          <Button type="submit" disabled={submit.busy}>
+          <Button type="submit" disabled={submit.busy || props.offlineMessage !== null}>
             {submit.label}
           </Button>
         </div>

@@ -3,6 +3,7 @@ import { Wallet } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useOnline } from "../../shared/use-online";
 import { useResource } from "../../shared/use-resource";
 import { Button } from "../../ui/atoms/Button";
 import { EmptyState } from "../../ui/molecules/EmptyState";
@@ -94,6 +95,7 @@ function AccountForm({ institutions, account }: AccountFormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [params] = useSearchParams();
+  const online = useOnline();
   const original = account ? { account, displayName: displayName(account, t) } : null;
   const [form, setForm] = useState<FormState>(() =>
     account
@@ -290,6 +292,7 @@ function AccountForm({ institutions, account }: AccountFormProps) {
         busy,
         onSubmit: () => void submit(),
       }}
+      offlineMessage={online ? null : t("offline.saveDisabled")}
       errorMessage={failure ?? undefined}
       manage={
         account

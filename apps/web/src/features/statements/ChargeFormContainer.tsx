@@ -7,6 +7,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useOnline } from "../../shared/use-online";
 import { Button } from "../../ui/atoms/Button";
 import { EmptyState } from "../../ui/molecules/EmptyState";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
@@ -26,6 +27,7 @@ const KNOWN_FAILURES = new Set([
 
 export function ChargeFormContainer() {
   const { t } = useTranslation();
+  const online = useOnline();
   const navigate = useNavigate();
   const { accountId = "", movementId } = useParams();
   const [search] = useSearchParams();
@@ -189,6 +191,7 @@ export function ChargeFormContainer() {
         onChange: (value) => change({ date: value }),
       }}
       hint={t("statements.charge.hint")}
+      offlineMessage={online ? null : t("offline.saveDisabled")}
       failure={failure}
       submit={{
         label: busy

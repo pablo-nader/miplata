@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
 import { Button } from "../../ui/atoms/Button";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
 import "./statement-form.css";
@@ -20,6 +21,7 @@ export type ReconcileScreenProps = {
   groups: { key: string; calculated: string; fields: ReconcileField[] }[];
   failure: string | null;
   submit: { label: string; busy: boolean; onSubmit: () => void };
+  offlineMessage: string | null;
 };
 
 export function ReconcileScreen(props: ReconcileScreenProps) {
@@ -52,8 +54,9 @@ export function ReconcileScreen(props: ReconcileScreenProps) {
             {props.failure}
           </p>
         ) : null}
+        {props.offlineMessage !== null ? <OfflineNote message={props.offlineMessage} /> : null}
         <div className="statement-form__submit">
-          <Button type="submit" disabled={props.submit.busy}>
+          <Button type="submit" disabled={props.submit.busy || props.offlineMessage !== null}>
             {props.submit.label}
           </Button>
         </div>

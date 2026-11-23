@@ -1,6 +1,8 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Menu } from "lucide-react";
 import { type KeyboardEvent, type ReactNode, useId } from "react";
+import { Link } from "react-router-dom";
 import { SegmentedControl, type SegmentOption } from "../../ui/molecules/SegmentedControl";
+import type { NavAction } from "../../ui/organisms/nav";
 import "./reports.css";
 
 export type ReportTab = { id: string; label: string };
@@ -12,6 +14,7 @@ export type SelectGroup = { label: string; options: SelectOption[] };
 type ReportsScreenProps = {
   title: string;
   subtitle: string;
+  menu: NavAction;
   tabsLabel: string;
   tabs: readonly ReportTab[];
   activeTab: string;
@@ -71,6 +74,7 @@ function onTabKey(
 export function ReportsScreen({
   title,
   subtitle,
+  menu,
   tabsLabel,
   tabs,
   activeTab,
@@ -88,6 +92,9 @@ export function ReportsScreen({
       <header className="reports-header">
         <h1 className="reports-header__title">{title}</h1>
         <span className="reports-header__subtitle">{subtitle}</span>
+        <Link className="reports-header__menu" to={menu.to} aria-label={menu.label}>
+          <Menu aria-hidden="true" />
+        </Link>
       </header>
       <div className="reports-tabs" role="tablist" aria-label={tabsLabel}>
         {tabs.map((tab) => (

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "../../ui/atoms/Button";
 import { ConfirmPanel } from "../../ui/molecules/ConfirmPanel";
 import { Field } from "../../ui/molecules/Field";
+import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import type { NavAction } from "../../ui/organisms/nav";
 import "../placeholder/placeholder-screen.css";
 import "./category-editor-screen.css";
@@ -20,6 +21,7 @@ type GroupEditorScreenProps = {
     onChange: (value: string) => void;
   };
   save: { label: string; busy: boolean; onSubmit: () => void };
+  offlineMessage: string | null;
   errorMessage: string | null;
   remove: { label: string; onClick: () => void } | null;
   confirm: ConfirmView | null;
@@ -30,6 +32,7 @@ export function GroupEditorScreen({
   back,
   name,
   save,
+  offlineMessage,
   errorMessage,
   remove,
   confirm,
@@ -67,8 +70,9 @@ export function GroupEditorScreen({
               {errorMessage}
             </p>
           ) : null}
+          {offlineMessage !== null ? <OfflineNote message={offlineMessage} /> : null}
           <div className="category-editor__actions">
-            <Button type="submit" disabled={save.busy}>
+            <Button type="submit" disabled={save.busy || offlineMessage !== null}>
               {save.label}
             </Button>
           </div>

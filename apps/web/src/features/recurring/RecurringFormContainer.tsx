@@ -3,6 +3,7 @@ import { RECURRING_FREQUENCIES } from "@miplata/shared";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
+import { useOnline } from "../../shared/use-online";
 import { useResource } from "../../shared/use-resource";
 import { Button } from "../../ui/atoms/Button";
 import { EmptyState } from "../../ui/molecules/EmptyState";
@@ -42,6 +43,7 @@ const KNOWN_FAILURES = new Set([
 export function RecurringFormContainer() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const online = useOnline();
   const { recurringId } = useParams();
   const isEdit = recurringId !== undefined;
   const lookups = useLookups();
@@ -172,6 +174,7 @@ export function RecurringFormContainer() {
         />
       }
       categoryError={errors.category ? t("recurring.form.errors.category") : undefined}
+      offlineMessage={online ? null : t("offline.saveDisabled")}
       failure={failure}
       busy={busy}
       onSubmit={submit}

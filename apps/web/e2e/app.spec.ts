@@ -27,7 +27,7 @@ test.describe("language", () => {
 
     // Assert
     await expect(heading).toHaveText("miPlata");
-    await expect(page.getByRole("link", { name: "Menú" })).toBeVisible();
+    await expect(page.locator(".signage-band").getByRole("link", { name: "Menú" })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("lang", "es");
   });
 });
@@ -41,7 +41,7 @@ test.describe("language in English", () => {
     await page.goto("/home");
 
     // Act
-    const menu = page.getByRole("link", { name: "Menu" });
+    const menu = page.locator(".signage-band").getByRole("link", { name: "Menu" });
 
     // Assert
     await expect(menu).toBeVisible();

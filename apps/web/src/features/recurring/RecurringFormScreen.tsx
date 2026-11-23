@@ -2,6 +2,7 @@ import { DESCRIPTION_MAX_LENGTH } from "@miplata/shared";
 import type { FormEvent, ReactNode } from "react";
 import { Button } from "../../ui/atoms/Button";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { SegmentedControl } from "../../ui/molecules/SegmentedControl";
 import { SelectField, type SelectOption } from "../../ui/molecules/SelectField";
@@ -42,6 +43,7 @@ type RecurringFormScreenProps = {
   categoryError: string | undefined;
   failure: string | null;
   busy: boolean;
+  offlineMessage: string | null;
   onSubmit: () => void;
 };
 
@@ -58,6 +60,7 @@ export function RecurringFormScreen({
   categoryError,
   failure,
   busy,
+  offlineMessage,
   onSubmit,
 }: RecurringFormScreenProps) {
   function handleSubmit(event: FormEvent) {
@@ -172,8 +175,9 @@ export function RecurringFormScreen({
             {failure}
           </p>
         ) : null}
+        {offlineMessage !== null ? <OfflineNote message={offlineMessage} /> : null}
         <div className="movement-form__submit">
-          <Button type="submit" disabled={busy}>
+          <Button type="submit" disabled={busy || offlineMessage !== null}>
             {busy ? copy.saving : copy.submit}
           </Button>
         </div>

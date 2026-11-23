@@ -321,6 +321,29 @@ describe("a movement that belongs to a statement", () => {
   });
 });
 
+describe("when the browser is offline", () => {
+  it("disables saving and explains why next to the button", async () => {
+    // Arrange
+    stubApi({ ...lookupHandlers });
+    vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+
+    // Act
+    const save = await openNew();
+
+    // Assert
+    expect((save as HTMLButtonElement).disabled).toBe(true);
+    expect(
+      screen.getByText(
+        "Estás sin conexión: guardar no está disponible hasta que vuelva la conexión.",
+      ),
+    ).toBeDefined();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+});
+
 describe("editing and deleting", () => {
   const existing = makeMovement({
     description: "Coto",

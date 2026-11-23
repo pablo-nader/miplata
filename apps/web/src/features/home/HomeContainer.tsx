@@ -8,6 +8,7 @@ import { fetchBalance } from "../accounts/accounts-api";
 import { toBudgetRow } from "../budgets/budget-rows";
 import { fetchBudgets } from "../budgets/budgets-api";
 import { allCategories, useLabel } from "../categories/catalog";
+import { InstallHintContainer } from "../install/InstallHintContainer";
 import { fetchMonthSummary, fetchMovements } from "../movements/movements-api";
 import { localDate, monthOfDate } from "../movements/present-movement";
 import { useLookups } from "../movements/useLookups";
@@ -123,6 +124,7 @@ export function HomeContainer() {
     <HomeScreen
       brandName={t("app.name")}
       menu={{ to: "/menu", label: t("nav.menu") }}
+      installHint={<InstallHintContainer />}
       emptyTitle={t("screens.home.title")}
       emptyDescription={t("screens.home.description")}
       {...(totals

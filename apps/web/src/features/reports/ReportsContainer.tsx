@@ -74,6 +74,7 @@ export function ReportsContainer() {
   return (
     <ReportsScreen
       title={t("screens.reports.title")}
+      menu={{ to: "/menu", label: t("nav.menu") }}
       subtitle={`${formatMonthLabel(shownMonth, locale)} · ${currency}`}
       tabsLabel={t("reports.tabsLabel")}
       tabs={TABS.map((id) => ({ id, label: t(`reports.${id}.tab`) }))}

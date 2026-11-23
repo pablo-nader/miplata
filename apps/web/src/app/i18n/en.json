@@ -9,6 +9,7 @@
     "accounts": "Accounts",
     "reports": "Reports",
     "backHome": "Back to home",
+    "backMenu": "Back to menu",
     "newMovement": "New movement",
     "menu": "Menu"
   },
@@ -839,7 +840,7 @@
     "sections": {
       "due": "Overdue and today",
       "upcoming": "Upcoming",
-      "receivable": "To receive"
+      "receivable": "To collect"
     },
     "due": {
       "today": "Today",
@@ -1004,5 +1005,20 @@
       "deleteFailed": "We could not delete the budget."
     },
     "nearLimitTitle": "Budgets close to the limit"
+  },
+  "offline": {
+    "banner": "You're offline. Data can't load or save until the connection comes back.",
+    "saveDisabled": "You're offline: saving is unavailable until the connection comes back."
+  },
+  "install": {
+    "row": "Install the app",
+    "action": "Install app",
+    "dismiss": "Not now",
+    "installed": "The app is already installed.",
+    "hint": {
+      "title": "Install miPlata on your home screen",
+      "ios": "Tap Share, then “Add to Home Screen”.",
+      "browser": "Open the browser menu and choose “Install app”."
+    }
   }
 }
