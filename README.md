@@ -1,6 +1,6 @@
-# Gastos
+# miPlata
 
-Personal expense management app for a small circle of users (owner, family and friends). Each user signs in with their own Google account and owns their data.
+Personal expense and income tracking app for a small circle of users (owner, family and friends). Each user signs in with their own Google account and owns their data.
 
 ## Stack
 

@@ -32,3 +32,5 @@ Impact on users, cost, and technical design.
 | [BD-0003](BD-0003-google-sign-in.md) | Sign in with Google | Accepted |
 | [BD-0004](BD-0004-mobile-first-installable-app.md) | Mobile-first, installable app | Accepted |
 | [BD-0005](BD-0005-track-expenses-and-income.md) | Track expenses and income | Accepted |
+| [BD-0006](BD-0006-app-name-miplata.md) | App name: miPlata | Accepted |
+| [BD-0007](BD-0007-visual-direction-transit-signage.md) | Visual direction: transit signage | Accepted |

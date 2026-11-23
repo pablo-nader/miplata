@@ -32,7 +32,8 @@ A private, personal finance log for a small circle of people: no ads, no bank li
 - Undecided: categories, payment methods, currencies, budgets, reports, recurring movements, shared expenses (currently out of scope).
 
 ## Brand Commitments
-None yet. App name, logo and visual identity are being decided.
+- Name: miPlata. Logo: an "mP" monogram.
+- Visual direction: Buenos Aires subway signage (see docs/business/BD-0007). Palette pending.
 
 ## Evidence on Hand
 No real user data, testimonials or assets exist. Do not fabricate any.
