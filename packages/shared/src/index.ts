@@ -132,4 +132,28 @@ export {
   type TransferRequest,
   transferRequestSchema,
 } from "./movements";
+export {
+  type ChangesQuery,
+  type ChangesReport,
+  COMMITTED_MONTHS_DEFAULT,
+  COMMITTED_MONTHS_MAX,
+  type CommittedQuery,
+  type CommittedReport,
+  changesQuerySchema,
+  changesReportSchema,
+  committedQuerySchema,
+  committedReportSchema,
+  type MonthlyQuery,
+  type MonthlyReport,
+  monthlyQuerySchema,
+  monthlyReportSchema,
+  type SpendingMovements,
+  type SpendingMovementsQuery,
+  type SpendingQuery,
+  type SpendingReport,
+  spendingMovementsQuerySchema,
+  spendingMovementsSchema,
+  spendingQuerySchema,
+  spendingReportSchema,
+} from "./reports";
 export { divideRounded, type RoundingMode, sumMinorUnits, toSafeInteger } from "./rounding";
