@@ -1,0 +1,12 @@
+{
+  "app": {
+    "name": "miPlata"
+  },
+  "health": {
+    "label": "Estado del servidor",
+    "checking": "Verificando…",
+    "ok": "Conectado",
+    "unavailable": "Sin conexión con el servidor",
+    "version": "Versión {{version}}"
+  }
+}
