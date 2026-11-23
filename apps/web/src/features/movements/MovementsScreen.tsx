@@ -9,6 +9,7 @@ import { type Currency, formatMoney, type MoneyLocale } from "../../ui/format/mo
 import { EmptyState } from "../../ui/molecules/EmptyState";
 import { MovementList, MovementRow } from "../../ui/molecules/MovementRow";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
+import type { NavAction } from "../../ui/organisms/nav";
 import "../accounts/screen-note.css";
 import type { DayGroup, RowData } from "./present-movement";
 import "./movements-screen.css";
@@ -24,6 +25,7 @@ export type ChipData = {
 
 export type MovementsScreenProps = {
   title: string;
+  menu: NavAction;
   locale: MoneyLocale;
   search: { label: string; value: string; onChange: (value: string) => void };
   chips: ChipData[];
@@ -86,6 +88,7 @@ function DayTotal({ amount, currency, locale }: DayTotalProps) {
 
 export function MovementsScreen({
   title,
+  menu,
   locale,
   search,
   chips,
@@ -100,7 +103,7 @@ export function MovementsScreen({
 }: MovementsScreenProps) {
   return (
     <>
-      <ScreenHeader title={title} />
+      <ScreenHeader title={title} menu={menu} />
       <div className="movements-screen__search">
         <Search aria-hidden="true" />
         <input

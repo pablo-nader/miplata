@@ -29,6 +29,25 @@
   height: 20px;
 }
 
+.screen-header__menu {
+  display: grid;
+  place-items: center;
+  width: var(--size-touch-target);
+  height: var(--size-touch-target);
+  margin-left: auto;
+  margin-right: calc(var(--space-2) * -1);
+  color: var(--color-ink);
+}
+
+.screen-header__menu svg {
+  width: 20px;
+  height: 20px;
+}
+
+.screen-header__action + .screen-header__menu {
+  margin-left: 0;
+}
+
 .screen-header__action {
   display: inline-flex;
   align-items: center;

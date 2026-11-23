@@ -185,6 +185,29 @@ describe("creating a recurring item", () => {
   });
 });
 
+describe("when the browser is offline", () => {
+  it("disables saving and explains why next to the button", async () => {
+    // Arrange
+    stubApi({ ...lookupHandlers });
+    vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+
+    // Act
+    const save = await openNew();
+
+    // Assert
+    expect((save as HTMLButtonElement).disabled).toBe(true);
+    expect(
+      screen
+        .getByText("Estás sin conexión: guardar no está disponible hasta que vuelva la conexión.")
+        .closest('[role="status"]'),
+    ).not.toBeNull();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+});
+
 describe("editing a recurring item", () => {
   it("loads the definition and saves the changes with PUT", async () => {
     // Arrange

@@ -32,6 +32,7 @@ export type AccountSectionData = {
 
 type AccountsScreenProps = {
   title: string;
+  menu: NavAction;
   add: NavAction;
   status: "loading" | "error" | "ready";
   isEmpty: boolean;
@@ -48,6 +49,7 @@ type AccountsScreenProps = {
 
 export function AccountsScreen({
   title,
+  menu,
   add,
   status,
   isEmpty,
@@ -57,7 +59,7 @@ export function AccountsScreen({
 }: AccountsScreenProps) {
   return (
     <>
-      <ScreenHeader title={title} action={add} />
+      <ScreenHeader title={title} action={add} menu={menu} />
       {status === "loading" ? (
         <p className="screen-note" role="status">
           {messages.loading}

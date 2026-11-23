@@ -6,6 +6,7 @@ import { SectionLabel } from "../../ui/atoms/SectionLabel";
 import { Switch } from "../../ui/atoms/Switch";
 import { ConfirmPanel } from "../../ui/molecules/ConfirmPanel";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { SegmentedControl } from "../../ui/molecules/SegmentedControl";
 import { SelectField, type SelectOption } from "../../ui/molecules/SelectField";
@@ -81,6 +82,7 @@ export type MovementFormScreenProps = {
   failure: string | null;
   busy: boolean;
   onSubmit: () => void;
+  offlineMessage: string | null;
   onRemove?: (() => void) | undefined;
   confirm?: (ConfirmCopy & { onConfirm: () => void; onCancel: () => void }) | undefined;
 };
@@ -369,8 +371,9 @@ export function MovementFormScreen(props: MovementFormScreenProps) {
             {props.failure}
           </p>
         ) : null}
+        {props.offlineMessage !== null ? <OfflineNote message={props.offlineMessage} /> : null}
         <div className="movement-form__submit">
-          <Button type="submit" disabled={props.busy}>
+          <Button type="submit" disabled={props.busy || props.offlineMessage !== null}>
             {props.busy ? copy.saving : copy.submit}
           </Button>
         </div>

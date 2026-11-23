@@ -2,6 +2,7 @@ import type { Account, Currency } from "@miplata/shared";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
+import { useOnline } from "../../shared/use-online";
 import { useResource } from "../../shared/use-resource";
 import { Button } from "../../ui/atoms/Button";
 import { formatMoney, localeForLanguage } from "../../ui/format/money";
@@ -48,6 +49,7 @@ const KNOWN_FAILURES = new Set([
 
 export function MovementFormContainer() {
   const { t, i18n } = useTranslation();
+  const online = useOnline();
   const locale = localeForLanguage(i18n.language);
   const navigate = useNavigate();
   const { movementId } = useParams();
@@ -331,6 +333,7 @@ export function MovementFormContainer() {
       categoryError={errors.category ? t("movements.form.errors.category") : undefined}
       rateText={rateText}
       failure={failure}
+      offlineMessage={online ? null : t("offline.saveDisabled")}
       busy={busy}
       onSubmit={submit}
       copy={{

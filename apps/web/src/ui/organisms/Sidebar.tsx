@@ -1,5 +1,5 @@
 import markUrl from "@brand/mark.svg";
-import { Plus } from "lucide-react";
+import { Menu, Plus } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { ButtonLink } from "../atoms/Button";
 import type { NavAction, NavItem } from "./nav";
@@ -10,9 +10,10 @@ type SidebarProps = {
   brandName: string;
   items: readonly NavItem[];
   action: NavAction;
+  menu: NavAction;
 };
 
-export function Sidebar({ label, brandName, items, action }: SidebarProps) {
+export function Sidebar({ label, brandName, items, action, menu }: SidebarProps) {
   return (
     <nav className="sidebar" aria-label={label}>
       <div className="sidebar__brand">
@@ -32,6 +33,10 @@ export function Sidebar({ label, brandName, items, action }: SidebarProps) {
           </li>
         ))}
       </ul>
+      <NavLink to={menu.to} className="sidebar__item">
+        <Menu aria-hidden="true" />
+        <span>{menu.label}</span>
+      </NavLink>
     </nav>
   );
 }

@@ -344,7 +344,7 @@ describe("ToPayContainer", () => {
 
     // Assert
     expect(await screen.findByRole("region", { name: "Overdue and today" })).toBeDefined();
-    expect(screen.getByRole("region", { name: "To receive" })).toBeDefined();
+    expect(screen.getByRole("region", { name: "To collect" })).toBeDefined();
     expect(screen.getByRole("button", { name: "Confirm Alquiler" })).toBeDefined();
   });
 });

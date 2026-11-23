@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { Button } from "../../ui/atoms/Button";
 import { Switch } from "../../ui/atoms/Switch";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { SegmentedControl } from "../../ui/molecules/SegmentedControl";
 import { SelectField, type SelectOption } from "../../ui/molecules/SelectField";
@@ -52,6 +53,7 @@ export type PayStatementScreenProps = {
   note: string;
   failure: string | null;
   submit: { label: string; busy: boolean; onSubmit: () => void };
+  offlineMessage: string | null;
 };
 
 export function PayStatementScreen(props: PayStatementScreenProps) {
@@ -137,8 +139,9 @@ export function PayStatementScreen(props: PayStatementScreenProps) {
             {props.failure}
           </p>
         ) : null}
+        {props.offlineMessage !== null ? <OfflineNote message={props.offlineMessage} /> : null}
         <div className="statement-form__submit">
-          <Button type="submit" disabled={props.submit.busy}>
+          <Button type="submit" disabled={props.submit.busy || props.offlineMessage !== null}>
             {props.submit.label}
           </Button>
         </div>

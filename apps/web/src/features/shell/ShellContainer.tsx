@@ -15,11 +15,20 @@ export function ShellContainer() {
     { id: "reports", to: "/reports", label: t("nav.reports"), icon: ChartPie },
   ];
   const action: NavAction = { to: "/movements/new", label: t("nav.newMovement") };
+  const menu: NavAction = { to: "/menu", label: t("nav.menu") };
   const label = t("nav.primary");
 
   return (
     <AppShell
-      sidebar={<Sidebar label={label} brandName={t("app.name")} items={items} action={action} />}
+      sidebar={
+        <Sidebar
+          label={label}
+          brandName={t("app.name")}
+          items={items}
+          action={action}
+          menu={menu}
+        />
+      }
       tabBar={<TabBar label={label} items={items} action={action} />}
     >
       <Outlet />

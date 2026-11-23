@@ -8,6 +8,7 @@ import { type ColorOption, ColorPicker } from "../../ui/molecules/ColorPicker";
 import { ConfirmPanel } from "../../ui/molecules/ConfirmPanel";
 import { Field } from "../../ui/molecules/Field";
 import { type IconOption, IconPicker } from "../../ui/molecules/IconPicker";
+import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import type { NavAction } from "../../ui/organisms/nav";
 import "../placeholder/placeholder-screen.css";
 import "./category-editor-screen.css";
@@ -54,6 +55,7 @@ type CategoryEditorScreenProps = {
     onSelect: (icon: string | null) => void;
   };
   save: { label: string; busy: boolean; onSubmit: () => void };
+  offlineMessage: string | null;
   errorMessage: string | null;
   actions: { label: string; onClick: () => void }[];
   confirm: ConfirmView | null;
@@ -68,6 +70,7 @@ export function CategoryEditorScreen({
   colors,
   icons,
   save,
+  offlineMessage,
   errorMessage,
   actions,
   confirm,
@@ -142,8 +145,9 @@ export function CategoryEditorScreen({
               {errorMessage}
             </p>
           ) : null}
+          {offlineMessage !== null ? <OfflineNote message={offlineMessage} /> : null}
           <div className="category-editor__actions">
-            <Button type="submit" disabled={save.busy}>
+            <Button type="submit" disabled={save.busy || offlineMessage !== null}>
               {save.label}
             </Button>
           </div>

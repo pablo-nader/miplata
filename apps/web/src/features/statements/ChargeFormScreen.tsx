@@ -4,6 +4,7 @@ import { Button } from "../../ui/atoms/Button";
 import { FilterChip } from "../../ui/atoms/Chip";
 import { ConfirmPanel } from "../../ui/molecules/ConfirmPanel";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { SelectField, type SelectOption } from "../../ui/molecules/SelectField";
 import type { NavAction } from "../../ui/organisms/nav";
@@ -36,6 +37,7 @@ export type ChargeFormScreenProps = {
   hint: string;
   failure: string | null;
   submit: { label: string; busy: boolean; onSubmit: () => void };
+  offlineMessage: string | null;
   remove?:
     | {
         label: string;
@@ -118,8 +120,9 @@ export function ChargeFormScreen(props: ChargeFormScreenProps) {
             {props.failure}
           </p>
         ) : null}
+        {props.offlineMessage !== null ? <OfflineNote message={props.offlineMessage} /> : null}
         <div className="statement-form__submit">
-          <Button type="submit" disabled={props.submit.busy}>
+          <Button type="submit" disabled={props.submit.busy || props.offlineMessage !== null}>
             {props.submit.label}
           </Button>
         </div>

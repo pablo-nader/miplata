@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SessionState } from "../features/auth/useSession";
@@ -68,7 +68,7 @@ describe("AppRoutes", () => {
     renderApp(<AppRoutes />, "es", "/home");
 
     // Act
-    const menu = screen.getByRole("link", { name: "Menú" });
+    const menu = within(screen.getByRole("banner")).getByRole("link", { name: "Menú" });
 
     // Assert
     expect(screen.getByRole("heading", { level: 1, name: "miPlata" })).toBeDefined();
@@ -184,7 +184,9 @@ describe("AppRoutes for a signed-in visitor on the landing page", () => {
 
     // Assert
     expect(screen.getByRole("heading", { level: 1, name: "miPlata" })).toBeDefined();
-    expect(screen.getByRole("link", { name: "Menú" }).getAttribute("href")).toBe("/menu");
+    expect(
+      within(screen.getByRole("banner")).getByRole("link", { name: "Menú" }).getAttribute("href"),
+    ).toBe("/menu");
   });
 
   it("sends the unknown paths on to the home screen", () => {
@@ -195,7 +197,7 @@ describe("AppRoutes for a signed-in visitor on the landing page", () => {
     renderApp(<AppRoutes />, "es", "/nowhere");
 
     // Assert
-    expect(screen.getByRole("link", { name: "Menú" })).toBeDefined();
+    expect(within(screen.getByRole("banner")).getByRole("link", { name: "Menú" })).toBeDefined();
   });
 });
 

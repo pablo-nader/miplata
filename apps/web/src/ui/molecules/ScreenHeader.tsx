@@ -1,4 +1,4 @@
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Menu, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { NavAction } from "../organisms/nav";
 import "./screen-header.css";
@@ -7,9 +7,10 @@ type ScreenHeaderProps = {
   title: string;
   back?: NavAction;
   action?: NavAction;
+  menu?: NavAction;
 };
 
-export function ScreenHeader({ title, back, action }: ScreenHeaderProps) {
+export function ScreenHeader({ title, back, action, menu }: ScreenHeaderProps) {
   return (
     <header className="screen-header">
       {back ? (
@@ -22,6 +23,11 @@ export function ScreenHeader({ title, back, action }: ScreenHeaderProps) {
         <Link className="screen-header__action" to={action.to}>
           <Plus aria-hidden="true" />
           {action.label}
+        </Link>
+      ) : null}
+      {menu ? (
+        <Link className="screen-header__menu" to={menu.to} aria-label={menu.label}>
+          <Menu aria-hidden="true" />
         </Link>
       ) : null}
     </header>

@@ -3,6 +3,7 @@ import { Target } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
+import { useOnline } from "../../shared/use-online";
 import { useResource } from "../../shared/use-resource";
 import { Button } from "../../ui/atoms/Button";
 import { EmptyState } from "../../ui/molecules/EmptyState";
@@ -35,6 +36,7 @@ function BudgetForm({ catalog, budget }: FormProps) {
   const label = useLabel();
   const pickerCopy = usePickerCopy();
   const navigate = useNavigate();
+  const online = useOnline();
   const [form, setForm] = useState<BudgetFormState>(() =>
     budget ? formFromBudget(budget) : emptyBudgetForm(),
   );
@@ -136,6 +138,7 @@ function BudgetForm({ catalog, budget }: FormProps) {
         error: errors?.limit ? t(`budgets.form.${errors.limit}`) : undefined,
       }}
       submit={{ label: submitLabel, busy, onSubmit: () => void submit() }}
+      offlineMessage={online ? null : t("offline.saveDisabled")}
       errorMessage={failure ?? undefined}
       manage={
         budget

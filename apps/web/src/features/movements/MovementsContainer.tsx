@@ -129,6 +129,7 @@ export function MovementsContainer() {
   return (
     <MovementsScreen
       title={t("screens.movements.title")}
+      menu={{ to: "/menu", label: t("nav.menu") }}
       locale={locale}
       search={{ label: t("movements.search"), value: searchText, onChange: setSearchText }}
       chips={[

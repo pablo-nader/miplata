@@ -10,10 +10,10 @@ import { CategoriesContainer } from "../features/categories/CategoriesContainer"
 import { CategoryEditorContainer } from "../features/categories/CategoryEditorContainer";
 import { GroupEditorContainer } from "../features/categories/GroupEditorContainer";
 import { HomeContainer } from "../features/home/HomeContainer";
+import { LanguageContainer } from "../features/menu/LanguageContainer";
 import { MenuContainer } from "../features/menu/MenuContainer";
 import { MovementFormContainer } from "../features/movements/MovementFormContainer";
 import { MovementsContainer } from "../features/movements/MovementsContainer";
-import { PlaceholderContainer } from "../features/placeholder/PlaceholderContainer";
 import { LandingContainer } from "../features/public/LandingContainer";
 import { LegalContainer } from "../features/public/LegalContainer";
 import { PublicLayoutContainer } from "../features/public/PublicLayoutContainer";
@@ -77,6 +77,7 @@ export function AppRoutes() {
           <Route path="recurring/new" element={<RecurringFormContainer />} />
           <Route path="recurring/:recurringId/edit" element={<RecurringFormContainer />} />
           <Route path="menu" element={<MenuContainer />} />
+          <Route path="menu/language" element={<LanguageContainer />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

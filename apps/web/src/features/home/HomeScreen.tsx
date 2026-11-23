@@ -1,4 +1,5 @@
 import { Wallet } from "lucide-react";
+import type { ReactNode } from "react";
 import { SectionLabel } from "../../ui/atoms/SectionLabel";
 import type { MoneyLocale } from "../../ui/format/money";
 import { EmptyState } from "../../ui/molecules/EmptyState";
@@ -13,6 +14,7 @@ import type { RowData } from "../movements/present-movement";
 type HomeScreenProps = {
   brandName: string;
   menu: NavAction;
+  installHint?: ReactNode;
   emptyTitle: string;
   emptyDescription: string;
   balance?: SignageBandProps["balance"];
@@ -26,6 +28,7 @@ type HomeScreenProps = {
 export function HomeScreen({
   brandName,
   menu,
+  installHint,
   emptyTitle,
   emptyDescription,
   balance,
@@ -43,6 +46,7 @@ export function HomeScreen({
         {...(balance ? { balance } : {})}
         {...(income && expense ? { income, expense } : {})}
       />
+      {installHint}
       {pending ? <PendingBanner {...pending} /> : null}
       {budgets && budgets.rows.length > 0 ? (
         <section aria-label={budgets.label}>

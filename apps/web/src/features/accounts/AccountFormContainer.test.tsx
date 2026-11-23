@@ -233,6 +233,29 @@ describe("creating an account", () => {
   });
 });
 
+describe("when the browser is offline", () => {
+  it("disables saving and explains why next to the button", async () => {
+    // Arrange
+    stubApi(listOf([]));
+    vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+
+    // Act
+    const save = await openNewForm();
+
+    // Assert
+    expect((save as HTMLButtonElement).disabled).toBe(true);
+    expect(
+      screen
+        .getByText("Estás sin conexión: guardar no está disponible hasta que vuelva la conexión.")
+        .closest('[role="status"]'),
+    ).not.toBeNull();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+});
+
 describe("editing an account", () => {
   const bank = makeAccount({
     id: "bank-1",

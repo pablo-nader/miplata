@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useOnline } from "../../shared/use-online";
 import { Button } from "../../ui/atoms/Button";
 import { categoryColorFor } from "../../ui/atoms/CategoryBadge";
 import { EmptyState } from "../../ui/molecules/EmptyState";
@@ -41,6 +42,7 @@ function CategoryEditorForm({ catalog, category, type, initialGroupId }: FormPro
   const { t } = useTranslation();
   const label = useLabel();
   const navigate = useNavigate();
+  const online = useOnline();
   const initialName = category ? label(category) : "";
   const [name, setName] = useState(initialName);
   const initialIcon = category ? iconOf(category) : null;
@@ -189,6 +191,7 @@ function CategoryEditorForm({ catalog, category, type, initialGroupId }: FormPro
         busy,
         onSubmit: () => void submit(),
       }}
+      offlineMessage={online ? null : t("offline.saveDisabled")}
       errorMessage={failure ? failureMessage(failure, t) : null}
       actions={actions}
       confirm={confirm}
