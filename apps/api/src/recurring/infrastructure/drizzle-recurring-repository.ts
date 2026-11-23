@@ -6,6 +6,7 @@ import {
   desc,
   eq,
   gt,
+  gte,
   inArray,
   lte,
   posting,
@@ -21,6 +22,7 @@ import {
   toSafeInteger,
 } from "@miplata/shared";
 import type {
+  CommittedSchedule,
   GenerationCandidate,
   RecurringFields,
   RecurringRepository,
@@ -297,6 +299,62 @@ export function drizzleRecurringRepository(db: Database): RecurringRepository {
       ];
       const lastConfirmed = await lastConfirmedAmounts(userId, variableIds);
       return rows.map((row) => toOccurrence(row, lastConfirmed));
+    },
+
+    async committedSchedule(userId, filter): Promise<CommittedSchedule> {
+      const templates = await db
+        .select()
+        .from(recurring)
+        .where(
+          and(
+            eq(recurring.userId, userId),
+            eq(recurring.type, "expense"),
+            eq(recurring.currency, filter.currency),
+            eq(recurring.isPaused, false),
+            lte(recurring.startsOn, filter.to),
+            sql`(${recurring.endsOn} is null or ${recurring.endsOn} >= ${filter.from})`,
+            filter.accountId ? eq(recurring.accountId, filter.accountId) : undefined,
+            filter.categoryId ? eq(recurring.categoryId, filter.categoryId) : undefined,
+          ),
+        );
+      if (templates.length === 0) {
+        return { items: [], resolved: [] };
+      }
+      const ids = templates.map((row) => row.id);
+      const variableIds = templates
+        .filter((row) => row.amountMode === "variable")
+        .map((row) => row.id);
+      const [lastConfirmed, resolved] = await Promise.all([
+        lastConfirmedAmounts(userId, variableIds),
+        db
+          .select({
+            recurringId: recurringOccurrence.recurringId,
+            dueOn: recurringOccurrence.dueOn,
+          })
+          .from(recurringOccurrence)
+          .where(
+            and(
+              eq(recurringOccurrence.userId, userId),
+              inArray(recurringOccurrence.recurringId, ids),
+              inArray(recurringOccurrence.status, ["confirmed", "skipped"]),
+              gte(recurringOccurrence.dueOn, filter.from),
+              lte(recurringOccurrence.dueOn, filter.to),
+            ),
+          ),
+      ]);
+      return {
+        items: templates.map((row) => {
+          const template = toRecurring(row);
+          return {
+            recurring: template,
+            estimateMinor:
+              template.amountMode === "fixed"
+                ? template.amountMinor
+                : (lastConfirmed.get(template.id) ?? template.amountMinor),
+          };
+        }),
+        resolved,
+      };
     },
 
     async findOccurrence(userId, occurrenceId): Promise<StoredOccurrence | null> {

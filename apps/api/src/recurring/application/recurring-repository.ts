@@ -1,4 +1,4 @@
-import type { IsoDate, Occurrence, Recurring } from "@miplata/shared";
+import type { Currency, IsoDate, Occurrence, Recurring } from "@miplata/shared";
 
 export type RecurringFields = Omit<Recurring, "id" | "isPaused">;
 
@@ -7,6 +7,19 @@ export type GenerationCandidate = { recurring: Recurring; latestDueOn: IsoDate |
 export type OccurrenceRow = { recurringId: string; dueOn: IsoDate; status: "pending" | "skipped" };
 
 export type StoredOccurrence = { occurrence: Occurrence; status: string };
+
+export type CommittedFilter = {
+  currency: Currency;
+  from: IsoDate;
+  to: IsoDate;
+  accountId?: string | undefined;
+  categoryId?: string | undefined;
+};
+
+export type CommittedSchedule = {
+  items: { recurring: Recurring; estimateMinor: number | null }[];
+  resolved: { recurringId: string; dueOn: IsoDate }[];
+};
 
 export type SkipOutcome = "skipped" | "not_found" | "resolved";
 
@@ -32,4 +45,5 @@ export type RecurringRepository = {
   ): Promise<Occurrence[]>;
   findOccurrence(userId: string, occurrenceId: string): Promise<StoredOccurrence | null>;
   skip(userId: string, occurrenceId: string): Promise<SkipOutcome>;
+  committedSchedule(userId: string, filter: CommittedFilter): Promise<CommittedSchedule>;
 };

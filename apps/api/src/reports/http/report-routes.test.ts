@@ -17,7 +17,7 @@ function build(rows: TotalRow[] = [], recurring?: RecurringCommitments) {
     categories: unusedCategories,
     ...unusedAccountDependencies(),
     reports: repository,
-    ...(recurring ? { recurringCommitments: recurring } : {}),
+    recurringCommitments: recurring ?? { pendingByMonth: async () => new Map() },
   });
   return { app, calls };
 }
