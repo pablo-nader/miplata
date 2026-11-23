@@ -37,3 +37,5 @@ Impact on users, cost, and technical design.
 | [BD-0008](BD-0008-graphite-palette-with-dark-theme.md) | Graphite palette with light and dark themes | Accepted |
 | [BD-0009](BD-0009-movement-types-and-categories.md) | Movement types and categories | Accepted |
 | [BD-0010](BD-0010-category-icons.md) | Category icons | Accepted |
+| [BD-0011](BD-0011-accounts-and-transfers.md) | Accounts and transfers | Accepted |
+| [BD-0012](BD-0012-institution-logos.md) | Institution logos | Accepted |

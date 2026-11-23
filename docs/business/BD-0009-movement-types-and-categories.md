@@ -1,6 +1,6 @@
 # BD-0009. Movement types and categories
 
-- Status: Accepted
+- Status: Accepted; movement types amended by [BD-0011](BD-0011-accounts-and-transfers.md), which adds transfers
 - Date: 2026-11-23
 
 ## Context
