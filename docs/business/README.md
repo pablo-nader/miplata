@@ -57,3 +57,4 @@ Impact on users, cost, and technical design.
 | [BD-0028](BD-0028-recurring-movement-lifecycle.md) | Recurring movement lifecycle | Accepted |
 | [BD-0029](BD-0029-category-picker-and-creating-people.md) | Category picker and where people are created | Accepted |
 | [BD-0030](BD-0030-search-ignores-accents-and-amounts-use-the-selected-currency.md) | Search ignores accents and amounts use the selected currency | Accepted |
+| [BD-0031](BD-0031-guided-tours.md) | Guided tours | Accepted |

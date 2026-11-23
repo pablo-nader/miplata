@@ -69,3 +69,4 @@ What becomes easier, harder, or constrained.
 | [0040](0040-statement-movements-in-the-web.md) | Statement dates editing and statement-bound movements in the web | Accepted |
 | [0041](0041-most-used-categories-endpoint.md) | Most used categories endpoint | Accepted |
 | [0042](0042-accent-insensitive-movement-search.md) | Accent-insensitive movement search | Accepted |
+| [0043](0043-guided-tours.md) | Guided tours with driver.js and a per-device seen state | Accepted |
