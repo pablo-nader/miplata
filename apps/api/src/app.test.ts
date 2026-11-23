@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { type AppDependencies, createApp } from "./app";
+import type { CategoryRepository } from "./categories/application/category-repository";
+
+const unusedCategories = new Proxy({} as CategoryRepository, {
+  get: () => async () => {
+    throw new Error("unused");
+  },
+});
 
 function buildApp(overrides: Partial<AppDependencies> = {}) {
   return createApp({
@@ -7,6 +14,7 @@ function buildApp(overrides: Partial<AppDependencies> = {}) {
     authHandler: async () => new Response("auth", { status: 200 }),
     resolveSession: async () => null,
     users: { findById: async () => null, updateLocale: async () => null },
+    categories: unusedCategories,
     ...overrides,
   });
 }

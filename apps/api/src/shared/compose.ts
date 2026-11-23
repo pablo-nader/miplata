@@ -1,5 +1,6 @@
 import { createDb } from "@miplata/db";
 import { createApp } from "../app";
+import { drizzleCategoryRepository } from "../categories/infrastructure/drizzle-category-repository";
 import { drizzleUserProfileRepository } from "../me/infrastructure/drizzle-user-profile-repository";
 import { readVersion } from "../version";
 import { createAuth } from "./auth/create-auth";
@@ -14,5 +15,6 @@ export function composeApp(env: Env = parseEnv(process.env)) {
     authHandler: auth.handler,
     resolveSession: sessionResolverFor(auth),
     users: drizzleUserProfileRepository(db),
+    categories: drizzleCategoryRepository(db),
   });
 }
