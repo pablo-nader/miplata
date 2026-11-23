@@ -20,6 +20,15 @@ export {
 } from "./exchange";
 export { type HealthResponse, healthResponseSchema } from "./health";
 export {
+  LOCALES,
+  type Locale,
+  localeSchema,
+  type MeResponse,
+  meResponseSchema,
+  type UpdateLocaleRequest,
+  updateLocaleRequestSchema,
+} from "./me";
+export {
   addMoney,
   CURRENCIES,
   type Currency,

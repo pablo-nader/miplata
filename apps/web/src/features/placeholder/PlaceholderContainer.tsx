@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import { PlaceholderScreen } from "./PlaceholderScreen";
 
 export type ScreenKey =
-  | "signIn"
   | "balance"
   | "newMovement"
   | "movements"

@@ -1,12 +1,23 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { SessionState } from "../features/auth/useSession";
 import { renderApp } from "../test/render";
 import { AppRoutes } from "./AppRoutes";
 import { resources } from "./i18n";
 
+let state: SessionState;
+
+vi.mock("../features/auth/useSession", () => ({ useSession: () => state }));
+
+const refresh = async () => {};
+const signedIn: SessionState = {
+  status: "signedIn",
+  user: { id: "1", name: "Ana", email: "ana@example.com", image: null, locale: "es" },
+  refresh,
+};
+
 const routes = [
-  ["/sign-in", "signIn"],
   ["/balance", "balance"],
   ["/movements", "movements"],
   ["/movements/new", "newMovement"],
@@ -19,6 +30,10 @@ const routes = [
 ] as const;
 
 describe("AppRoutes", () => {
+  beforeEach(() => {
+    state = signedIn;
+  });
+
   it.each(routes)("renders %s in Spanish", (path, key) => {
     // Arrange
     renderApp(<AppRoutes />, "es", path);
@@ -86,17 +101,6 @@ describe("AppRoutes", () => {
     expect(back.getAttribute("href")).toBe("/home");
   });
 
-  it("shows no back link on the sign in screen", () => {
-    // Arrange
-    renderApp(<AppRoutes />, "en", "/sign-in");
-
-    // Act
-    const back = screen.queryByRole("link", { name: "Back to home" });
-
-    // Assert
-    expect(back).toBeNull();
-  });
-
   it("shows navigation only on the main sections", () => {
     // Arrange
     renderApp(<AppRoutes />, "en", "/movements/new");
@@ -130,5 +134,73 @@ describe("AppRoutes", () => {
 
     // Assert
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Accounts");
+  });
+});
+
+describe("AppRoutes when signed out", () => {
+  beforeEach(() => {
+    state = { status: "signedOut", user: null, refresh };
+  });
+
+  it.each(routes)("sends %s to the public landing page", (path) => {
+    // Arrange
+    renderApp(<AppRoutes />, "es", path);
+
+    // Act
+    const heading = screen.getByRole("heading", { level: 1 });
+
+    // Assert
+    expect(heading.textContent).toBe("miPlata");
+    expect(screen.getByRole("button", { name: "Entrar con Google" })).toBeDefined();
+    expect(screen.queryAllByRole("navigation", { name: "Navegación principal" })).toHaveLength(0);
+  });
+
+  it("keeps the legal pages public", () => {
+    // Arrange
+    renderApp(<AppRoutes />, "en", "/privacy");
+
+    // Act
+    const heading = screen.getByRole("heading", { level: 1 });
+
+    // Assert
+    expect(heading.textContent).toBe(resources.en.translation.legal.privacy.title);
+  });
+});
+
+describe("AppRoutes for a signed-in visitor on the landing page", () => {
+  it("sends them to the home screen", () => {
+    // Arrange
+    state = signedIn;
+
+    // Act
+    renderApp(<AppRoutes />, "es", "/");
+
+    // Assert
+    expect(screen.getByRole("heading", { level: 1, name: "miPlata" })).toBeDefined();
+    expect(screen.getByRole("link", { name: "Menú" }).getAttribute("href")).toBe("/menu");
+  });
+
+  it("sends the unknown paths on to the home screen", () => {
+    // Arrange
+    state = signedIn;
+
+    // Act
+    renderApp(<AppRoutes />, "es", "/nowhere");
+
+    // Assert
+    expect(screen.getByRole("link", { name: "Menú" })).toBeDefined();
+  });
+});
+
+describe("AppRoutes while the session loads", () => {
+  it("renders nothing yet", () => {
+    // Arrange
+    state = { status: "loading", user: null, refresh };
+
+    // Act
+    renderApp(<AppRoutes />, "es", "/movements");
+
+    // Assert
+    expect(screen.queryByRole("heading")).toBeNull();
   });
 });

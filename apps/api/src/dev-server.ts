@@ -1,7 +1,6 @@
 import { serve } from "@hono/node-server";
-import { createApp } from "./app";
-import { readVersion } from "./version";
+import { composeApp } from "./shared/compose";
 
 const port = Number(process.env.API_PORT ?? 8787);
 
-serve({ fetch: createApp(readVersion).fetch, port });
+serve({ fetch: composeApp().fetch, port });

@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
+import { mockSignedIn } from "./session";
 
 type Tokens = { theme: Record<"light" | "dark", Record<string, { $value: string }>> };
 
@@ -18,6 +19,7 @@ test.describe("language", () => {
 
   test("shows the home band in Spanish and sets the document language", async ({ page }) => {
     // Arrange
+    await mockSignedIn(page);
     await page.goto("/home");
 
     // Act
@@ -35,6 +37,7 @@ test.describe("language in English", () => {
 
   test("shows the home band in English and sets the document language", async ({ page }) => {
     // Arrange
+    await mockSignedIn(page, "en");
     await page.goto("/home");
 
     // Act

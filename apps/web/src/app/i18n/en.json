@@ -15,11 +15,16 @@
   "placeholder": {
     "comingSoon": "This screen arrives in a later stage."
   },
-  "screens": {
-    "signIn": {
-      "title": "Sign in",
-      "description": "Sign in with Google."
+  "menu": {
+    "language": "Language",
+    "languageNames": {
+      "es": "Español",
+      "en": "English"
     },
+    "languageNotSaved": "We could not save the language. Try again.",
+    "signOut": "Sign out"
+  },
+  "screens": {
     "home": {
       "title": "Home",
       "description": "Your balance and latest movements will show up here."
