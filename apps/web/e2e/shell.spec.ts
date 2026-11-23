@@ -103,6 +103,7 @@ test.describe("keyboard focus", () => {
   test("shows a visible focus ring in the ink color", async ({ page }) => {
     // Arrange
     await page.goto("/balance");
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
     // Act
     await page.keyboard.press("Tab");
