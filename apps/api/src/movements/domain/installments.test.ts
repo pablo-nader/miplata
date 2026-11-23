@@ -200,6 +200,17 @@ describe("allocateOwnShare", () => {
     for (const act of acts) expect(act).toThrow(RangeError);
   });
 
+  it("rejects installments whose total leaves the safe integer range", () => {
+    // Arrange
+    const installments = [9007199254740000, 9007199254740000];
+
+    // Act
+    const act = () => allocateOwnShare(installments, 0);
+
+    // Assert
+    expect(act).toThrow(RangeError);
+  });
+
   it("rejects an empty list", () => {
     // Arrange
     const installments: number[] = [];

@@ -124,6 +124,17 @@ describe("statementForPeriod", () => {
     expect(act).toThrow(RangeError);
   });
 
+  it("rejects an override with a date that does not exist", () => {
+    // Arrange
+    const overrides = { "2026-02": { closingDate: "2026-02-31", dueDate: "2026-03-05" } };
+
+    // Act
+    const act = () => statementForPeriod(schedule, "2026-02", overrides);
+
+    // Assert
+    expect(act).toThrow(RangeError);
+  });
+
   it("rejects an override whose due date is not after the closing date", () => {
     // Arrange
     const overrides = { "2026-11": { closingDate: "2026-11-25", dueDate: "2026-11-25" } };

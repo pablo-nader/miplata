@@ -2,6 +2,7 @@ import {
   addMonths,
   dateInMonth,
   type IsoDate,
+  isoDateSchema,
   monthOf,
   sumMinorUnits,
   type YearMonth,
@@ -39,6 +40,12 @@ function assertDay(day: number, label: string): void {
 }
 
 function assertOverride(period: YearMonth, override: StatementOverride): void {
+  if (
+    !isoDateSchema.safeParse(override.closingDate).success ||
+    !isoDateSchema.safeParse(override.dueDate).success
+  ) {
+    throw new RangeError("Override dates must be real calendar dates");
+  }
   if (monthOf(override.closingDate) !== period) {
     throw new RangeError(`Closing date ${override.closingDate} is outside statement ${period}`);
   }

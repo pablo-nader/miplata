@@ -59,15 +59,18 @@ describe("percentChangeVsPreviousThree", () => {
     expect(drop).toBe(-0.3);
   });
 
-  it("keeps the sign convention when the baseline is negative", () => {
+  it("rejects negative amounts", () => {
     // Arrange
-    const previous = [-100, -100, -100];
+    const cases = [
+      { current: -1, previous: [1, 2, 3] },
+      { current: 1, previous: [-100, 0, 0] },
+    ];
 
     // Act
-    const result = percentChangeVsPreviousThree(-50, previous);
+    const acts = cases.map((c) => () => percentChangeVsPreviousThree(c.current, c.previous));
 
     // Assert
-    expect(result).toBe(-50);
+    for (const act of acts) expect(act).toThrow(RangeError);
   });
 
   it("counts a month without spending as zero in the average", () => {
@@ -174,6 +177,26 @@ describe("monthlyInOut", () => {
 
     // Assert
     expect(result[0]?.outMinor).toBe(400);
+  });
+
+  it("rejects a result outside the safe integer range", () => {
+    // Arrange
+    const rows = [
+      {
+        kind: "income",
+        periodMonth: "2026-10",
+        currency: "ARS",
+        ownAmountMinor: Number.MAX_SAFE_INTEGER,
+      },
+      { kind: "expense", periodMonth: "2026-10", currency: "ARS", ownAmountMinor: -5 },
+    ] as const;
+    const range = { from: "2026-10", to: "2026-10", currency: "ARS" } as const;
+
+    // Act
+    const act = () => monthlyInOut(rows, range);
+
+    // Assert
+    expect(act).toThrow(RangeError);
   });
 
   it("returns an empty list for a reversed range", () => {
