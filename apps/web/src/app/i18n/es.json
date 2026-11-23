@@ -608,5 +608,59 @@
       }
     },
     "moreFailed": "No pudimos traer más movimientos. Probá de nuevo."
+  },
+  "reports": {
+    "tabsLabel": "Reportes",
+    "currency": "Moneda",
+    "account": "Cuenta",
+    "category": "Categoría",
+    "allAccounts": "Todas",
+    "allCategories": "Todas",
+    "ungrouped": "Sin grupo",
+    "incomeGroup": "Ingresos",
+    "unknownCategory": "Categoría eliminada",
+    "loading": "Cargando…",
+    "loadFailed": "No pudimos cargar el reporte.",
+    "retry": "Reintentar",
+    "period": {
+      "spending": "Mes del reporte",
+      "monthly": "Último mes del reporte",
+      "changes": "Mes del reporte",
+      "committed": "Primer mes comprometido",
+      "previous": "Mes anterior",
+      "next": "Mes siguiente"
+    },
+    "spending": {
+      "tab": "En qué se va",
+      "empty": "No hay gastos en este mes.",
+      "total": "Total del mes: {{amount}}",
+      "allGroups": "Todos los grupos",
+      "installmentOf": "cuota {{number}} de {{count}}"
+    },
+    "monthly": {
+      "tab": "Mes a mes",
+      "empty": "No hay movimientos en estos 12 meses.",
+      "chart": "Gráfico de barras: entra y sale en cada uno de los últimos 12 meses",
+      "in": "Entra",
+      "out": "Sale",
+      "result": "Resultado",
+      "month": "Mes",
+      "table": "Entra, sale y resultado de cada mes"
+    },
+    "changes": {
+      "tab": "Qué cambió",
+      "empty": "No hay gastos para comparar.",
+      "nominalNote": "La comparación es nominal: no descuenta la inflación, así que un aumento en pesos no siempre es un gasto mayor en términos reales.",
+      "average": "Prom. 3 meses: {{amount}}",
+      "versus": "{{percent}} vs. el promedio",
+      "noBaseline": "Sin base de comparación"
+    },
+    "committed": {
+      "tab": "Comprometido",
+      "empty": "No hay nada comprometido en los próximos meses.",
+      "note": "Suma las cuotas de tarjeta y los movimientos recurrentes pendientes de cada mes.",
+      "installments": "Cuotas {{amount}}",
+      "recurring": "Recurrentes {{amount}}"
+    }
   }
 }

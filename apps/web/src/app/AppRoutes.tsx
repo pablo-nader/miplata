@@ -15,6 +15,7 @@ import { PlaceholderContainer } from "../features/placeholder/PlaceholderContain
 import { LandingContainer } from "../features/public/LandingContainer";
 import { LegalContainer } from "../features/public/LegalContainer";
 import { PublicLayoutContainer } from "../features/public/PublicLayoutContainer";
+import { ReportsContainer } from "../features/reports/ReportsContainer";
 import { FocusedLayout } from "../features/shell/FocusedLayout";
 import { ShellContainer } from "../features/shell/ShellContainer";
 
@@ -38,7 +39,7 @@ export function AppRoutes() {
           <Route path="home" element={<HomeContainer />} />
           <Route path="movements" element={<MovementsContainer />} />
           <Route path="accounts" element={<AccountsContainer />} />
-          <Route path="reports" element={<PlaceholderContainer screen="reports" />} />
+          <Route path="reports" element={<ReportsContainer />} />
         </Route>
         <Route element={<FocusedLayout />}>
           <Route path="balance" element={<BalanceContainer />} />
