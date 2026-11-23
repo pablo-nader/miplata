@@ -65,6 +65,7 @@ export function MovementFormContainer() {
   const [confirming, setConfirming] = useState(false);
   const [createdPeople, setCreatedPeople] = useState<Account[]>([]);
   const [newPerson, setNewPerson] = useState<NewPersonDraft | null>(null);
+  const draftOpen = useRef(false);
   const initialised = useRef(false);
 
   useEffect(() => {
@@ -203,6 +204,7 @@ export function MovementFormContainer() {
 
   function change(patch: Partial<FormState>) {
     if (patch.personId !== undefined || patch.forOther === false) {
+      draftOpen.current = false;
       setNewPerson(null);
     }
     setForm((current) => (current ? applyChange(current, patch, accounts) : current));
@@ -232,7 +234,9 @@ export function MovementFormContainer() {
       return;
     }
     setCreatedPeople((current) => [...current, result.value]);
-    setNewPerson(null);
+    if (!draftOpen.current) {
+      return;
+    }
     change({ personId: result.value.id });
   }
 
@@ -296,11 +300,17 @@ export function MovementFormContainer() {
           creating: t("movements.form.newPerson.creating"),
           cancel: t("movements.form.newPerson.cancel"),
         },
-        onOpen: () => setNewPerson({ name: "", error: undefined, busy: false }),
+        onOpen: () => {
+          draftOpen.current = true;
+          setNewPerson({ name: "", error: undefined, busy: false });
+        },
         onNameChange: (name) =>
           setNewPerson((current) => (current ? { ...current, name, error: undefined } : current)),
         onCreate: createPerson,
-        onCancel: () => setNewPerson(null),
+        onCancel: () => {
+          draftOpen.current = false;
+          setNewPerson(null);
+        },
       }}
       entryCurrencies={entryAccount ? currenciesOf(entryAccount) : ALL_CURRENCIES}
       fromCurrencies={

@@ -67,3 +67,4 @@ What becomes easier, harder, or constrained.
 | [0038](0038-old-domain-permanent-redirect.md) | Permanent redirect from miplata-beta.vercel.app | Accepted |
 | [0039](0039-institution-logos.md) | Institution logos | Accepted |
 | [0040](0040-statement-movements-in-the-web.md) | Statement dates editing and statement-bound movements in the web | Accepted |
+| [0041](0041-most-used-categories-endpoint.md) | Most used categories endpoint | Accepted |

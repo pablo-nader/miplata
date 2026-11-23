@@ -7,6 +7,7 @@ import {
   desc,
   eq,
   gte,
+  lte,
   movement,
   ne,
   sql,
@@ -83,7 +84,7 @@ export function drizzleCategoryRepository(db: Database): CategoryRepository {
   }
 
   return {
-    async mostUsedCategoryIds(userId, type, since, limit) {
+    async mostUsedCategoryIds(userId, type, since, until, limit) {
       const uses = sql<number>`count(${movement.id})`;
       const rows = await db
         .select({ id: category.id })
@@ -92,16 +93,26 @@ export function drizzleCategoryRepository(db: Database): CategoryRepository {
           category,
           and(eq(category.userId, movement.userId), eq(category.id, movement.categoryId)),
         )
+        .leftJoin(
+          categoryGroup,
+          and(eq(categoryGroup.userId, category.userId), eq(categoryGroup.id, category.groupId)),
+        )
         .where(
           and(
             eq(movement.userId, userId),
             eq(category.type, type),
             eq(category.isActive, true),
             gte(movement.occurredOn, since),
+            lte(movement.occurredOn, until),
           ),
         )
-        .groupBy(category.id, category.sortOrder)
-        .orderBy(desc(uses), asc(category.sortOrder), asc(category.id))
+        .groupBy(category.id, category.sortOrder, categoryGroup.sortOrder)
+        .orderBy(
+          desc(uses),
+          asc(sql`coalesce(${categoryGroup.sortOrder}, 0)`),
+          asc(category.sortOrder),
+          asc(category.id),
+        )
         .limit(limit);
       return rows.map((row) => row.id);
     },

@@ -1,7 +1,7 @@
 import { Check, Plus, Search, X } from "lucide-react";
 import { type KeyboardEvent, useEffect, useId, useMemo, useRef, useState } from "react";
 import { CategoryBadge } from "../atoms/CategoryBadge";
-import { SectionLabel } from "../atoms/SectionLabel";
+import "../atoms/section-label.css";
 import type { CategorySelectorCopy, PickerItem, PickerSection } from "./category-picker-types";
 import { filterSections } from "./category-search";
 import "./category-selector.css";
@@ -158,8 +158,9 @@ export function CategorySelector({
             <div role="listbox" aria-label={copy.title}>
               {results.map((section) => (
                 <fieldset key={section.id} className="category-selector__group">
-                  <legend className="visually-hidden">{section.title ?? copy.title}</legend>
-                  {section.title ? <SectionLabel as="p">{section.title}</SectionLabel> : null}
+                  {section.title ? (
+                    <legend className="section-label">{section.title}</legend>
+                  ) : null}
                   {section.items.map(option)}
                 </fieldset>
               ))}

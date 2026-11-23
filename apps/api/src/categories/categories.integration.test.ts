@@ -91,9 +91,9 @@ describe("GET /api/categories/most-used", () => {
     await insertMovementOn(person.id, (b as CategoryDto).id, "2026-11-01");
     await insertMovementOn(person.id, (b as CategoryDto).id, "2026-10-01");
     await insertMovementOn(person.id, (c as CategoryDto).id, "2026-11-02");
-    await insertMovementOn(person.id, (a as CategoryDto).id, "2026-08-24");
-    await insertMovementOn(person.id, (a as CategoryDto).id, "2026-08-24");
-    await insertMovementOn(person.id, (a as CategoryDto).id, "2026-08-24");
+    await insertMovementOn(person.id, (a as CategoryDto).id, "2026-08-25");
+    await insertMovementOn(person.id, (a as CategoryDto).id, "2026-08-25");
+    await insertMovementOn(person.id, (a as CategoryDto).id, "2026-08-25");
 
     // Act
     const { response, ids } = await mostUsed(person);
@@ -126,13 +126,46 @@ describe("GET /api/categories/most-used", () => {
     expect(income.ids).toEqual([salary.id]);
   });
 
+  it("ignores movements dated after today", async () => {
+    // Arrange
+    const person = await newPerson();
+    const [first] = (await catalogOf(person)).expenseGroups.flatMap(
+      (group) => group.categories,
+    ) as CategoryDto[];
+    await insertMovementOn(person.id, (first as CategoryDto).id, "2026-11-24");
+
+    // Act
+    const { ids } = await mostUsed(person);
+
+    // Assert
+    expect(ids).toEqual([]);
+  });
+
+  it("breaks ties across groups by the group order first", async () => {
+    // Arrange
+    const person = await newPerson();
+    const groups = (await catalogOf(person)).expenseGroups;
+    const lastGroup = groups[groups.length - 1];
+    const firstGroup = groups[0];
+    const late = lastGroup?.categories[0] as CategoryDto;
+    const early = firstGroup?.categories[firstGroup.categories.length - 1] as CategoryDto;
+    await insertMovementOn(person.id, late.id, "2026-11-20");
+    await insertMovementOn(person.id, early.id, "2026-11-20");
+
+    // Act
+    const { ids } = await mostUsed(person);
+
+    // Assert
+    expect(ids).toEqual([early.id, late.id]);
+  });
+
   it("includes the first day of the window and breaks ties by the default order", async () => {
     // Arrange
     const person = await newPerson();
     const [first, second, third] = (await catalogOf(person)).expenseGroups.flatMap(
       (group) => group.categories,
     ) as CategoryDto[];
-    await insertMovementOn(person.id, (third as CategoryDto).id, "2026-08-25");
+    await insertMovementOn(person.id, (third as CategoryDto).id, "2026-08-26");
     await insertMovementOn(person.id, (second as CategoryDto).id, "2026-11-23");
     await insertMovementOn(person.id, (first as CategoryDto).id, "2026-11-23");
 
