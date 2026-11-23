@@ -2,6 +2,7 @@ import markUrl from "@brand/mark.svg";
 import { Menu, Plus } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { ButtonLink } from "../atoms/Button";
+import { tourAnchor } from "../tour/anchors";
 import type { NavAction, NavItem } from "./nav";
 import "./sidebar.css";
 
@@ -20,7 +21,11 @@ export function Sidebar({ label, brandName, items, action, menu }: SidebarProps)
         <img src={markUrl} alt="" width={28} height={28} />
         <span className="sidebar__name">{brandName}</span>
       </div>
-      <ButtonLink to={action.to} icon={<Plus aria-hidden="true" strokeWidth={2.5} />}>
+      <ButtonLink
+        to={action.to}
+        icon={<Plus aria-hidden="true" strokeWidth={2.5} />}
+        {...tourAnchor("nav-new-movement")}
+      >
         {action.label}
       </ButtonLink>
       <ul className="sidebar__list">

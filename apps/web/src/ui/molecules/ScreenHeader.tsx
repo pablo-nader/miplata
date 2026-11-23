@@ -1,6 +1,7 @@
 import { ArrowLeft, Menu, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { NavAction } from "../organisms/nav";
+import { tourAnchor } from "../tour/anchors";
 import "./screen-header.css";
 
 type ScreenHeaderProps = {
@@ -20,7 +21,7 @@ export function ScreenHeader({ title, back, action, menu }: ScreenHeaderProps) {
       ) : null}
       <h1 className="screen-header__title">{title}</h1>
       {action ? (
-        <Link className="screen-header__action" to={action.to}>
+        <Link className="screen-header__action" to={action.to} {...tourAnchor("screen-action")}>
           <Plus aria-hidden="true" />
           {action.label}
         </Link>

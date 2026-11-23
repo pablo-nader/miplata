@@ -1,5 +1,6 @@
 import {
   ArrowLeft,
+  BookOpen,
   ChevronRight,
   Clock,
   Download,
@@ -31,6 +32,7 @@ type MenuScreenProps = {
   recurring: MenuLink;
   categories: MenuLink;
   budgets: MenuLink;
+  guides: MenuLink;
   language: NavAction & { value: string };
   install: InstallRow;
   errorMessage: string | null;
@@ -45,6 +47,7 @@ export function MenuScreen({
   recurring,
   categories,
   budgets,
+  guides,
   language,
   install,
   errorMessage,
@@ -66,6 +69,7 @@ export function MenuScreen({
             [recurring, Repeat],
             [categories, Tags],
             [budgets, Target],
+            [guides, BookOpen],
           ] as const
         ).map(([link, Icon]) => (
           <li key={link.to} className="menu-screen__row">

@@ -3,6 +3,7 @@ import { Button } from "../../ui/atoms/Button";
 import { EmptyState } from "../../ui/molecules/EmptyState";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
+import { tourAnchor } from "../../ui/tour/anchors";
 import "../accounts/screen-note.css";
 import { BudgetList, type BudgetRowData } from "./BudgetList";
 
@@ -57,7 +58,11 @@ export function BudgetsScreen({
           description={messages.emptyDescription}
         />
       ) : null}
-      {status === "ready" && rows.length > 0 ? <BudgetList rows={rows} /> : null}
+      {status === "ready" && rows.length > 0 ? (
+        <div {...tourAnchor("budgets-list")}>
+          <BudgetList rows={rows} />
+        </div>
+      ) : null}
     </>
   );
 }

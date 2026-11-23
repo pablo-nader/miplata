@@ -3,6 +3,7 @@ import { ChevronRight, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { LineRule } from "../atoms/LineRule";
 import { MoneyAmount, type MoneyAmountProps } from "../atoms/MoneyAmount";
+import { tourAnchor } from "../tour/anchors";
 import type { NavAction } from "./nav";
 import "./signage-band.css";
 
@@ -30,12 +31,17 @@ export function SignageBand({ brandName, menu, balance, income, expense }: Signa
       <div className="signage-band__top">
         <img src={markUrl} alt="" width={28} height={28} />
         <h1 className="signage-band__brand">{brandName}</h1>
-        <Link className="signage-band__menu" to={menu.to} aria-label={menu.label}>
+        <Link
+          className="signage-band__menu"
+          to={menu.to}
+          aria-label={menu.label}
+          {...tourAnchor("home-menu")}
+        >
           <Menu aria-hidden="true" />
         </Link>
       </div>
       {balance ? (
-        <Link className="signage-band__balance" to={balance.to}>
+        <Link className="signage-band__balance" to={balance.to} {...tourAnchor("home-balance")}>
           <span className="signage-band__balance-label">
             {balance.label}
             <ChevronRight aria-hidden="true" />
@@ -51,7 +57,7 @@ export function SignageBand({ brandName, menu, balance, income, expense }: Signa
         </Link>
       ) : null}
       {income && expense ? (
-        <div className="signage-band__rules">
+        <div className="signage-band__rules" {...tourAnchor("home-month")}>
           <LineRule tone="income">
             {income.label}
             <b className="signage-band__total">

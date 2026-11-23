@@ -28,7 +28,8 @@
     "categories": "Categorías",
     "toPay": "Por pagar",
     "recurring": "Gastos fijos",
-    "budgets": "Presupuestos"
+    "budgets": "Presupuestos",
+    "guides": "Ver guías"
   },
   "screens": {
     "home": {
@@ -1024,5 +1025,227 @@
       "ios": "Tocá Compartir y después «Agregar a pantalla de inicio».",
       "browser": "Abrí el menú del navegador y elegí «Instalar app»."
     }
+  },
+  "tours": {
+    "progress": "Paso {{current}} de {{total}}",
+    "next": "Siguiente",
+    "back": "Atrás",
+    "done": "Listo",
+    "close": "Cerrar guía",
+    "names": {
+      "home": "Inicio",
+      "new-movement": "Nuevo movimiento",
+      "movements": "Movimientos",
+      "accounts": "Cuentas",
+      "statement": "Resumen de tarjeta",
+      "to-pay": "Por pagar",
+      "recurring": "Gastos fijos",
+      "budgets": "Presupuestos",
+      "reports": "Reportes",
+      "categories": "Categorías"
+    },
+    "home": {
+      "welcome": {
+        "title": "Tu plata de un vistazo",
+        "body": "Esta es la pantalla de Inicio. Aquí ves cuánto tienes y qué pasó este mes."
+      },
+      "balance": {
+        "title": "Tu saldo",
+        "body": "Suma lo que tienes en todas tus cuentas. Tócalo para ver el detalle."
+      },
+      "month": {
+        "title": "Ingresos y gastos del mes",
+        "body": "Dos líneas resumen lo que entró y lo que salió este mes."
+      },
+      "add": {
+        "title": "Anotar un movimiento",
+        "body": "Con este botón registras un gasto, un ingreso o una transferencia."
+      },
+      "menu": {
+        "title": "Más opciones",
+        "body": "En el menú están tus gastos fijos, presupuestos, categorías, el idioma y estas guías."
+      }
+    },
+    "new-movement": {
+      "type": {
+        "title": "Tipo de movimiento",
+        "body": "Elige si es un gasto, un ingreso o una transferencia entre tus cuentas."
+      },
+      "amount": {
+        "title": "Monto",
+        "body": "Escribe cuánto fue. En gastos e ingresos la moneda se elige justo arriba."
+      },
+      "category": {
+        "title": "Categoría",
+        "body": "Sirve para ordenar tus gastos y ver después en qué se va la plata."
+      },
+      "account": {
+        "title": "Cuenta",
+        "body": "Indica de dónde sale o a dónde entra. Con una tarjeta de crédito puedes elegir cuotas."
+      },
+      "submit": {
+        "title": "Guardar",
+        "body": "Al terminar, guarda. Podrás editarlo o eliminarlo más tarde."
+      }
+    },
+    "movements": {
+      "intro": {
+        "title": "Todos tus movimientos",
+        "body": "Aquí está el historial, ordenado por día y con el total de cada día."
+      },
+      "search": {
+        "title": "Buscar",
+        "body": "Escribe aquí para encontrar un movimiento."
+      },
+      "filters": {
+        "title": "Filtros",
+        "body": "Acota la lista con los filtros disponibles."
+      },
+      "list": {
+        "title": "Un movimiento",
+        "body": "Toca cualquiera para verlo, editarlo o eliminarlo."
+      },
+      "add": {
+        "title": "Nuevo movimiento",
+        "body": "Desde aquí anotas el siguiente."
+      }
+    },
+    "accounts": {
+      "intro": {
+        "title": "Tus cuentas",
+        "body": "Efectivo, bancos, billeteras, tarjetas y personas, cada una con su saldo."
+      },
+      "add": {
+        "title": "Agregar una cuenta",
+        "body": "Crea una cuenta nueva con su saldo inicial."
+      },
+      "list": {
+        "title": "Tus saldos",
+        "body": "Toca una cuenta para ver o cambiar sus datos."
+      },
+      "cards": {
+        "title": "Tarjetas de crédito",
+        "body": "Una tarjeta abre su resumen: lo que debes en el período, las cuotas y el pago."
+      }
+    },
+    "statement": {
+      "intro": {
+        "title": "Resumen de la tarjeta",
+        "body": "Aquí ves lo que debes de esta tarjeta, período por período."
+      },
+      "period": {
+        "title": "Período",
+        "body": "Cambia entre el resumen actual y los anteriores."
+      },
+      "summary": {
+        "title": "Cuánto debes",
+        "body": "El total del período, con sus compras, cuotas y cargos."
+      },
+      "actions": {
+        "title": "Cargos, cuadre y pago",
+        "body": "Anota un cargo del banco, compara con tu resumen o registra el pago."
+      }
+    },
+    "to-pay": {
+      "intro": {
+        "title": "Lo que viene",
+        "body": "Aquí aparecen los pagos próximos que esperan tu confirmación."
+      },
+      "source": {
+        "title": "De dónde salen",
+        "body": "Se generan desde tus gastos fijos, que creas desde el menú."
+      },
+      "list": {
+        "title": "Pendientes",
+        "body": "Cada fila es un pago por confirmar."
+      },
+      "actions": {
+        "title": "Confirmar, ajustar u omitir",
+        "body": "Confirma el pago si salió como siempre u omítelo este mes. En los de monto variable puedes ajustar el monto."
+      }
+    },
+    "recurring": {
+      "intro": {
+        "title": "Gastos fijos",
+        "body": "Pagos y cobros que se repiten, como el alquiler o una suscripción."
+      },
+      "add": {
+        "title": "Agregar uno",
+        "body": "Define el monto, cada cuánto se repite y la fecha."
+      },
+      "list": {
+        "title": "Tu lista",
+        "body": "Toca uno para editarlo. Con sus botones puedes pausarlo o terminarlo."
+      },
+      "flow": {
+        "title": "Llegan a Por pagar",
+        "body": "Al acercarse la fecha, cada uno aparece en Por pagar para que lo confirmes."
+      }
+    },
+    "budgets": {
+      "intro": {
+        "title": "Presupuestos",
+        "body": "Un tope mensual por categoría o grupo, para saber cuánto llevas gastado."
+      },
+      "add": {
+        "title": "Nuevo presupuesto",
+        "body": "Elige una categoría o un grupo y el tope del mes."
+      },
+      "list": {
+        "title": "Tu progreso",
+        "body": "La barra muestra lo gastado frente al tope y avisa cuando te acercas."
+      },
+      "home": {
+        "title": "Avisos en Inicio",
+        "body": "Los presupuestos cerca del tope también aparecen en Inicio."
+      }
+    },
+    "reports": {
+      "intro": {
+        "title": "Reportes",
+        "body": "Aquí ves en qué se va la plata y cómo cambia con el tiempo."
+      },
+      "tabs": {
+        "title": "Vistas",
+        "body": "Cambia entre los distintos reportes."
+      },
+      "currency": {
+        "title": "Moneda",
+        "body": "Cada reporte se calcula en una sola moneda a la vez."
+      },
+      "filters": {
+        "title": "Período y filtros",
+        "body": "Acota el reporte por período, cuenta o categoría."
+      }
+    },
+    "categories": {
+      "intro": {
+        "title": "Categorías",
+        "body": "Así se ordenan tus gastos y tus ingresos."
+      },
+      "tabs": {
+        "title": "Gastos e ingresos",
+        "body": "Cambia entre las categorías de gastos y las de ingresos."
+      },
+      "list": {
+        "title": "Grupos y categorías",
+        "body": "Toca una para cambiar su nombre, su ícono o desactivarla."
+      },
+      "add": {
+        "title": "Agregar",
+        "body": "Suma tus propias categorías cuando las necesites."
+      }
+    }
+  },
+  "guides": {
+    "title": "Guías",
+    "back": "Volver al menú",
+    "intro": "Vuelve a ver la explicación de cualquier pantalla.",
+    "view": "Ver",
+    "viewNamed": "Ver la guía de {{name}}",
+    "needsCard": "Necesitas una tarjeta de crédito para verla.",
+    "reset": "Mostrar todas de nuevo",
+    "resetDone": "Listo. Cada guía volverá a aparecer al abrir su pantalla.",
+    "resetFailed": "No pudimos restablecer las guías. Inténtalo de nuevo."
   }
 }

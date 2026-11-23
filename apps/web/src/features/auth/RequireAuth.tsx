@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { TourHost } from "../tours/TourHost";
 import { useSession } from "./useSession";
 
 export function RequireAuth() {
@@ -9,5 +10,10 @@ export function RequireAuth() {
   if (status === "signedOut") {
     return <Navigate to="/" replace />;
   }
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+      <TourHost />
+    </>
+  );
 }
