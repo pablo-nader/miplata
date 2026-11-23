@@ -40,3 +40,4 @@ What becomes easier, harder, or constrained.
 | [0011](0011-design-system-source-of-truth.md) | Design system source of truth | Accepted |
 | [0012](0012-category-icons-with-lucide.md) | Category icons with Lucide | Accepted |
 | [0013](0013-internationalization.md) | Internationalization | Accepted |
+| [0014](0014-ui-preview-approval.md) | UI preview approval before merge | Accepted |

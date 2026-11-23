@@ -1,6 +1,6 @@
 # 0006. Agent-driven delivery workflow
 
-- Status: Accepted
+- Status: Accepted; automatic merge amended by [0014](0014-ui-preview-approval.md) for user interface changes
 - Date: 2026-11-23
 
 ## Context

@@ -20,7 +20,7 @@ Read [DESIGN.md](DESIGN.md) before building or changing any screen. Use only the
 3. Before opening a pull request, two fresh agents with no prior context review the change. Open the pull request only when both pass with no warnings.
 4. All CI checks must pass. Fix CI failures and merge conflicts.
 5. Rebase onto `main` instead of merging, to keep history linear.
-6. Merge to `main` is automatic once CI and the dual review pass; it deploys to production.
+6. Merge to `main` is automatic once CI and the dual review pass; it deploys to production. Exception: a pull request that adds or changes user interface waits for the owner to approve a preview (Vercel preview URL plus phone and desktop screenshots, light and dark, in Spanish). See ADR 0014.
 7. Conventional Commits with the AI co-author trailer. Pull request descriptions end with an AI attribution line.
 
 ## Decisions
