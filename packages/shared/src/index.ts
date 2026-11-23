@@ -98,6 +98,20 @@ export {
 } from "./exchange";
 export { type HealthResponse, healthResponseSchema } from "./health";
 export {
+  type ForgiveRequest,
+  forgiveRequestSchema,
+  type LoanDetail,
+  type LoanLine,
+  type LoanPerson,
+  type LoansResponse,
+  type LoanTotal,
+  loanDetailSchema,
+  loanLineSchema,
+  loanPersonSchema,
+  loansResponseSchema,
+  loanTotalSchema,
+} from "./loans";
+export {
   LOCALES,
   type Locale,
   localeSchema,

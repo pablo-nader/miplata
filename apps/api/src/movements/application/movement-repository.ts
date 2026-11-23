@@ -1,4 +1,5 @@
 import type { Movement, MovementQuery, YearMonth } from "@miplata/shared";
+import type { PendingShareRow } from "../../loans/domain/loan-summary";
 import type { StatementOverrides } from "../../statements/domain/statement-assignment";
 import type { MonthTotalRow } from "../domain/month-summary";
 import type { MovementPlan } from "../domain/movement-plan";
@@ -32,4 +33,5 @@ export type MovementRepository = {
   list(userId: string, query: MovementQuery): Promise<MovementPage>;
   remove(userId: string, movementId: string): Promise<RemoveOutcome>;
   monthRows(userId: string, month: YearMonth): Promise<MonthTotalRow[]>;
+  pendingPersonShares(userId: string, month: YearMonth): Promise<PendingShareRow[]>;
 };

@@ -23,6 +23,7 @@ import {
   planTransfer,
 } from "../domain/movement-plan";
 import type { MovementPage, MovementRepository } from "./movement-repository";
+import { planRepayment } from "./repayment";
 
 export type MovementDependencies = {
   movements: MovementRepository;
@@ -144,6 +145,13 @@ export async function createMovement(
   const planned = await planFor(deps, userId, request, null);
   if (!planned.ok) {
     return planned;
+  }
+  if (request.type === "transfer") {
+    const plans = await planRepayment(deps, userId, request, planned.value);
+    if (plans.length > 1) {
+      const [settled] = await deps.movements.createAll(userId, plans);
+      return { ok: true, value: settled as Movement };
+    }
   }
   return { ok: true, value: await deps.movements.create(userId, planned.value) };
 }

@@ -389,5 +389,46 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
         totalMinor: toSafeInteger(BigInt(row.total)),
       }));
     },
+
+    async pendingPersonShares(userId, month) {
+      const share = sql`(${installment.amountMinor} - ${installment.ownAmountMinor})`;
+      const rows = await db
+        .select({
+          personId: posting.accountId,
+          currency: installment.currency,
+          dueNow: sql<string>`coalesce(sum(case when ${installment.periodMonth} = ${firstDay(month)} then ${share} else 0 end), 0)`,
+          total: sql<string>`coalesce(sum(${share}), 0)`,
+        })
+        .from(installment)
+        .innerJoin(
+          posting,
+          and(
+            eq(posting.userId, installment.userId),
+            eq(posting.movementId, installment.movementId),
+          ),
+        )
+        .innerJoin(
+          account,
+          and(
+            eq(account.userId, posting.userId),
+            eq(account.id, posting.accountId),
+            eq(account.type, "person"),
+          ),
+        )
+        .where(
+          and(
+            eq(installment.userId, userId),
+            gte(installment.periodMonth, firstDay(month)),
+            sql`${installment.amountMinor} > ${installment.ownAmountMinor}`,
+          ),
+        )
+        .groupBy(posting.accountId, installment.currency);
+      return rows.map((row) => ({
+        personId: row.personId,
+        currency: currencySchema.parse(row.currency),
+        dueNowMinor: toSafeInteger(BigInt(row.dueNow)),
+        totalMinor: toSafeInteger(BigInt(row.total)),
+      }));
+    },
   };
 }

@@ -70,3 +70,4 @@ What becomes easier, harder, or constrained.
 | [0041](0041-most-used-categories-endpoint.md) | Most used categories endpoint | Accepted |
 | [0042](0042-accent-insensitive-movement-search.md) | Accent-insensitive movement search | Accepted |
 | [0043](0043-guided-tours.md) | Guided tours with driver.js and a per-device seen state | Accepted |
+| [0044](0044-loans-api.md) | Loans API | Accepted |
