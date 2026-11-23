@@ -1,5 +1,5 @@
 import type { LoanDetail } from "@miplata/shared";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { I18nextProvider } from "react-i18next";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
@@ -177,6 +177,7 @@ describe("LoanDetailContainer", () => {
     await screen.findByRole("region", { name: "Te debe" });
     expect(calls.find((call) => call.key === "POST /api/loans/acc-juan/forgive")?.body).toEqual({
       currency: "ARS",
+      amountMinor: 70_000_00,
       categoryId: "cat-groceries",
       occurredOn: "2026-11-25",
     });
@@ -205,6 +206,7 @@ describe("LoanDetailContainer", () => {
     await screen.findByRole("region", { name: "Le debés" });
     expect(calls.find((call) => call.key === "POST /api/loans/acc-juan/forgive")?.body).toEqual({
       currency: "USD",
+      amountMinor: 30_00,
       categoryId: "cat-salary",
       occurredOn: "2026-11-25",
     });
@@ -227,6 +229,25 @@ describe("LoanDetailContainer", () => {
     // Assert
     expect((await screen.findByRole("alert")).textContent).toBe("Ya no hay deuda para perdonar.");
     expect(screen.getByRole("alertdialog")).toBeDefined();
+  });
+
+  it("closes the dialog and reloads when the balance changed meanwhile", async () => {
+    // Arrange
+    const { calls } = stubApi({
+      ...lookupHandlers,
+      "GET /api/loans/acc-juan": { body: owesYou },
+      "POST /api/loans/acc-juan/forgive": { status: 409, body: { error: "balance_changed" } },
+    });
+    renderDetail();
+    await userEvent.click(await screen.findByRole("button", { name: "Perdonar deuda" }));
+
+    // Act
+    await userEvent.click(screen.getByRole("button", { name: "Supermercado" }));
+    await userEvent.click(screen.getByRole("button", { name: "Confirmar" }));
+
+    // Assert
+    await waitFor(() => expect(screen.queryByRole("alertdialog")).toBeNull());
+    expect(calls.filter((call) => call.key === "GET /api/loans/acc-juan").length).toBe(2);
   });
 
   it("uses a generic message for an unknown failure", async () => {

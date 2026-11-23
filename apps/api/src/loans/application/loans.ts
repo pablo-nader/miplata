@@ -99,6 +99,9 @@ export async function forgiveDebt(
   }
   const occurredOn = request.occurredOn ?? deps.today();
   const amountMinor = Math.abs(balanceMinor);
+  if (request.amountMinor !== amountMinor) {
+    return failure("balance_changed");
+  }
   const plan: MovementPlan = {
     type,
     occurredOn,

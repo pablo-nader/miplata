@@ -274,6 +274,7 @@ describe("forgiving a debt", () => {
     const forgiven = await ok(
       await call(user.cookie, "POST", `/loans/${user.juan}/forgive`, {
         currency: "ARS",
+        amountMinor: 700_00,
         categoryId: user.food,
         occurredOn: "2026-11-12",
       }),
@@ -298,6 +299,7 @@ describe("forgiving a debt", () => {
     const forgiven = await ok(
       await call(user.cookie, "POST", `/loans/${user.juan}/forgive`, {
         currency: "USD",
+        amountMinor: 50_00,
         categoryId: user.food,
       }),
       201,
@@ -314,6 +316,7 @@ describe("forgiving a debt", () => {
     const forgive = () =>
       call(user.cookie, "POST", `/loans/${user.juan}/forgive`, {
         currency: "ARS",
+        amountMinor: 700_00,
         categoryId: user.food,
       });
 
@@ -337,6 +340,7 @@ describe("forgiving a debt", () => {
     const body = await ok(
       await call(user.cookie, "POST", `/loans/${user.juan}/forgive`, {
         currency: "ARS",
+        amountMinor: 700_00,
         categoryId: stranger.food,
       }),
       400,
@@ -355,6 +359,7 @@ describe("forgiving a debt", () => {
     const forgiven = await ok(
       await call(user.cookie, "POST", `/loans/${user.ana}/forgive`, {
         currency: "ARS",
+        amountMinor: 3_000_00,
         categoryId: user.otherIncome,
       }),
       201,
@@ -377,6 +382,7 @@ describe("forgiving a debt", () => {
     const body = await ok(
       await call(user.cookie, "POST", `/loans/${user.juan}/forgive`, {
         currency: "ARS",
+        amountMinor: 700_00,
         categoryId: user.otherIncome,
       }),
       400,
@@ -395,6 +401,7 @@ describe("forgiving a debt", () => {
     const body = await ok(
       await call(user.cookie, "POST", `/loans/${user.juan}/forgive`, {
         currency: "ARS",
+        amountMinor: 700_00,
         categoryId: user.food,
       }),
       400,
@@ -413,6 +420,7 @@ describe("forgiving a debt", () => {
     // Act
     const response = await call(stranger.cookie, "POST", `/loans/${owner.juan}/forgive`, {
       currency: "ARS",
+      amountMinor: 700_00,
       categoryId: stranger.food,
     });
 

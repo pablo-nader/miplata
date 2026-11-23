@@ -58,11 +58,17 @@ export function LoanDetailContainer() {
     setFailure(null);
     const result = await forgiveDebt(personId, {
       currency: forgiving.currency,
+      amountMinor: forgiving.amountMinor,
       categoryId,
       occurredOn: localDate(),
     });
     setBusy(false);
     if (result.ok) {
+      setForgiving(null);
+      reload();
+      return;
+    }
+    if (result.error === "balance_changed") {
       setForgiving(null);
       reload();
       return;
