@@ -179,9 +179,11 @@ export function StatementContainer() {
       {
         key: currency,
         label:
-          amount === 0
-            ? t("statements.removeAdjustment")
-            : t("statements.adjust", { amount: money(amount, currency) }),
+          busy === currency
+            ? t("statements.adjusting")
+            : amount === 0
+              ? t("statements.removeAdjustment")
+              : t("statements.adjust", { amount: money(amount, currency) }),
         busy: busy === currency,
         onClick: () => adjust(detail, currency),
       },
@@ -210,7 +212,10 @@ export function StatementContainer() {
         key: item.id,
         label: monthLabel(item.periodMonth, locale),
         selected: item.id === selected.id,
-        onSelect: () => navigate(`${base}?period=${item.periodMonth}`, { replace: true }),
+        onSelect: () => {
+          setFailure(null);
+          navigate(`${base}?period=${item.periodMonth}`, { replace: true });
+        },
       }))}
       caption={t("statements.closesDue", {
         closing: shortDate(detail.closingDate, locale),

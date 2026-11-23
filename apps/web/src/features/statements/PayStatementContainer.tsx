@@ -46,8 +46,9 @@ export function PayStatementContainer() {
       return;
     }
     initialised.current = true;
-    const source = data.accounts.find(canPayFrom);
-    setForm({ ...emptyPayForm(data.detail.dueDate), sourceId: source?.id ?? null });
+    const sources = data.accounts.filter(canPayFrom);
+    const only = sources.length === 1 ? sources[0] : undefined;
+    setForm({ ...emptyPayForm(data.detail.dueDate), sourceId: only?.id ?? null });
   }, [data.status, data.detail, data.accounts]);
 
   if (data.status === "error") {
@@ -123,6 +124,7 @@ export function PayStatementContainer() {
       editLabel: t("statements.pay.arsAmount"),
       value: form.arsText,
       editable,
+      error: errors.amount && editable ? t("statements.pay.errors.amount") : undefined,
       onChange: (value: string) => change({ arsText: value }),
       account: sourceName,
     },
@@ -135,6 +137,7 @@ export function PayStatementContainer() {
             editLabel: t("statements.pay.usdAmount"),
             value: form.usdText,
             editable,
+            error: errors.amount && editable ? t("statements.pay.errors.amount") : undefined,
             onChange: (value: string) => change({ usdText: value }),
             account: form.usdWithPesos ? `${sourceName} · ARS` : `${sourceName} · USD`,
           },
