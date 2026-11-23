@@ -7,6 +7,7 @@ import type {
 } from "../accounts/application/accounts";
 import { inMemoryMovements } from "./movement-fakes";
 import { emptyReports } from "./report-fakes";
+import { inertStatements } from "./statement-fakes";
 
 type StoredAccount = Account & { userId: string; posted: Map<Currency, number> };
 
@@ -125,5 +126,7 @@ export function unusedAccountDependencies() {
     people: repository,
     movements: inMemoryMovements().repository,
     reports: emptyReports(),
+    statements: inertStatements,
+    today: () => "2026-11-23",
   };
 }

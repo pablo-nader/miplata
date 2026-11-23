@@ -30,7 +30,11 @@ export type MovementDependencies = {
   categories: CategoryRepository;
 };
 
-export type MovementError = MovementViolation | "not_found" | "movement_in_use";
+export type MovementError =
+  | MovementViolation
+  | "not_found"
+  | "movement_in_use"
+  | "statement_movement";
 
 export type MovementResult<T> = { ok: true; value: T } | { ok: false; error: MovementError };
 
@@ -152,6 +156,9 @@ export async function updateMovement(
   const existing = await deps.movements.find(userId, movementId);
   if (!existing) {
     return failure("not_found");
+  }
+  if (await deps.movements.isStatementBound(userId, movementId)) {
+    return failure("statement_movement");
   }
   const planned = await planFor(deps, userId, request, existing);
   if (!planned.ok) {

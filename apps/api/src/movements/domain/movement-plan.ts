@@ -59,6 +59,7 @@ export type MovementPlan = {
   postings: PostingPlan[];
   installments: InstallmentPlan[];
   statementPlan: StatementPlan | null;
+  statementId?: string;
 };
 
 export type PlanOutcome =

@@ -7,9 +7,11 @@ import { drizzleCategoryRepository } from "../categories/infrastructure/drizzle-
 import { drizzleUserProfileRepository } from "../me/infrastructure/drizzle-user-profile-repository";
 import { drizzleMovementRepository } from "../movements/infrastructure/drizzle-movement-repository";
 import { drizzleReportRepository } from "../reports/infrastructure/drizzle-report-repository";
+import { drizzleStatementRepository } from "../statements/infrastructure/drizzle-statement-repository";
 import { readVersion } from "../version";
 import { createAuth } from "./auth/create-auth";
 import { sessionResolverFor } from "./auth/session-resolver";
+import { todayInArgentina } from "./clock/today";
 import { type Env, parseEnv } from "./env/env";
 
 export function composeApp(env: Env = parseEnv(process.env)) {
@@ -24,6 +26,8 @@ export function composeApp(env: Env = parseEnv(process.env)) {
     ...accountDependencies(db),
     movements: drizzleMovementRepository(db),
     reports: drizzleReportRepository(db),
+    statements: drizzleStatementRepository(db),
+    today: todayInArgentina,
   });
 }
 

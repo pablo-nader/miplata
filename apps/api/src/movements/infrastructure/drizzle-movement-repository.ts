@@ -12,7 +12,6 @@ import {
   posting,
   type SQL,
   sql,
-  statement,
 } from "@miplata/db";
 import {
   currencySchema,
@@ -23,7 +22,10 @@ import {
   type YearMonth,
 } from "@miplata/shared";
 import { FOREIGN_KEY_VIOLATION, pgErrorCode } from "../../shared/database/pg-error";
-import type { StatementOverrides } from "../../statements/domain/statement-assignment";
+import {
+  ensureStatements,
+  readStatementOverrides,
+} from "../../statements/infrastructure/statement-rows";
 import type { MovementRepository } from "../application/movement-repository";
 import type { MonthTotalRow } from "../domain/month-summary";
 import type { MovementPlan } from "../domain/movement-plan";
@@ -148,53 +150,20 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
     });
   }
 
-  async function ensureStatements(
-    tx: Transaction,
-    userId: string,
-    plan: MovementPlan,
-  ): Promise<Map<string, string>> {
-    const statementPlan = plan.statementPlan;
-    if (!statementPlan) {
-      return new Map();
-    }
-    const unique = [
-      ...new Map(statementPlan.statements.map((item) => [item.periodMonth, item])).values(),
-    ];
-    await tx
-      .insert(statement)
-      .values(
-        unique.map((item) => ({
-          userId,
-          accountId: statementPlan.accountId,
-          periodMonth: firstDay(item.periodMonth),
-          closingDate: item.closingDate,
-          dueDate: item.dueDate,
-        })),
-      )
-      .onConflictDoNothing({ target: [statement.accountId, statement.periodMonth] });
-    const rows = await tx
-      .select({ id: statement.id, periodMonth: statement.periodMonth })
-      .from(statement)
-      .where(
-        and(
-          eq(statement.userId, userId),
-          eq(statement.accountId, statementPlan.accountId),
-          inArray(
-            statement.periodMonth,
-            unique.map((item) => firstDay(item.periodMonth)),
-          ),
-        ),
-      );
-    return new Map(rows.map((row) => [row.periodMonth.slice(0, 7), row.id]));
-  }
-
   async function writeLines(
     tx: Transaction,
     userId: string,
     movementId: string,
     plan: MovementPlan,
   ): Promise<void> {
-    const statementIds = await ensureStatements(tx, userId, plan);
+    const statementIds = plan.statementPlan
+      ? await ensureStatements(
+          tx,
+          userId,
+          plan.statementPlan.accountId,
+          plan.statementPlan.statements,
+        )
+      : new Map<string, string>();
     await tx.insert(posting).values(
       plan.postings.map((item) => ({
         userId,
@@ -211,7 +180,7 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
           movementId,
           number: item.number,
           periodMonth: firstDay(item.periodMonth),
-          statementId: statementIds.get(item.periodMonth) ?? null,
+          statementId: statementIds.get(item.periodMonth) ?? plan.statementId ?? null,
           currency: item.currency,
           amountMinor: BigInt(item.amountMinor),
           ownAmountMinor: BigInt(item.ownAmountMinor),
@@ -232,27 +201,8 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
   return {
     find: findOne,
 
-    async statementOverrides(userId, accountId, fromMonth, toMonth) {
-      const rows = await db
-        .select()
-        .from(statement)
-        .where(
-          and(
-            eq(statement.userId, userId),
-            eq(statement.accountId, accountId),
-            gte(statement.periodMonth, firstDay(fromMonth)),
-            lte(statement.periodMonth, firstDay(toMonth)),
-          ),
-        );
-      const overrides: Record<string, { closingDate: string; dueDate: string }> = {};
-      for (const row of rows) {
-        const period = row.periodMonth.slice(0, 7);
-        const usable = row.closingDate.slice(0, 7) === period && row.dueDate > row.closingDate;
-        if (usable) {
-          overrides[period] = { closingDate: row.closingDate, dueDate: row.dueDate };
-        }
-      }
-      return overrides as StatementOverrides;
+    statementOverrides(userId, accountId, fromMonth, toMonth) {
+      return readStatementOverrides(db, userId, accountId, fromMonth, toMonth);
     },
 
     async create(userId, plan) {
@@ -265,6 +215,7 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
             occurredOn: plan.occurredOn,
             description: plan.description,
             categoryId: plan.categoryId,
+            statementId: plan.statementId ?? null,
           })
           .returning({ id: movement.id });
         const movementId = (created as { id: string }).id;
@@ -272,6 +223,38 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
         return movementId;
       });
       return (await findOne(userId, id)) as Movement;
+    },
+
+    async createAll(userId, plans) {
+      const ids = await db.transaction(async (tx) => {
+        const created: string[] = [];
+        for (const plan of plans) {
+          const [row] = await tx
+            .insert(movement)
+            .values({
+              userId,
+              type: plan.type,
+              occurredOn: plan.occurredOn,
+              description: plan.description,
+              categoryId: plan.categoryId,
+              statementId: plan.statementId ?? null,
+            })
+            .returning({ id: movement.id });
+          const movementId = (row as { id: string }).id;
+          await writeLines(tx, userId, movementId, plan);
+          created.push(movementId);
+        }
+        return created;
+      });
+      return Promise.all(ids.map((id) => findOne(userId, id) as Promise<Movement>));
+    },
+
+    async isStatementBound(userId, movementId) {
+      const rows = await db
+        .select({ statementId: movement.statementId })
+        .from(movement)
+        .where(and(eq(movement.userId, userId), eq(movement.id, movementId)));
+      return rows[0]?.statementId != null;
     },
 
     async replace(userId, movementId, plan) {

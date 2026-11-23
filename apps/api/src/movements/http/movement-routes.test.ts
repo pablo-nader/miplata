@@ -5,6 +5,7 @@ import type { CategoryRepository } from "../../categories/application/category-r
 import { inMemoryAccounts, inMemoryInstitutions } from "../../test/account-fakes";
 import { inMemoryMovements } from "../../test/movement-fakes";
 import { emptyReports } from "../../test/report-fakes";
+import { inertStatements } from "../../test/statement-fakes";
 
 const CATEGORY = "00000000-0000-4000-8000-000000000009";
 
@@ -73,6 +74,8 @@ beforeEach(async () => {
     } as CategoryRepository,
     movements: inMemoryMovements().repository,
     reports: emptyReports(),
+    statements: inertStatements,
+    today: () => "2026-11-23",
   });
 });
 
@@ -205,6 +208,8 @@ describe("movement routes", () => {
       categories: {} as CategoryRepository,
       movements: { ...blocked, remove: async () => "in_use" },
       reports: emptyReports(),
+      statements: inertStatements,
+      today: () => "2026-11-23",
     });
 
     // Act

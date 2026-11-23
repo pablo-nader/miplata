@@ -38,6 +38,7 @@ function toMovement(id: string, plan: MovementPlan): Movement {
 export function inMemoryMovements() {
   const rows: Stored[] = [];
   const plans: MovementPlan[] = [];
+  const bound = new Set<string>();
 
   const repository: MovementRepository = {
     async statementOverrides() {
@@ -46,8 +47,17 @@ export function inMemoryMovements() {
     async create(userId, plan) {
       const movement = toMovement(randomUUID(), plan);
       rows.push({ userId, movement });
+      if (plan.statementId) {
+        bound.add(`${userId}:${movement.id}`);
+      }
       plans.push(plan);
       return movement;
+    },
+    async createAll(userId, batch) {
+      return Promise.all(batch.map((plan) => repository.create(userId, plan)));
+    },
+    async isStatementBound(userId, movementId) {
+      return bound.has(`${userId}:${movementId}`);
     },
     async replace(userId, movementId, plan) {
       const row = rows.find((item) => item.userId === userId && item.movement.id === movementId);
