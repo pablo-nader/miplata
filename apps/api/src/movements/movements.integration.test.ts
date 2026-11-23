@@ -668,6 +668,31 @@ describe("editing and deleting", () => {
     expect(await balanceOf(user, user.visa, "ARS")).toBe(-600_00);
   });
 
+  it("moves a card purchase to a cash account and drops its statement links", async () => {
+    // Arrange
+    const user = await newUser();
+    const created = await record(
+      user,
+      expense(user, { accountId: user.visa, amountMinor: 900_00, installments: 3 }),
+    );
+
+    // Act
+    const edited = await ok(
+      await call(
+        user.cookie,
+        "PUT",
+        `/movements/${created.id}`,
+        expense(user, { amountMinor: 900_00 }),
+      ),
+    );
+
+    // Assert
+    expect(edited.installments).toHaveLength(1);
+    expect(edited.installments[0].statementId).toBeNull();
+    expect(await balanceOf(user, user.visa, "ARS")).toBe(0);
+    expect(await balanceOf(user, user.cash, "ARS")).toBe(-900_00);
+  });
+
   it("changes the type of a movement from expense to transfer", async () => {
     // Arrange
     const user = await newUser();
@@ -922,6 +947,9 @@ describe("listing and filtering", () => {
     "accountId=nope",
     "from=2026-12-01&to=2026-11-01",
     "minAmountMinor=10&maxAmountMinor=5",
+    "maxAmountMinor=99999999999999999999",
+    "offset=1000000000000000000000",
+    "minAmountMinor=",
   ])("rejects the query %s", async (query) => {
     // Arrange
     const path = `/movements?${query}`;
