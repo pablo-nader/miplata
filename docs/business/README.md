@@ -30,3 +30,4 @@ Impact on users, cost, and technical design.
 | [BD-0001](BD-0001-personal-non-commercial-use.md) | Personal, non-commercial use | Accepted |
 | [BD-0002](BD-0002-each-user-owns-their-data.md) | Each user owns their data | Accepted |
 | [BD-0003](BD-0003-google-sign-in.md) | Sign in with Google | Accepted |
+| [BD-0004](BD-0004-mobile-first-installable-app.md) | Mobile-first, installable app | Accepted |
