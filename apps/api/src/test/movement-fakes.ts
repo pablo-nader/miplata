@@ -47,6 +47,9 @@ export function inMemoryMovements(claimOccurrence: OccurrenceClaim = () => false
     async statementOverrides() {
       return {};
     },
+    async pendingPersonShares() {
+      return [];
+    },
     async create(userId, plan) {
       const movement = toMovement(randomUUID(), plan);
       rows.push({ userId, movement });
