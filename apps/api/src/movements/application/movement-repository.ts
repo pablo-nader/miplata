@@ -1,4 +1,4 @@
-import type { Movement, MovementQuery, YearMonth } from "@miplata/shared";
+import type { Currency, Movement, MovementQuery, YearMonth } from "@miplata/shared";
 import type { PendingShareRow } from "../../loans/domain/loan-summary";
 import type { StatementOverrides } from "../../statements/domain/statement-assignment";
 import type { MonthTotalRow } from "../domain/month-summary";
@@ -17,6 +17,11 @@ export type MovementRepository = {
   ): Promise<StatementOverrides>;
   create(userId: string, plan: MovementPlan): Promise<Movement>;
   createAll(userId: string, plans: MovementPlan[]): Promise<Movement[]>;
+  createIfBalance(
+    userId: string,
+    plan: MovementPlan,
+    expected: { accountId: string; currency: Currency; balanceMinor: number },
+  ): Promise<Movement | "balance_changed">;
   isStatementBound(userId: string, movementId: string): Promise<boolean>;
   replace(
     userId: string,

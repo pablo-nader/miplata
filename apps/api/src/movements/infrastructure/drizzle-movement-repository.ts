@@ -1,5 +1,6 @@
 import {
   account,
+  accountCurrency,
   and,
   type Database,
   desc,
@@ -286,6 +287,40 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
         return movementId;
       });
       return id === null ? "not_pending" : ((await findOne(userId, id)) as Movement);
+    },
+
+    async createIfBalance(userId, plan, expected) {
+      const id = await db.transaction(async (tx) => {
+        await tx.execute(
+          sql`select pg_advisory_xact_lock(hashtext(${`person:${userId}:${expected.accountId}`}))`,
+        );
+        const [opening] = await tx
+          .select({ value: accountCurrency.openingBalanceMinor })
+          .from(accountCurrency)
+          .where(
+            and(
+              eq(accountCurrency.userId, userId),
+              eq(accountCurrency.accountId, expected.accountId),
+              eq(accountCurrency.currency, expected.currency),
+            ),
+          );
+        const [posted] = await tx
+          .select({ total: sql<string>`coalesce(sum(${posting.amountMinor}), 0)` })
+          .from(posting)
+          .where(
+            and(
+              eq(posting.userId, userId),
+              eq(posting.accountId, expected.accountId),
+              eq(posting.currency, expected.currency),
+            ),
+          );
+        const balance = (opening?.value ?? 0n) + BigInt(posted?.total ?? 0);
+        if (balance !== BigInt(expected.balanceMinor)) {
+          return null;
+        }
+        return insertMovement(tx, userId, plan, null);
+      });
+      return id === null ? "balance_changed" : ((await findOne(userId, id)) as Movement);
     },
 
     async createAll(userId, plans) {

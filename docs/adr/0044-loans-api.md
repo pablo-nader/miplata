@@ -19,4 +19,4 @@ People are accounts of type `person` ([BD-0011](../business/BD-0011-accounts-and
 - Asking for the income category in the repayment request: BD-0017 says the excess is recorded automatically. Rejected.
 
 ## Consequences
-- Two concurrent forgiveness or repayment requests for the same person could both read the same balance. The app is single-user per account of data and the risk is accepted, as for other balance-dependent writes.
+- Forgiveness locks the person and re-reads the balance inside its transaction, so a second request after the balance changed fails with `balance_changed`. Repayments are not locked: two simultaneous repayments by the same person can both read the same balance, and the risk is accepted. Editing or deleting a repayment that was split does not touch its companion income, because the two movements are independent.
