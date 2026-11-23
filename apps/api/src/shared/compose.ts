@@ -6,6 +6,7 @@ import { createApp } from "../app";
 import { drizzleCategoryRepository } from "../categories/infrastructure/drizzle-category-repository";
 import { drizzleUserProfileRepository } from "../me/infrastructure/drizzle-user-profile-repository";
 import { drizzleMovementRepository } from "../movements/infrastructure/drizzle-movement-repository";
+import { drizzleReportRepository } from "../reports/infrastructure/drizzle-report-repository";
 import { readVersion } from "../version";
 import { createAuth } from "./auth/create-auth";
 import { sessionResolverFor } from "./auth/session-resolver";
@@ -22,6 +23,7 @@ export function composeApp(env: Env = parseEnv(process.env)) {
     categories: drizzleCategoryRepository(db),
     ...accountDependencies(db),
     movements: drizzleMovementRepository(db),
+    reports: drizzleReportRepository(db),
   });
 }
 

@@ -5,6 +5,7 @@ import { createApp } from "../app";
 import { drizzleCategoryRepository } from "../categories/infrastructure/drizzle-category-repository";
 import { drizzleUserProfileRepository } from "../me/infrastructure/drizzle-user-profile-repository";
 import { drizzleMovementRepository } from "../movements/infrastructure/drizzle-movement-repository";
+import { drizzleReportRepository } from "../reports/infrastructure/drizzle-report-repository";
 import { createAuth, type SeedDefaults } from "../shared/auth/create-auth";
 import { sessionResolverFor } from "../shared/auth/session-resolver";
 import { accountDependencies } from "../shared/compose";
@@ -37,6 +38,7 @@ export async function createAuthHarness(seedDefaults?: SeedDefaults) {
     categories: drizzleCategoryRepository(db),
     ...accountDependencies(db),
     movements: drizzleMovementRepository(db),
+    reports: drizzleReportRepository(db),
   });
 
   async function signUpWithGoogle(email: string, name = "Test Person") {

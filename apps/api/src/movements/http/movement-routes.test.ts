@@ -4,6 +4,7 @@ import { createApp } from "../../app";
 import type { CategoryRepository } from "../../categories/application/category-repository";
 import { inMemoryAccounts, inMemoryInstitutions } from "../../test/account-fakes";
 import { inMemoryMovements } from "../../test/movement-fakes";
+import { emptyReports } from "../../test/report-fakes";
 
 const CATEGORY = "00000000-0000-4000-8000-000000000009";
 
@@ -71,6 +72,7 @@ beforeEach(async () => {
       findCategory: async (_userId: string, id: string) => (id === CATEGORY ? category : null),
     } as CategoryRepository,
     movements: inMemoryMovements().repository,
+    reports: emptyReports(),
   });
 });
 
@@ -202,6 +204,7 @@ describe("movement routes", () => {
       people: inMemoryAccounts().repository,
       categories: {} as CategoryRepository,
       movements: { ...blocked, remove: async () => "in_use" },
+      reports: emptyReports(),
     });
 
     // Act
