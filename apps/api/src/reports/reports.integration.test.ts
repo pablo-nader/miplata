@@ -564,6 +564,36 @@ describe("committed recurring movements", () => {
     expect(dollars.months[0].recurringMinor).toBe(70_00);
   });
 
+  it("does not count a confirmed occurrence again and estimates a variable one from the last confirmed amount", async () => {
+    // Arrange
+    harness.clock.today = "2026-12-04";
+    const user = await newUser();
+    const variable = await defineRecurring(user, { amountMode: "variable", amountMinor: 100_00 });
+    const occurrences = await ok(
+      await call(user.cookie, "GET", "/recurring/occurrences?type=expense"),
+    );
+    const december = occurrences.items.find(
+      (item: Json) => item.recurringId === variable.id && item.dueOn === "2026-12-05",
+    );
+    await ok(
+      await call(user.cookie, "POST", `/recurring/occurrences/${december.id}/confirm`, {
+        amountMinor: 180_00,
+      }),
+      201,
+    );
+
+    // Act
+    const report = await ok(await get(user, "/committed?from=2026-12&months=2"));
+
+    // Assert
+    expect(
+      report.months.map((month: Json) => [month.installmentsMinor, month.recurringMinor]),
+    ).toEqual([
+      [180_00, 0],
+      [0, 180_00],
+    ]);
+  });
+
   it("never includes another user's recurring movements", async () => {
     // Arrange
     const owner = await newUser();
