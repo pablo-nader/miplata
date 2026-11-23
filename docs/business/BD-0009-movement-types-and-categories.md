@@ -1,6 +1,6 @@
 # BD-0009. Movement types and categories
 
-- Status: Accepted; movement types amended by [BD-0011](BD-0011-accounts-and-transfers.md), which adds transfers
+- Status: Accepted; movement types amended by [BD-0011](BD-0011-accounts-and-transfers.md), which adds transfers; default categories amended by [BD-0015](BD-0015-statement-payment-charges-and-reconciliation.md), which adds the Financial charges group
 - Date: 2026-11-23
 
 ## Context
