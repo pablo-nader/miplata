@@ -15,6 +15,8 @@ Building statements end to end leaves small questions open in the earlier decisi
 - **Difference with the bank.** Bank total minus the app's total. A positive difference means the bank charged more than the app knows.
 - **Adjustment.** Only a positive difference can be recorded, as one Adjustment charge per currency. Recording it again after the bank total changes updates that same charge instead of adding another. A bank total below the app's total is not adjusted: something recorded twice or a payment that is missing explains it better than a negative charge.
 - **Charges.** A charge belongs to one statement and stays in it when the statement dates change. Its date defaults to the closing date. Only categories of the Financial charges group can be used. A charge or a payment is edited from its statement, never from the movements screen; it can still be deleted from there.
+- **Deactivated cards.** A deactivated card keeps its statements: it can still receive charges and payments, so a closed card's debt can be paid and reconciled. The source account of a payment must be active.
+- **Transfers outside Pay statement.** A transfer to the card that is not made with Pay statement, and an income recorded on the card, lower the card balance but belong to no statement, so no statement total includes them.
 - **Correcting dates.** When the user moves a closing date, the purchases made that month are assigned again with the new date, together with all their installments. Purchases of other months and charges do not move.
 - **Opening the current statement.** Opening a card's statements creates the one the card is in today if it does not exist yet, so charges and payments can be recorded before any purchase.
 

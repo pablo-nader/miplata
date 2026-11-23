@@ -229,6 +229,7 @@ async function writeCharge(
   loaded: Loaded,
   request: ChargeRequest,
   existingId: string | null,
+  alsoRemove: string[] = [],
 ): Promise<StatementResult<string>> {
   const refs = await chargeReferences(deps, userId, request.categoryId);
   if (!refs.category) {
@@ -248,7 +249,7 @@ async function writeCharge(
     return failure(planned.violation);
   }
   if (existingId) {
-    const replaced = await deps.movements.replace(userId, existingId, planned.plan);
+    const replaced = await deps.movements.replace(userId, existingId, planned.plan, alsoRemove);
     return replaced ? success(existingId) : failure("not_found");
   }
   const created = await deps.movements.create(userId, planned.plan);
@@ -359,12 +360,13 @@ export async function adjustStatement(
     occurredOn: null,
   };
   const [first, ...rest] = existing;
-  const written = await writeCharge(deps, userId, loaded, charge, first?.movementId ?? null);
-  if (!written.ok) {
-    return written;
-  }
-  for (const line of rest) {
-    await deps.movements.remove(userId, line.movementId);
-  }
-  return respond(deps, userId, statementId);
+  const written = await writeCharge(
+    deps,
+    userId,
+    loaded,
+    charge,
+    first?.movementId ?? null,
+    rest.map((line) => line.movementId),
+  );
+  return written.ok ? respond(deps, userId, statementId) : written;
 }

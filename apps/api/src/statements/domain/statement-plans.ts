@@ -60,9 +60,6 @@ export function planCharge(
   if (!category.isActive && !keepInactive.has(category.id)) {
     return { ok: false, violation: "category_inactive" };
   }
-  if (!card.isActive && !keepInactive.has(card.id)) {
-    return { ok: false, violation: "account_inactive" };
-  }
   if (!holds(card, request.currency)) {
     return { ok: false, violation: "currency_not_in_account" };
   }
@@ -128,7 +125,7 @@ export function planPayment(
         from: { accountId: source.id, ...leg.from },
         to: { accountId: card.id, ...leg.to },
       },
-      { from: source, to: card, keepInactive: new Set() },
+      { from: source, to: card, keepInactive: new Set([card.id]) },
     );
     if (!planned.ok) {
       return planned;

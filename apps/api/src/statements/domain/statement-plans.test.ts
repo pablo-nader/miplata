@@ -109,18 +109,26 @@ describe("planCharge", () => {
     expect(outcome).toEqual({ ok: false, violation: "category_not_allowed" });
   });
 
-  it("rejects an inactive category and an inactive card", () => {
+  it("rejects an inactive category", () => {
     // Arrange
     const inactiveCategory = refs({ category: { ...category, isActive: false } });
+
+    // Act
+    const outcome = planCharge(statement, charge(), inactiveCategory);
+
+    // Assert
+    expect(outcome).toEqual({ ok: false, violation: "category_inactive" });
+  });
+
+  it("accepts a charge on a deactivated card so its debt stays reconcilable", () => {
+    // Arrange
     const inactiveCard = refs({ card: { ...card, isActive: false } });
 
     // Act
-    const byCategory = planCharge(statement, charge(), inactiveCategory);
-    const byCard = planCharge(statement, charge(), inactiveCard);
+    const outcome = planCharge(statement, charge(), inactiveCard);
 
     // Assert
-    expect(byCategory).toEqual({ ok: false, violation: "category_inactive" });
-    expect(byCard).toEqual({ ok: false, violation: "account_inactive" });
+    expect(outcome.ok).toBe(true);
   });
 
   it("allows an edit to keep an inactive category", () => {
@@ -229,6 +237,20 @@ describe("planPayment", () => {
         },
       ],
     });
+  });
+
+  it("accepts paying a deactivated card but not from a deactivated account", () => {
+    // Arrange
+    const inactiveCard = { ...card, isActive: false };
+    const inactiveSource = { ...bank, isActive: false };
+
+    // Act
+    const toCard = planPayment(statement, payment(), { card: inactiveCard, source: bank });
+    const fromAccount = planPayment(statement, payment(), { card, source: inactiveSource });
+
+    // Assert
+    expect(toCard.ok).toBe(true);
+    expect(fromAccount).toEqual({ ok: false, violation: "account_inactive" });
   });
 
   it("rejects paying from a person or another card", () => {
