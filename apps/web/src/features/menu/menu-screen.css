@@ -23,3 +23,24 @@
   padding: 0 var(--space-4);
   color: var(--color-ink);
 }
+
+.menu-screen__link {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--size-touch-target);
+  color: var(--color-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.menu-screen__link-label {
+  flex: 1;
+}
+
+.menu-screen__link svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color-muted);
+}

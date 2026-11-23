@@ -1,4 +1,9 @@
+import { CATEGORY_ICON_NAMES } from "@miplata/shared";
 import { describe, expect, it } from "vitest";
+import {
+  DEFAULT_EXPENSE_GROUPS,
+  DEFAULT_INCOME_CATEGORIES,
+} from "../../../../../packages/db/src/seed/defaults";
 import { createI18n, detectLanguage, resources, syncDocumentLanguage } from "./index";
 
 function flatten(value: unknown, prefix = ""): string[] {
@@ -34,6 +39,40 @@ describe("translation files", () => {
 
     // Assert
     expect(empty).toEqual([]);
+  });
+});
+
+describe("seeded defaults", () => {
+  const keys = [
+    ...DEFAULT_EXPENSE_GROUPS.flatMap((group) => [
+      group.nameKey,
+      ...group.categories.map((item) => item.nameKey),
+    ]),
+    ...DEFAULT_INCOME_CATEGORIES.map((item) => item.nameKey),
+  ];
+
+  it.each(["es", "en"] as const)("have a translation in %s for every seeded name", (language) => {
+    // Arrange
+    const instance = createI18n(language);
+
+    // Act
+    const missing = keys.filter((key) => !instance.exists(key));
+
+    // Assert
+    expect(missing).toEqual([]);
+  });
+
+  it.each(["es", "en"] as const)("name every curated icon in %s", (language) => {
+    // Arrange
+    const instance = createI18n(language);
+
+    // Act
+    const missing = CATEGORY_ICON_NAMES.filter(
+      (name) => !instance.exists(`categories.icons.${name}`),
+    );
+
+    // Assert
+    expect(missing).toEqual([]);
   });
 });
 

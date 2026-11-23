@@ -49,6 +49,7 @@ export function MenuContainer() {
       title={t("screens.menu.title")}
       back={{ to: "/", label: t("nav.backHome") }}
       identity={user?.email ?? ""}
+      categories={{ to: "/categories", label: t("menu.categories") }}
       language={{
         label: t("menu.language"),
         options: [
