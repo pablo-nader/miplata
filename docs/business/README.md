@@ -59,3 +59,4 @@ Impact on users, cost, and technical design.
 | [BD-0030](BD-0030-search-ignores-accents-and-amounts-use-the-selected-currency.md) | Search ignores accents and amounts use the selected currency | Accepted |
 | [BD-0031](BD-0031-guided-tours.md) | Guided tours | Accepted |
 | [BD-0032](BD-0032-loan-settlement-rules.md) | Loan settlement rules | Accepted |
+| [BD-0033](BD-0033-manual-data-deletion-on-request.md) | Manual deletion of a user's data on request | Accepted |

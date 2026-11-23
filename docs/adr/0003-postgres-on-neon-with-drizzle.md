@@ -1,6 +1,6 @@
 # 0003. Postgres on Neon with Drizzle ORM
 
-- Status: Accepted
+- Status: Superseded by [0045](0045-no-preview-deployments-and-pg-driver.md) (serverless driver)
 - Date: 2026-11-23
 
 ## Context

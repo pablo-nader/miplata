@@ -27,9 +27,9 @@ What becomes easier, harder, or constrained.
 
 | ADR | Title | Status |
 | --- | --- | --- |
-| [0001](0001-hosting-on-vercel.md) | Host the application on Vercel | Accepted |
+| [0001](0001-hosting-on-vercel.md) | Host the application on Vercel | Superseded by 0042 (preview rule) |
 | [0002](0002-typescript-api-with-hono.md) | TypeScript API with Hono | Accepted |
-| [0003](0003-postgres-on-neon-with-drizzle.md) | Postgres on Neon with Drizzle ORM | Accepted |
+| [0003](0003-postgres-on-neon-with-drizzle.md) | Postgres on Neon with Drizzle ORM | Superseded by 0042 (serverless driver) |
 | [0004](0004-auth-with-better-auth-and-google.md) | Authentication with Better Auth and Google | Accepted |
 | [0005](0005-per-user-data-isolation.md) | Per-user data isolation enforced in the API | Accepted |
 | [0006](0006-agent-driven-delivery-workflow.md) | Agent-driven delivery workflow | Accepted |
@@ -44,7 +44,7 @@ What becomes easier, harder, or constrained.
 | [0015](0015-approved-screen-designs.md) | Approved screen designs | Accepted |
 | [0016](0016-data-model.md) | Data model | Accepted |
 | [0017](0017-project-structure.md) | Project structure | Accepted |
-| [0018](0018-ci-cd-pipeline.md) | CI/CD pipeline | Accepted |
+| [0018](0018-ci-cd-pipeline.md) | CI/CD pipeline | Superseded by 0042 (preview rule) |
 | [0019](0019-hosting-region.md) | Hosting region: São Paulo | Accepted |
 | [0020](0020-brand-name-is-not-translated.md) | The brand name is not translated | Accepted |
 | [0021](0021-serverless-packaging-and-quality-gates.md) | Serverless packaging and quality gates | Accepted |
@@ -71,3 +71,4 @@ What becomes easier, harder, or constrained.
 | [0042](0042-accent-insensitive-movement-search.md) | Accent-insensitive movement search | Accepted |
 | [0043](0043-guided-tours.md) | Guided tours with driver.js and a per-device seen state | Accepted |
 | [0044](0044-loans-api.md) | Loans API | Accepted |
+| [0045](0045-no-preview-deployments-and-pg-driver.md) | Previews out of the delivery flow and the pg driver for Neon | Accepted |

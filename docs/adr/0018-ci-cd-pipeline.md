@@ -1,6 +1,6 @@
 # 0018. CI/CD pipeline
 
-- Status: Accepted
+- Status: Superseded by [0045](0045-no-preview-deployments-and-pg-driver.md) (preview rule)
 - Date: 2026-11-23
 
 ## Context
