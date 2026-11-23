@@ -43,3 +43,5 @@ What becomes easier, harder, or constrained.
 | [0014](0014-ui-preview-approval.md) | UI preview approval before merge | Accepted |
 | [0015](0015-approved-screen-designs.md) | Approved screen designs | Accepted |
 | [0016](0016-data-model.md) | Data model | Accepted |
+| [0017](0017-project-structure.md) | Project structure | Accepted |
+| [0018](0018-ci-cd-pipeline.md) | CI/CD pipeline | Accepted |
