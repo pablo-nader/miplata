@@ -1,9 +1,14 @@
-import type {
-  CategoriesResponse,
-  CategoryDto,
-  CreateCategoryRequest,
-  UpdateCategoryRequest,
+import {
+  type CategoriesResponse,
+  type CategoryDto,
+  type CategoryType,
+  type CreateCategoryRequest,
+  type IsoDate,
+  MOST_USED_CATEGORY_LIMIT,
+  MOST_USED_WINDOW_DAYS,
+  type UpdateCategoryRequest,
 } from "@miplata/shared";
+import { addDays } from "../../recurring/domain/generation";
 import { buildCatalog, checkPlacement } from "../domain/catalog";
 import { type CategoryRepository, fail, type Outcome, succeed } from "./category-repository";
 
@@ -16,6 +21,20 @@ export async function listCategories(
     repository.listCategories(userId),
   ]);
   return buildCatalog(groups, categories);
+}
+
+export async function mostUsedCategoryIds(
+  repository: CategoryRepository,
+  userId: string,
+  type: CategoryType,
+  today: IsoDate,
+): Promise<string[]> {
+  return repository.mostUsedCategoryIds(
+    userId,
+    type,
+    addDays(today, -MOST_USED_WINDOW_DAYS),
+    MOST_USED_CATEGORY_LIMIT,
+  );
 }
 
 export async function createCategory(

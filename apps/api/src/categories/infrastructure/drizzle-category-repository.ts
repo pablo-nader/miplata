@@ -1,4 +1,16 @@
-import { and, asc, category, categoryGroup, type Database, eq, ne, sql } from "@miplata/db";
+import {
+  and,
+  asc,
+  category,
+  categoryGroup,
+  type Database,
+  desc,
+  eq,
+  gte,
+  movement,
+  ne,
+  sql,
+} from "@miplata/db";
 import { type CategoryDto, type CategoryGroupDto, categoryTypeSchema } from "@miplata/shared";
 import {
   FOREIGN_KEY_VIOLATION,
@@ -71,6 +83,29 @@ export function drizzleCategoryRepository(db: Database): CategoryRepository {
   }
 
   return {
+    async mostUsedCategoryIds(userId, type, since, limit) {
+      const uses = sql<number>`count(${movement.id})`;
+      const rows = await db
+        .select({ id: category.id })
+        .from(movement)
+        .innerJoin(
+          category,
+          and(eq(category.userId, movement.userId), eq(category.id, movement.categoryId)),
+        )
+        .where(
+          and(
+            eq(movement.userId, userId),
+            eq(category.type, type),
+            eq(category.isActive, true),
+            gte(movement.occurredOn, since),
+          ),
+        )
+        .groupBy(category.id, category.sortOrder)
+        .orderBy(desc(uses), asc(category.sortOrder), asc(category.id))
+        .limit(limit);
+      return rows.map((row) => row.id);
+    },
+
     async listGroups(userId) {
       const rows = await db
         .select()

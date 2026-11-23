@@ -116,6 +116,14 @@ export const categoriesResponseSchema = z.object({
 });
 export type CategoriesResponse = z.infer<typeof categoriesResponseSchema>;
 
+export const MOST_USED_CATEGORY_LIMIT = 4;
+export const MOST_USED_WINDOW_DAYS = 90;
+
+export const mostUsedCategoriesResponseSchema = z.object({
+  categoryIds: z.array(z.string().min(1)),
+});
+export type MostUsedCategoriesResponse = z.infer<typeof mostUsedCategoriesResponseSchema>;
+
 export const createCategoryRequestSchema = z.object({
   type: categoryTypeSchema,
   groupId: z.guid().optional(),

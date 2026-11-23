@@ -31,6 +31,7 @@ function appWith(overrides: Partial<CategoryRepository> = {}, userId: string | n
     insertGroup: vi.fn(async () => group),
     renameGroup: vi.fn(async () => group),
     deleteGroup: vi.fn(async () => "deleted" as const),
+    mostUsedCategoryIds: vi.fn(async () => []),
     ...overrides,
   };
   const app = createApp({
@@ -62,6 +63,7 @@ const newCategory = { type: "expense", groupId: id, name: "Rent", icon: "key", c
 describe("authentication", () => {
   it.each([
     ["GET", "/categories"],
+    ["GET", "/categories/most-used?type=expense"],
     ["POST", "/categories"],
     ["PATCH", `/categories/${id}`],
     ["POST", `/categories/${id}/deactivate`],
@@ -95,6 +97,30 @@ describe("categories", () => {
     const catalog = (await response.json()) as { expenseGroups: { categories: unknown[] }[] };
     expect(catalog.expenseGroups[0]?.categories).toHaveLength(1);
     expect(categories.listCategories).toHaveBeenCalledWith("u1");
+  });
+
+  it("asks for the session user's most used categories of the last 90 days", async () => {
+    // Arrange
+    const { app, categories } = appWith({ mostUsedCategoryIds: vi.fn(async () => [id]) });
+
+    // Act
+    const response = await send(app, "GET", "/categories/most-used?type=income&userId=spoofed");
+
+    // Assert
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ categoryIds: [id] });
+    expect(categories.mostUsedCategoryIds).toHaveBeenCalledWith("u1", "income", "2026-08-25", 4);
+  });
+
+  it.each(["", "?type=other"])("rejects most used with type %s with 400", async (query) => {
+    // Arrange
+    const { app } = appWith();
+
+    // Act
+    const response = await send(app, "GET", `/categories/most-used${query}`);
+
+    // Assert
+    expect(response.status).toBe(400);
   });
 
   it("never takes the user id from the request", async () => {
