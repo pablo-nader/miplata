@@ -77,7 +77,7 @@ type CurrencyChipsProps = {
 
 function CurrencyChips({ label, currencies, value, onChange }: CurrencyChipsProps) {
   if (currencies.length < 2) {
-    return null;
+    return currencies[0] ? <p className="movement-form__hint">{currencies[0]}</p> : null;
   }
   return (
     <fieldset className="movement-form__currencies">

@@ -606,6 +606,7 @@
         "transfer_amount_mismatch": "Con la misma moneda, los dos montos tienen que ser iguales.",
         "transfer_same_account": "Elegí cuentas distintas."
       }
-    }
+    },
+    "moreFailed": "No pudimos traer más movimientos. Probá de nuevo."
   }
 }

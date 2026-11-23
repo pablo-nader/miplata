@@ -173,6 +173,36 @@ describe("MovementsContainer", () => {
     expect(screen.queryByRole("button", { name: "Ver más" })).toBeNull();
   });
 
+  it("tells the user when the next page cannot be loaded", async () => {
+    // Arrange
+    stubApi({ ...lookupHandlers, [month]: listOf([coto], true) });
+    renderApp(<MovementsContainer />, "es");
+    await screen.findByText("Coto");
+
+    // Act
+    await userEvent.click(screen.getByRole("button", { name: "Ver más" }));
+
+    // Assert
+    expect(
+      await screen.findByText("No pudimos traer más movimientos. Probá de nuevo."),
+    ).toBeDefined();
+    expect(screen.getByText("Coto")).toBeDefined();
+  });
+
+  it("reloads the accounts and categories when retrying after they failed", async () => {
+    // Arrange
+    const { calls } = stubApi({ [month]: listOf([coto]) });
+    renderApp(<MovementsContainer />, "es");
+    const retry = await screen.findByRole("button", { name: "Reintentar" });
+
+    // Act
+    await userEvent.click(retry);
+
+    // Assert
+    await screen.findByRole("button", { name: "Reintentar" });
+    expect(calls.filter((call) => call.key === "GET /api/categories").length).toBeGreaterThan(1);
+  });
+
   it("offers a retry when the list cannot be loaded", async () => {
     // Arrange
     stubApi({ ...lookupHandlers });
