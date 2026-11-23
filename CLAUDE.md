@@ -5,6 +5,9 @@ Rules for every agent working in this repository. Background and reasons live in
 ## Stack
 React + Vite, Hono, Drizzle, Neon Postgres, Better Auth with Google, Vercel. All TypeScript. See ADRs 0001 to 0004.
 
+## Design
+Read [DESIGN.md](DESIGN.md) before building or changing any screen. Use only the tokens in `design/tokens.json`; never literal colors. Logo and icon sources live in `design/brand/`. See ADR 0011.
+
 ## Code
 - No code comments. Only Arrange / Act / Assert markers in tests and method docs of at most two lines. No standing exceptions: ask the owner before any comment-style tool directive (`@ts-expect-error`, `biome-ignore`, ...). See ADR 0007.
 - Every user-owned table has `user_id`. Repositories require `userId`. The user id comes only from the server-side session. See ADR 0005.

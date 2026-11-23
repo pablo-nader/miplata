@@ -37,3 +37,4 @@ What becomes easier, harder, or constrained.
 | [0008](0008-engineering-practices.md) | Engineering practices baseline | Accepted |
 | [0009](0009-language-policy.md) | Language policy | Accepted |
 | [0010](0010-online-only-pwa.md) | Online-only PWA | Accepted |
+| [0011](0011-design-system-source-of-truth.md) | Design system source of truth | Accepted |

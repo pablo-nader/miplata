@@ -18,6 +18,8 @@ Personal expense and income tracking app for a small circle of users (owner, fam
 - [Architecture Decision Records](docs/adr/README.md): technical decisions and why they were taken.
 - [Business decisions](docs/business/README.md): product and business decisions and why they were taken.
 - [Agent working rules](CLAUDE.md): how development, review and delivery are run.
+- [Design system](DESIGN.md): visual identity, tokens, components and logo.
+- [Product context](PRODUCT.md): users, purpose and principles.
 
 ## Status
 
