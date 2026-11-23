@@ -17,4 +17,4 @@ Recording an expense must be fast from the phone, or users forget to do it. Inst
 - Every screen is designed for small screens first, then expanded for larger ones.
 - No App Store or Play Store publishing, fees or review process.
 - On iOS, installation is manual through Share, then "Add to Home Screen"; there is no automatic install prompt.
-- The offline scope is decided separately.
+- The app works online only (see [ADR 0010](../adr/0010-online-only-pwa.md)).

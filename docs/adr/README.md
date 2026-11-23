@@ -36,3 +36,4 @@ What becomes easier, harder, or constrained.
 | [0007](0007-no-code-comments.md) | No code comments | Accepted |
 | [0008](0008-engineering-practices.md) | Engineering practices baseline | Accepted |
 | [0009](0009-language-policy.md) | Language policy | Accepted |
+| [0010](0010-online-only-pwa.md) | Online-only PWA | Accepted |
