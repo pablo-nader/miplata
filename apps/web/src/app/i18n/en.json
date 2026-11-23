@@ -60,5 +60,166 @@
       "title": "Menu",
       "description": "To pay, categories, budgets, language and sign out."
     }
+  },
+  "public": {
+    "backHome": "Go to the home page",
+    "languages": {
+      "es": "Español",
+      "en": "English"
+    },
+    "footer": {
+      "label": "Legal information",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "language": "Language"
+    },
+    "landing": {
+      "tagline": "Your expenses and income, clear and in one place.",
+      "signIn": "Sign in with Google",
+      "about": "What miPlata is",
+      "description": "miPlata is a personal log of expenses and income. You note each movement in seconds from your phone and see how much came in, how much went out and how you are doing this month.",
+      "points": [
+        "Each person signs in with their own Google account and sees only their own data.",
+        "No ads, no bank connections and no selling of data.",
+        "It installs on your phone like an app and works in the browser."
+      ],
+      "status": "miPlata is a personal, non-commercial project that is still under development."
+    }
+  },
+  "legal": {
+    "updated": "Last updated: {{date}}",
+    "contact": {
+      "heading": "Contact"
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "intro": "miPlata is a personal app for recording expenses and income. This policy explains what data it handles, why, and what you can do with it.",
+      "contact": "For questions about this policy or to ask for your account and data to be deleted, write to:",
+      "sections": [
+        {
+          "heading": "What data we handle",
+          "body": [
+            "When you sign in with Google we receive your name, your email address and your profile picture. We use them only to identify you and let you sign in.",
+            "We also store the financial records you enter yourself: movements, accounts, categories and anything else you add in the app.",
+            "We use a session cookie to keep you signed in. Our hosting provider may log technical connection data, such as the IP address, to operate the service."
+          ]
+        },
+        {
+          "heading": "Why we use it",
+          "body": [
+            "Only to provide the miPlata service to you. We do not use it for advertising or to build profiles."
+          ]
+        },
+        {
+          "heading": "Where it is stored",
+          "body": [
+            "Data is stored in a Neon Postgres database located in São Paulo, Brazil. The app is hosted on Vercel and its functions also run in São Paulo."
+          ]
+        },
+        {
+          "heading": "Who we share it with",
+          "body": [
+            "We do not sell or share your data with third parties, and we show no ads.",
+            "Only the providers needed to run the app are involved: Google for sign-in, Vercel for hosting and Neon for the database. We could disclose data if a law required it."
+          ]
+        },
+        {
+          "heading": "Each person sees only their own data",
+          "body": [
+            "Each user sees and manages only their own data; no user can see another user's. The person who maintains miPlata can technically access the database to operate and repair the service."
+          ]
+        },
+        {
+          "heading": "No bank connections",
+          "body": [
+            "miPlata does not connect to banks, wallets or cards. Everything you see is what you entered."
+          ]
+        },
+        {
+          "heading": "Institution trademarks",
+          "body": [
+            "Logos of banks and wallets that the app may show are trademarks of their respective owners and are used only to identify the institution."
+          ]
+        },
+        {
+          "heading": "Google data",
+          "body": [
+            "miPlata's use of information received from Google is limited to signing you in, and follows the Google API Services User Data Policy, including its limited use requirements."
+          ]
+        },
+        {
+          "heading": "Deleting your account and data",
+          "body": [
+            "You can ask at any time for your account and all your records to be deleted by writing to the contact below from the email address you sign in with. We delete them and confirm by email.",
+            "You can also remove miPlata's access from your Google account settings. That stops you from signing in again, but does not by itself delete the stored data."
+          ]
+        },
+        {
+          "heading": "Personal project",
+          "body": ["miPlata is a personal, non-commercial project, not a commercial service."]
+        },
+        {
+          "heading": "Changes to this policy",
+          "body": [
+            "If what we do with data changes, we will update this page and its last updated date."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "title": "Terms of use",
+      "intro": "By using miPlata you accept these terms. They are short on purpose.",
+      "contact": "For questions about these terms, write to:",
+      "sections": [
+        {
+          "heading": "What miPlata is",
+          "body": [
+            "miPlata is a personal, non-commercial project for recording expenses and income. It is free and still under development, so it may change."
+          ]
+        },
+        {
+          "heading": "Your account",
+          "body": [
+            "You sign in with your Google account and you are responsible for keeping it secure and for what is done with it."
+          ]
+        },
+        {
+          "heading": "Your data",
+          "body": [
+            "The data you enter is yours. How we handle it is described in the privacy policy, and you can ask for it to be deleted at any time."
+          ]
+        },
+        {
+          "heading": "Acceptable use",
+          "body": [
+            "Do not try to access other people's data, do not interfere with how the service works and do not use it for illegal activity."
+          ]
+        },
+        {
+          "heading": "No warranties",
+          "body": [
+            "miPlata is provided as is, without warranties. It may have errors, be interrupted, change or stop working. It is not financial advice: balances and reports reflect only what you entered."
+          ]
+        },
+        {
+          "heading": "Third-party trademarks",
+          "body": [
+            "Institution logos are trademarks of their owners and are used only to identify them."
+          ]
+        },
+        {
+          "heading": "Suspension and shutdown",
+          "body": [
+            "We may suspend an account that breaks these terms or shut the service down. If we decide to shut it down, we will delete the stored data."
+          ]
+        },
+        {
+          "heading": "Changes to the terms",
+          "body": [
+            "We may update these terms; the version in force is the one published on this page, with its last updated date."
+          ]
+        }
+      ]
+    }
   }
 }

@@ -18,7 +18,7 @@ test.describe("language", () => {
 
   test("shows the home band in Spanish and sets the document language", async ({ page }) => {
     // Arrange
-    await page.goto("/");
+    await page.goto("/home");
 
     // Act
     const heading = page.getByRole("heading", { level: 1 });
@@ -35,7 +35,7 @@ test.describe("language in English", () => {
 
   test("shows the home band in English and sets the document language", async ({ page }) => {
     // Arrange
-    await page.goto("/");
+    await page.goto("/home");
 
     // Act
     const menu = page.getByRole("link", { name: "Menu" });
