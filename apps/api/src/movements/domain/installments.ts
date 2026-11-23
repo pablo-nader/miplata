@@ -1,3 +1,5 @@
+import { sumMinorUnits } from "@miplata/shared";
+
 export type InstallmentShare = {
   amountMinor: number;
   ownAmountMinor: number;
@@ -36,7 +38,7 @@ export function allocateOwnShare(
   for (const amount of installmentsMinor) {
     assertPositiveInteger(amount, "Installment amount");
   }
-  const total = installmentsMinor.reduce((sum, amount) => sum + amount, 0);
+  const total = sumMinorUnits(installmentsMinor);
   if (!Number.isSafeInteger(ownTotalMinor) || ownTotalMinor < 0 || ownTotalMinor > total) {
     throw new RangeError(`Own total must be an integer between 0 and ${total}: ${ownTotalMinor}`);
   }

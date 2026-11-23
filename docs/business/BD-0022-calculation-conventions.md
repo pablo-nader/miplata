@@ -10,7 +10,7 @@ The earlier decisions leave small details open. The business rules need one answ
 ## Decision
 
 ### Amounts typed by the user
-- A comma is the decimal separator. A single dot followed by exactly three digits is a thousands separator (`1.234` is one thousand two hundred thirty-four pesos), otherwise a dot is a decimal separator. When both appear, the last one is the decimal separator.
+- A comma is the decimal separator. A single dot followed by exactly three digits is a thousands separator (`1.234` is one thousand two hundred thirty-four pesos), otherwise a dot is a decimal separator. When both appear, the last one is the decimal separator. A separator repeated with groups of three digits is a thousands separator (`1.234.567` and `1,234,567`).
 - Amounts have at most two decimals. Exchange rates have at most four decimals, and a rate such as `1.230` is rejected as ambiguous: the user writes `1230` or `1230,0`.
 
 ### Installments and shared purchases
@@ -25,6 +25,7 @@ The earlier decisions leave small details open. The business rules need one answ
 ### Recurring movements
 - Every two months counts from the month of the start date. A start date after the day of the month skips the start month.
 - A day that does not exist in a month moves to the last day of that month, including 29 February in non leap years.
+- A paused recurring movement produces no due dates in any window. Occurrences that already exist stay as they are; the caller handles them.
 
 ### Budgets
 - A refund that makes spending negative counts as zero spent.
@@ -33,6 +34,7 @@ The earlier decisions leave small details open. The business rules need one answ
 ### Reports
 - The change against the previous three months divides their sum by three, so a month without spending counts as zero.
 - When the previous three months are all zero there is no baseline and no percentage is shown.
+- Reports reject negative category totals; only budgets clamp them.
 - Percentages round to one decimal, halves away from zero.
 - "In" and "Out" use the user's own amount of each installment, so what other people owe never counts.
 
