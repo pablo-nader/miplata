@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { emptyBalance, stubApi } from "../../test/fake-api";
 import { lookupHandlers, makeMovement } from "../../test/fake-movements";
@@ -241,6 +241,57 @@ describe("HomeContainer", () => {
 
       // Assert
       expect(text(banner)).toContain("Expensas venció 24/11");
+    });
+  });
+
+  describe("budgets close to their limit", () => {
+    const nearKey = "GET /api/budgets?month=2026-11&attention=true";
+    const near = {
+      id: "b1",
+      categoryId: "cat-groceries",
+      groupId: null,
+      currency: "ARS",
+      limitMinor: 350_000_00,
+      month: "2026-11",
+      spentMinor: 290_000_00,
+      remainingMinor: 60_000_00,
+      overspentMinor: 0,
+      state: "warning",
+    };
+
+    it("shows each budget with its amounts, note and bar", async () => {
+      // Arrange
+      stubApi({
+        ...lookupHandlers,
+        "GET /api/balance": { body: emptyBalance },
+        [nearKey]: { body: { month: "2026-11", items: [near] } },
+      });
+
+      // Act
+      renderApp(<HomeContainer />, "es");
+      const budgets = await screen.findByRole("region", { name: "Presupuestos cerca del tope" });
+
+      // Assert
+      expect(text(budgets)).toContain("Supermercado");
+      expect(text(budgets)).toContain("$ 290.000 de $ 350.000");
+      expect(text(budgets)).toContain("Cerca del tope · te quedan $ 60.000");
+      expect(within(budgets).getByRole("progressbar")).toBeDefined();
+    });
+
+    it("is hidden when none is close to its limit", async () => {
+      // Arrange
+      stubApi({
+        ...lookupHandlers,
+        "GET /api/balance": { body: emptyBalance },
+        [nearKey]: { body: { month: "2026-11", items: [] } },
+      });
+
+      // Act
+      renderApp(<HomeContainer />, "es");
+      await screen.findByRole("link", { name: /Saldo total/ });
+
+      // Assert
+      expect(screen.queryByRole("region", { name: "Presupuestos cerca del tope" })).toBeNull();
     });
   });
 });

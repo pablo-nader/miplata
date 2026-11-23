@@ -14,8 +14,9 @@ async function failureOf(response: Response): Promise<string> {
   return payload?.error ?? "unknown";
 }
 
-export async function fetchBudgets(month: YearMonth): Promise<BudgetsResponse> {
-  const response = await fetch(`/api/budgets?month=${month}`);
+export async function fetchBudgets(month: YearMonth, attention = false): Promise<BudgetsResponse> {
+  const flag = attention ? "&attention=true" : "";
+  const response = await fetch(`/api/budgets?month=${month}${flag}`);
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }

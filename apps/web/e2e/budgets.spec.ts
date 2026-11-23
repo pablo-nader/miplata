@@ -66,6 +66,10 @@ test("creates a budget from the menu and shows its progress", async ({ page }) =
     "aria-valuenow",
     "800000",
   );
+  await page.goto("/home");
+  const near = page.getByRole("region", { name: "Presupuestos cerca del tope" });
+  await expect(near.getByText("Verdulería")).toBeVisible();
+  await expect(near.getByText(/^Cerca del tope/)).toBeVisible();
 });
 
 test("edits the limit and removes the budget", async ({ page }) => {
