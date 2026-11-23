@@ -4,6 +4,7 @@ import { createApp } from "../../app";
 import type { CategoryRepository } from "../../categories/application/category-repository";
 import { inMemoryAccounts, inMemoryInstitutions } from "../../test/account-fakes";
 import { inMemoryMovements } from "../../test/movement-fakes";
+import { emptyReports } from "../../test/report-fakes";
 import type { DetailLines, StatementRepository } from "../application/statement-repository";
 import type { AmountLine, StatementRow } from "../domain/statement-summary";
 
@@ -160,6 +161,7 @@ beforeEach(async () => {
     } as unknown as CategoryRepository,
     movements: movements.repository,
     statements: scripted.repository,
+    reports: emptyReports(),
     today: () => "2026-11-23",
   });
 });
