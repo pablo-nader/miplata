@@ -66,6 +66,15 @@ export function drizzleStatementRepository(db: Database): StatementRepository {
   }
 
   return {
+    exclusive(userId, statementId, work) {
+      return db.transaction(async (tx) => {
+        await tx.execute(
+          sql`select pg_advisory_xact_lock(hashtext(${`${userId}:${statementId}`}))`,
+        );
+        return work();
+      });
+    },
+
     async ensureOpen(userId, schedule, today) {
       const month = monthOf(today);
       const overrides = await readStatementOverrides(

@@ -1,6 +1,7 @@
 import type { StatementRepository } from "../statements/application/statement-repository";
 
 export const inertStatements: StatementRepository = {
+  exclusive: (_userId, _statementId, work) => work(),
   async ensureOpen() {},
   async rows() {
     return [];

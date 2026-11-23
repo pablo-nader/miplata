@@ -415,6 +415,45 @@ describe("payments and the previous balance", () => {
     expect(await ok(response, 400)).toEqual({ error: "invalid_request", reason });
   });
 
+  it("rejects a payment from a deactivated account", async () => {
+    // Arrange
+    const user = await newUser();
+    const november = (await statements(user))[0] as Json;
+    await ok(await call(user.cookie, "POST", `/accounts/${user.bank}/deactivate`), 200);
+
+    // Act
+    const response = await call(user.cookie, "POST", `/statements/${november.id}/payments`, {
+      fromAccountId: user.bank,
+      occurredOn: "2026-12-05",
+      arsMinor: 10_00,
+    });
+
+    // Assert
+    expect(await ok(response, 400)).toEqual({
+      error: "invalid_request",
+      reason: "account_inactive",
+    });
+  });
+
+  it("leaves a transfer to the card made outside Pay statement out of every statement", async () => {
+    // Arrange
+    const user = await newUser();
+    await record(user, purchase(user, { amountMinor: 100_00 }));
+    await record(user, {
+      type: "transfer",
+      occurredOn: "2026-12-01",
+      from: { accountId: user.bank, currency: "ARS", amountMinor: 40_00 },
+      to: { accountId: user.visa, currency: "ARS", amountMinor: 40_00 },
+    });
+
+    // Act
+    const november = await statementOf(user, "2026-11");
+
+    // Assert
+    expect(totalsOf(november)).toMatchObject({ paymentsMinor: 0, totalMinor: 100_00 });
+    expect(await balanceOf(user, user.visa, "ARS")).toBe(-60_00);
+  });
+
   it("rejects a payment without any amount", async () => {
     // Arrange
     const user = await newUser();
@@ -675,6 +714,34 @@ describe("charges", () => {
     expect(remove.status).toBe(404);
   });
 
+  it("keeps the date of a charge when only its amount changes", async () => {
+    // Arrange
+    const user = await newUser();
+    const november = (await statements(user))[0] as Json;
+    const added = await ok(
+      await call(
+        user.cookie,
+        "POST",
+        `/statements/${november.id}/charges`,
+        charge(user, { occurredOn: "2026-11-20" }),
+      ),
+      201,
+    );
+
+    // Act
+    const edited = await ok(
+      await call(
+        user.cookie,
+        "PUT",
+        `/statements/${november.id}/charges/${added.charges[0].movementId}`,
+        { categoryId: user.interest, currency: "ARS", amountMinor: 5_00 },
+      ),
+    );
+
+    // Assert
+    expect(edited.charges[0]).toMatchObject({ occurredOn: "2026-11-20", amountMinor: 5_00 });
+  });
+
   it("refuses to edit a charge or a payment through the movements endpoint", async () => {
     // Arrange
     const user = await newUser();
@@ -794,6 +861,46 @@ describe("the bank total and the adjustment", () => {
     expect(adjusted.charges).toHaveLength(1);
     expect(adjusted.charges[0]).toMatchObject({ amountMinor: 60_00, isAdjustment: true });
     expect(totalsOf(adjusted)).toMatchObject({ totalMinor: 160_00, differenceMinor: 0 });
+  });
+
+  it("creates a single Adjustment charge even when requested twice at once", async () => {
+    // Arrange
+    const user = await newUser();
+    await record(user, purchase(user, { amountMinor: 100_00 }));
+    const november = await statementOf(user, "2026-11");
+    await figures(user, november.id, { bankTotalArsMinor: 130_00 });
+    const adjust = () =>
+      call(user.cookie, "POST", `/statements/${november.id}/adjustment`, { currency: "ARS" });
+
+    // Act
+    const responses = await Promise.all([adjust(), adjust()]);
+
+    // Assert
+    expect(responses.map((response) => response.status)).toEqual([200, 200]);
+    const detail = await statementOf(user, "2026-11");
+    expect(detail.charges).toHaveLength(1);
+    expect(totalsOf(detail)).toMatchObject({ totalMinor: 130_00, differenceMinor: 0 });
+  });
+
+  it("removes a stale Adjustment charge when the bank total drops to the calculation", async () => {
+    // Arrange
+    const user = await newUser();
+    await record(user, purchase(user, { amountMinor: 100_00 }));
+    const november = await statementOf(user, "2026-11");
+    await figures(user, november.id, { bankTotalArsMinor: 130_00 });
+    await ok(
+      await call(user.cookie, "POST", `/statements/${november.id}/adjustment`, { currency: "ARS" }),
+    );
+    await figures(user, november.id, { bankTotalArsMinor: 100_00 });
+
+    // Act
+    const settled = await ok(
+      await call(user.cookie, "POST", `/statements/${november.id}/adjustment`, { currency: "ARS" }),
+    );
+
+    // Assert
+    expect(settled.charges).toEqual([]);
+    expect(totalsOf(settled)).toMatchObject({ totalMinor: 100_00, differenceMinor: 0 });
   });
 
   it.each([
