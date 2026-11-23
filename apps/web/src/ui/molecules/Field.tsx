@@ -4,7 +4,7 @@ import "./field.css";
 
 type FieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id"> & {
   label: string;
-  error?: string;
+  error?: string | undefined;
 };
 
 export function Field({ label, error, ...input }: FieldProps) {

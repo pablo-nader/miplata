@@ -21,6 +21,11 @@ async function mockCategoriesApi(page: Page) {
   return backend;
 }
 
+async function mockNoAccounts(page: Page) {
+  await page.route("**/api/accounts", (route) => route.fulfill({ json: [] }));
+  await page.route("**/api/people", (route) => route.fulfill({ json: [] }));
+}
+
 test.describe("categories", () => {
   test.use({ locale: "es-AR" });
 
@@ -28,6 +33,7 @@ test.describe("categories", () => {
     // Arrange
     await mockSignedIn(page);
     await mockCategoriesApi(page);
+    await mockNoAccounts(page);
     await page.goto("/menu");
 
     // Act
@@ -52,6 +58,7 @@ test.describe("categories", () => {
     // Arrange
     await mockSignedIn(page);
     await mockCategoriesApi(page);
+    await mockNoAccounts(page);
     await page.goto("/categories");
 
     // Act

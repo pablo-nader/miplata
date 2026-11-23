@@ -1,10 +1,17 @@
 import { screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { emptyBalance, stubApi } from "../../test/fake-api";
+import { lookupHandlers, makeMovement } from "../../test/fake-movements";
 import { renderApp } from "../../test/render";
 import { HomeContainer } from "./HomeContainer";
 
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date(2026, 10, 25, 12));
+});
+
 afterEach(() => {
+  vi.useRealTimers();
   vi.unstubAllGlobals();
 });
 
@@ -82,5 +89,55 @@ describe("HomeContainer", () => {
     // Assert
     expect(screen.getByRole("heading", { level: 1, name: "miPlata" })).toBeDefined();
     expect(screen.queryByRole("link", { name: /Saldo total/ })).toBeNull();
+  });
+
+  it("shows the month's money in and out and the latest movements", async () => {
+    // Arrange
+    stubApi({
+      ...lookupHandlers,
+      "GET /api/balance": { body: emptyBalance },
+      "GET /api/movements/summary?month=2026-11": {
+        body: {
+          month: "2026-11",
+          totals: [
+            { currency: "ARS", inMinor: 1_250_000_00, outMinor: 873_400_00 },
+            { currency: "USD", inMinor: 0, outMinor: 120_00 },
+          ],
+        },
+      },
+      "GET /api/movements?limit=5&offset=0": {
+        body: { items: [makeMovement()], hasMore: false },
+      },
+    });
+
+    // Act
+    renderApp(<HomeContainer />, "es");
+    const latest = await screen.findByRole("region", { name: "Últimos movimientos" });
+
+    // Assert
+    const band = screen.getByRole("banner");
+    expect(text(band)).toContain("Entró en noviembre");
+    expect(text(band)).toContain("$ 1.250.000");
+    expect(text(band)).toContain("Salió en noviembre");
+    expect(text(band)).toContain("$ 873.400 · US$ 120");
+    expect(text(latest)).toContain("Coto");
+    expect(text(latest)).toContain("− $ 48.300");
+  });
+
+  it("invites to record the first movement when there are none", async () => {
+    // Arrange
+    stubApi({
+      ...lookupHandlers,
+      "GET /api/balance": { body: emptyBalance },
+      "GET /api/movements?limit=5&offset=0": { body: { items: [], hasMore: false } },
+    });
+
+    // Act
+    renderApp(<HomeContainer />, "es");
+
+    // Assert
+    expect(
+      await screen.findByText("Acá vas a ver tu saldo y tus últimos movimientos."),
+    ).toBeDefined();
   });
 });
