@@ -1,0 +1,33 @@
+{
+  "name": "miplata",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=24 <25",
+    "pnpm": ">=9.12"
+  },
+  "scripts": {
+    "prepare": "lefthook install",
+    "dev": "pnpm --parallel --filter @miplata/api --filter @miplata/web dev",
+    "lint": "biome check . && pnpm lint:arch",
+    "lint:arch": "depcruise apps/api/src --config .dependency-cruiser.json",
+    "format": "biome format --write .",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "test:integration": "pnpm -r --if-present test:integration",
+    "build": "pnpm -r build",
+    "e2e": "pnpm --filter @miplata/web e2e",
+    "commitlint": "commitlint"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.6.8",
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@swc/core": "^1.16.22",
+    "dependency-cruiser": "^18.9.0",
+    "lefthook": "^2.2.2",
+    "typescript": "^7.0.2"
+  }
+}
