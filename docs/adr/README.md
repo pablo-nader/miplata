@@ -41,3 +41,4 @@ What becomes easier, harder, or constrained.
 | [0012](0012-category-icons-with-lucide.md) | Category icons with Lucide | Accepted |
 | [0013](0013-internationalization.md) | Internationalization | Accepted |
 | [0014](0014-ui-preview-approval.md) | UI preview approval before merge | Accepted |
+| [0015](0015-approved-screen-designs.md) | Approved screen designs | Accepted |

@@ -85,6 +85,16 @@ Rules:
 - Touch targets are at least 44 × 44 px.
 - Elevation is avoided; separation comes from the band, the rules and the `rule` dividers.
 
+## Navigation
+
+Approved screens and flows: [design/mockups/screens.html](design/mockups/screens.html) (see [ADR 0015](docs/adr/0015-approved-screen-designs.md)).
+
+- **Phone:** a bottom tab bar with Home, Movements, a central **+** button, Accounts and Reports. The **+** is the main action on every screen: it opens the new movement form (expense, income or transfer).
+- **Desktop and tablet:** the same sections in a left sidebar, with the **+** at its top.
+- **Menu** (button in the home band corner): To pay, Recurring movements, Categories, Budgets, Language, Sign out.
+- People and loans live inside Accounts, next to banks, wallets and cards.
+- Tapping the balance opens the balance detail; tapping a card opens its statement.
+
 ## Components
 
 **Signage band.** `band` background, `on-band` text. Contains the brand row (mark, name, month), the total balance in pesos with the total in dollars below it in caption size (only when it is not zero), and the two line rules (3 px top border, `line-income` and `action`) with the month's "In" and "Out" totals. The balance is a button that opens the balance detail screen, with one row per account and currency. Pesos and dollars are never added together (see [BD-0013](docs/business/BD-0013-currencies-and-exchange.md)).
@@ -93,7 +103,9 @@ Rules:
 
 **Category badge.** Circle in the category color with a white Lucide icon (2 px stroke, about 55% of the badge size). A category without an icon shows the first letter of its name in Schibsted Grotesk 800 instead. 32 px in lists, 38 px in pickers. Selected state: a 3 px `surface` gap and a 2 px `ink` ring. See [ADR 0012](docs/adr/0012-category-icons-with-lucide.md).
 
-**Main action.** Full width at the bottom of the screen, `action` background, `on-action` text, 12 px radius. When it opens a form it carries a round `+` glyph. Only one per screen.
+**Main action.** On navigation screens, the round `+` button in the center of the tab bar (50 px, `action` background, `on-action` icon), raised above the bar with a 4 px `surface` ring. On forms, a full-width button at the bottom, `action` background, `on-action` text, 12 px radius, that names its result ("Save expense", "Pay statement"). Only one per screen.
+
+**Tab bar.** `surface` background with a top `rule` divider; inactive items in `muted`, the active one in `ink` and bold. Icon 20 px with a short label.
 
 **Segmented control (Expense / Income).** `field` track; the selected segment uses `band` with an inset 3 px `action` underline.
 
