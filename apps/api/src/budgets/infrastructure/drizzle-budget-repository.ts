@@ -26,6 +26,10 @@ function sameTarget(userId: string, input: Target) {
   );
 }
 
+async function lockUserBudgets(tx: Pick<Database, "execute">, userId: string) {
+  await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`budget:${userId}`}))`);
+}
+
 export function drizzleBudgetRepository(db: Database): BudgetRepository {
   return {
     async list(userId) {
@@ -45,6 +49,7 @@ export function drizzleBudgetRepository(db: Database): BudgetRepository {
     },
     async insert(userId, input) {
       return db.transaction(async (tx) => {
+        await lockUserBudgets(tx, userId);
         const [taken] = await tx
           .select({ id: budget.id })
           .from(budget)
@@ -70,6 +75,7 @@ export function drizzleBudgetRepository(db: Database): BudgetRepository {
     },
     async replace(userId, budgetId, input) {
       return db.transaction(async (tx) => {
+        await lockUserBudgets(tx, userId);
         const [taken] = await tx
           .select({ id: budget.id })
           .from(budget)

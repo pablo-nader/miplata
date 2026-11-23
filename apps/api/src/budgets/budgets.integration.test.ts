@@ -145,6 +145,22 @@ describe("budgets endpoints", () => {
     expect(after).toEqual([]);
   });
 
+  it("lets only one of several simultaneous identical creations through", async () => {
+    // Arrange
+    const user = await newUser();
+    const body = { categoryId: user.food, currency: "ARS", limitMinor: 5000 };
+
+    // Act
+    const responses = await Promise.all(
+      Array.from({ length: 5 }, () => call(user.cookie, "POST", "/budgets", body)),
+    );
+    const stored = await progress(user);
+
+    // Assert
+    expect(responses.map((response) => response.status).sort()).toEqual([201, 409, 409, 409, 409]);
+    expect(stored).toHaveLength(1);
+  });
+
   it("requires a session", async () => {
     // Arrange
     const id = "00000000-0000-4000-8000-000000000001";
