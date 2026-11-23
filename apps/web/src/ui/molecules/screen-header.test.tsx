@@ -112,12 +112,25 @@ describe("AccountBadge with an institution logo", () => {
     expect(container.querySelector("img")).toBeNull();
     expect(container.querySelector(".account-badge svg")).not.toBeNull();
   });
+
+  it("keeps naming the institution on the type icon when a standalone logo fails to load", () => {
+    // Arrange
+    const { container } = render(<AccountBadge type="bank" logo={galicia} standalone />);
+
+    // Act
+    fireEvent.error(container.querySelector("img") as HTMLImageElement);
+
+    // Assert
+    expect(screen.getByRole("img", { name: "Galicia" }).querySelector("svg")).not.toBeNull();
+  });
 });
 
 describe("logoSource", () => {
   it.each([
     [{ name: "A", logoPath: "/institutions/a.svg" }, "/institutions/a.svg"],
     [{ name: "A", logoPath: "/institutions/a.png" }, null],
+    [{ name: "A", logoPath: "/institutions/../a.svg" }, null],
+    [{ name: "A", logoPath: "/institutions//evil.test/a.svg" }, null],
     [{ name: "A", logoPath: "//evil.test/institutions/a.svg" }, null],
     [{ name: "A", logoPath: null }, null],
     [null, null],

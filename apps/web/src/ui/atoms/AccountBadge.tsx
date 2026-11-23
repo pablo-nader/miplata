@@ -23,11 +23,11 @@ const icons: Record<AccountBadgeType, LucideIcon> = {
 
 export type AccountLogo = { name: string; logoPath: string | null };
 
-const LOGO_PREFIX = "/institutions/";
+const LOGO_PATH = /^\/institutions\/[a-z0-9-]+\.svg$/;
 
 export function logoSource(logo: AccountLogo | null | undefined): string | null {
   const path = logo?.logoPath;
-  return path?.startsWith(LOGO_PREFIX) && path.endsWith(".svg") ? path : null;
+  return path && LOGO_PATH.test(path) ? path : null;
 }
 
 type AccountBadgeProps = {
@@ -40,10 +40,11 @@ export function AccountBadge({ type, logo, standalone = false }: AccountBadgePro
   const [failedSource, setFailedSource] = useState<string | null>(null);
   const source = logoSource(logo);
   const Icon = icons[type];
-  if (logo && source && source !== failedSource) {
-    const accessibility = standalone
+  const accessibility =
+    standalone && logo
       ? ({ role: "img", "aria-label": logo.name } as const)
       : ({ "aria-hidden": true } as const);
+  if (logo && source && source !== failedSource) {
     return (
       <span className="account-badge account-badge--logo" {...accessibility}>
         <img src={source} alt="" onError={() => setFailedSource(source)} />
@@ -51,7 +52,7 @@ export function AccountBadge({ type, logo, standalone = false }: AccountBadgePro
     );
   }
   return (
-    <span className="account-badge" aria-hidden="true">
+    <span className="account-badge" {...accessibility}>
       <Icon aria-hidden="true" strokeWidth={2} />
     </span>
   );
