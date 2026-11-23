@@ -17,6 +17,8 @@ import { meRoutes } from "./me/http/me-routes";
 import type { MovementRepository } from "./movements/application/movement-repository";
 import { movementRoutes } from "./movements/http/movement-routes";
 import { peopleRoutes } from "./people/http/people-routes";
+import type { RecurringRepository } from "./recurring/application/recurring-repository";
+import { recurringRoutes } from "./recurring/http/recurring-routes";
 import type { ReportRepository } from "./reports/application/report-repository";
 import type { RecurringCommitments } from "./reports/application/report-use-cases";
 import { reportRoutes } from "./reports/http/report-routes";
@@ -37,6 +39,7 @@ export type AppDependencies = {
   recurringCommitments?: RecurringCommitments;
   statements: StatementRepository;
   today: () => IsoDate;
+  recurring: RecurringRepository;
 };
 
 export function createApp({
@@ -52,6 +55,7 @@ export function createApp({
   recurringCommitments,
   statements,
   today,
+  recurring,
 }: AppDependencies) {
   return new Hono()
     .basePath("/api")
@@ -77,6 +81,16 @@ export function createApp({
       "/statements",
       statementRoutes(resolveSession, {
         statements,
+        movements,
+        accounts: accounts.everyAccount,
+        categories,
+        today,
+      }),
+    )
+    .route(
+      "/recurring",
+      recurringRoutes(resolveSession, {
+        recurring,
         movements,
         accounts: accounts.everyAccount,
         categories,

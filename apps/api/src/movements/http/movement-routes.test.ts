@@ -4,6 +4,7 @@ import { createApp } from "../../app";
 import type { CategoryRepository } from "../../categories/application/category-repository";
 import { inMemoryAccounts, inMemoryInstitutions } from "../../test/account-fakes";
 import { inMemoryMovements } from "../../test/movement-fakes";
+import { unusedRecurring } from "../../test/recurring-fakes";
 import { emptyReports } from "../../test/report-fakes";
 import { inertStatements } from "../../test/statement-fakes";
 
@@ -76,6 +77,7 @@ beforeEach(async () => {
     reports: emptyReports(),
     statements: inertStatements,
     today: () => "2026-11-23",
+    recurring: unusedRecurring,
   });
 });
 
@@ -210,6 +212,7 @@ describe("movement routes", () => {
       reports: emptyReports(),
       statements: inertStatements,
       today: () => "2026-11-23",
+      recurring: unusedRecurring,
     });
 
     // Act

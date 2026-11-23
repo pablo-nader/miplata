@@ -20,6 +20,7 @@ export default defineConfig({
         "src/accounts/infrastructure/**",
         "src/movements/infrastructure/**",
         "src/statements/infrastructure/**",
+        "src/recurring/infrastructure/**",
       ],
       thresholds: { lines: 80, functions: 80, branches: 80, statements: 80 },
     },

@@ -60,3 +60,4 @@ What becomes easier, harder, or constrained.
 | [0031](0031-movements-api.md) | Movements API | Accepted |
 | [0032](0032-reports-api.md) | Reports API | Accepted |
 | [0033](0033-statements-api.md) | Statements API | Accepted |
+| [0034](0034-recurring-movements-api.md) | Recurring movements API | Accepted |

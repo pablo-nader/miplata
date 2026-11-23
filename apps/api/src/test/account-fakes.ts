@@ -6,6 +6,7 @@ import type {
   NewAccount,
 } from "../accounts/application/accounts";
 import { inMemoryMovements } from "./movement-fakes";
+import { unusedRecurring } from "./recurring-fakes";
 import { emptyReports } from "./report-fakes";
 import { inertStatements } from "./statement-fakes";
 
@@ -128,5 +129,6 @@ export function unusedAccountDependencies() {
     reports: emptyReports(),
     statements: inertStatements,
     today: () => "2026-11-23",
+    recurring: unusedRecurring,
   };
 }

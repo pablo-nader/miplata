@@ -11,6 +11,7 @@ import {
   movement,
   ne,
   posting,
+  recurringOccurrence,
   type SQL,
   sql,
 } from "@miplata/db";
@@ -190,6 +191,29 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
     }
   }
 
+  async function insertMovement(
+    tx: Transaction,
+    userId: string,
+    plan: MovementPlan,
+    recurringOccurrenceId: string | null,
+  ): Promise<string> {
+    const [created] = await tx
+      .insert(movement)
+      .values({
+        userId,
+        type: plan.type,
+        occurredOn: plan.occurredOn,
+        description: plan.description,
+        categoryId: plan.categoryId,
+        statementId: plan.statementId ?? null,
+        recurringOccurrenceId,
+      })
+      .returning({ id: movement.id });
+    const movementId = (created as { id: string }).id;
+    await writeLines(tx, userId, movementId, plan);
+    return movementId;
+  }
+
   async function findOne(userId: string, movementId: string): Promise<Movement | null> {
     const rows = await db
       .select()
@@ -207,43 +231,43 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
     },
 
     async create(userId, plan) {
+      const id = await db.transaction((tx) => insertMovement(tx, userId, plan, null));
+      return (await findOne(userId, id)) as Movement;
+    },
+
+    async createForOccurrence(userId, occurrenceId, plan) {
       const id = await db.transaction(async (tx) => {
-        const [created] = await tx
-          .insert(movement)
-          .values({
-            userId,
-            type: plan.type,
-            occurredOn: plan.occurredOn,
-            description: plan.description,
-            categoryId: plan.categoryId,
-            statementId: plan.statementId ?? null,
-          })
-          .returning({ id: movement.id });
-        const movementId = (created as { id: string }).id;
-        await writeLines(tx, userId, movementId, plan);
+        const pending = await tx
+          .select({ id: recurringOccurrence.id })
+          .from(recurringOccurrence)
+          .where(
+            and(
+              eq(recurringOccurrence.userId, userId),
+              eq(recurringOccurrence.id, occurrenceId),
+              eq(recurringOccurrence.status, "pending"),
+            ),
+          )
+          .for("update");
+        if (pending.length === 0) {
+          return null;
+        }
+        const movementId = await insertMovement(tx, userId, plan, occurrenceId);
+        await tx
+          .update(recurringOccurrence)
+          .set({ status: "confirmed", movementId })
+          .where(
+            and(eq(recurringOccurrence.userId, userId), eq(recurringOccurrence.id, occurrenceId)),
+          );
         return movementId;
       });
-      return (await findOne(userId, id)) as Movement;
+      return id === null ? "not_pending" : ((await findOne(userId, id)) as Movement);
     },
 
     async createAll(userId, plans) {
       const ids = await db.transaction(async (tx) => {
         const created: string[] = [];
         for (const plan of plans) {
-          const [row] = await tx
-            .insert(movement)
-            .values({
-              userId,
-              type: plan.type,
-              occurredOn: plan.occurredOn,
-              description: plan.description,
-              categoryId: plan.categoryId,
-              statementId: plan.statementId ?? null,
-            })
-            .returning({ id: movement.id });
-          const movementId = (row as { id: string }).id;
-          await writeLines(tx, userId, movementId, plan);
-          created.push(movementId);
+          created.push(await insertMovement(tx, userId, plan, null));
         }
         return created;
       });
