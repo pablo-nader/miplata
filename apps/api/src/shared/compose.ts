@@ -3,6 +3,7 @@ import { ACCOUNT_TYPES, MONEY_ACCOUNT_TYPES } from "@miplata/shared";
 import { drizzleAccountRepository } from "../accounts/infrastructure/drizzle-account-repository";
 import { drizzleInstitutionRepository } from "../accounts/infrastructure/drizzle-institution-repository";
 import { createApp } from "../app";
+import { drizzleBudgetRepository } from "../budgets/infrastructure/drizzle-budget-repository";
 import { drizzleCategoryRepository } from "../categories/infrastructure/drizzle-category-repository";
 import { drizzleUserProfileRepository } from "../me/infrastructure/drizzle-user-profile-repository";
 import { drizzleMovementRepository } from "../movements/infrastructure/drizzle-movement-repository";
@@ -30,6 +31,7 @@ export function composeApp(env: Env = parseEnv(process.env)) {
     statements: drizzleStatementRepository(db),
     today: todayInArgentina,
     recurring: drizzleRecurringRepository(db),
+    budgets: drizzleBudgetRepository(db),
   });
 }
 
