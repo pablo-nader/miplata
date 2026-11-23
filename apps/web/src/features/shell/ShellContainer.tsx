@@ -9,7 +9,7 @@ import { TabBar } from "../../ui/organisms/TabBar";
 export function ShellContainer() {
   const { t } = useTranslation();
   const items: NavItem[] = [
-    { id: "home", to: "/", label: t("nav.home"), icon: House, end: true },
+    { id: "home", to: "/home", label: t("nav.home"), icon: House, end: true },
     { id: "movements", to: "/movements", label: t("nav.movements"), icon: List },
     { id: "accounts", to: "/accounts", label: t("nav.accounts"), icon: Wallet },
     { id: "reports", to: "/reports", label: t("nav.reports"), icon: ChartPie },

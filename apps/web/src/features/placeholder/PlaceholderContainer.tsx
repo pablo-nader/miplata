@@ -22,7 +22,7 @@ export function PlaceholderContainer({ screen, focused = false }: PlaceholderCon
       title={t(`screens.${screen}.title`)}
       description={t(`screens.${screen}.description`)}
       note={t("placeholder.comingSoon")}
-      {...(focused ? { back: { to: "/", label: t("nav.backHome") } } : {})}
+      {...(focused ? { back: { to: "/home", label: t("nav.backHome") } } : {})}
     />
   );
 }

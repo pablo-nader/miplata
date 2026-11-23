@@ -60,5 +60,168 @@
       "title": "Menú",
       "description": "Por pagar, categorías, presupuestos, idioma y salir."
     }
+  },
+  "public": {
+    "backHome": "Ir al inicio",
+    "languages": {
+      "es": "Español",
+      "en": "English"
+    },
+    "footer": {
+      "label": "Información legal",
+      "privacy": "Privacidad",
+      "terms": "Términos",
+      "language": "Idioma"
+    },
+    "landing": {
+      "tagline": "Tus gastos e ingresos, claros y en un solo lugar.",
+      "signIn": "Entrar con Google",
+      "about": "Qué es miPlata",
+      "description": "miPlata es un registro personal de gastos e ingresos. Anotás cada movimiento en segundos desde el celular y ves cuánto entró, cuánto salió y cómo venís en el mes.",
+      "points": [
+        "Cada persona entra con su cuenta de Google y ve solo sus propios datos.",
+        "Sin anuncios, sin conexión a bancos y sin venta de datos.",
+        "Se instala en el celular como una aplicación y funciona en el navegador."
+      ],
+      "status": "miPlata es un proyecto personal y sin fines de lucro, todavía en desarrollo."
+    }
+  },
+  "legal": {
+    "updated": "Última actualización: {{date}}",
+    "contact": {
+      "heading": "Contacto"
+    },
+    "privacy": {
+      "title": "Política de privacidad",
+      "intro": "miPlata es una aplicación personal para registrar gastos e ingresos. Esta política explica qué datos trata, para qué y qué podés hacer con ellos.",
+      "contact": "Para preguntas sobre esta política o para pedir la eliminación de tu cuenta y tus datos, escribinos a:",
+      "sections": [
+        {
+          "heading": "Qué datos tratamos",
+          "body": [
+            "Al entrar con Google recibimos tu nombre, tu dirección de email y tu foto de perfil. Los usamos solo para identificarte y permitirte entrar.",
+            "También guardamos los datos financieros que cargás vos: movimientos, cuentas, categorías y lo que agregues en la app.",
+            "Usamos una cookie de sesión para mantenerte con la sesión iniciada. Nuestro proveedor de hosting puede registrar datos técnicos de conexión, como la dirección IP, para operar el servicio."
+          ]
+        },
+        {
+          "heading": "Para qué los usamos",
+          "body": [
+            "Solo para darte el servicio de miPlata a vos. No los usamos para publicidad ni para crear perfiles."
+          ]
+        },
+        {
+          "heading": "Dónde se guardan",
+          "body": [
+            "Los datos se guardan en una base de datos Postgres de Neon ubicada en São Paulo, Brasil. La aplicación se aloja en Vercel y sus funciones también corren en São Paulo."
+          ]
+        },
+        {
+          "heading": "Con quién los compartimos",
+          "body": [
+            "No vendemos ni compartimos tus datos con terceros, y no mostramos anuncios.",
+            "Solo intervienen los proveedores necesarios para que la aplicación funcione: Google para iniciar sesión, Vercel para el alojamiento y Neon para la base de datos. Podríamos divulgar datos si una ley lo exigiera."
+          ]
+        },
+        {
+          "heading": "Cada persona ve solo lo suyo",
+          "body": [
+            "Cada usuario ve y administra únicamente sus propios datos; ningún usuario puede ver los de otro. La persona que mantiene miPlata puede acceder técnicamente a la base de datos para operar y reparar el servicio."
+          ]
+        },
+        {
+          "heading": "Sin conexión a bancos",
+          "body": [
+            "miPlata no se conecta a bancos, billeteras ni tarjetas. Todo lo que ves lo cargaste vos."
+          ]
+        },
+        {
+          "heading": "Marcas de instituciones",
+          "body": [
+            "Los logos de bancos y billeteras que pueda mostrar la aplicación son marcas de sus respectivos dueños y se usan solo para identificar la institución."
+          ]
+        },
+        {
+          "heading": "Datos de Google",
+          "body": [
+            "El uso que miPlata hace de la información recibida de Google se limita a iniciar tu sesión, y respeta la Política de datos de usuario de los servicios de API de Google, incluidos sus requisitos de uso limitado."
+          ]
+        },
+        {
+          "heading": "Eliminar tu cuenta y tus datos",
+          "body": [
+            "Podés pedir en cualquier momento que eliminemos tu cuenta y todos tus registros escribiendo al contacto de abajo desde la dirección de email con la que entrás. Los eliminamos y te confirmamos por email.",
+            "También podés quitar el acceso de miPlata desde la configuración de tu cuenta de Google. Eso impide que vuelvas a entrar, pero no borra por sí solo los datos guardados."
+          ]
+        },
+        {
+          "heading": "Proyecto personal",
+          "body": [
+            "miPlata es un proyecto personal y sin fines de lucro, no un servicio comercial."
+          ]
+        },
+        {
+          "heading": "Cambios en esta política",
+          "body": [
+            "Si cambia lo que hacemos con los datos, actualizaremos esta página y la fecha de última actualización."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "title": "Términos de uso",
+      "intro": "Al usar miPlata aceptás estos términos. Son breves a propósito.",
+      "contact": "Para consultas sobre estos términos, escribinos a:",
+      "sections": [
+        {
+          "heading": "Qué es miPlata",
+          "body": [
+            "miPlata es un proyecto personal y sin fines de lucro para registrar gastos e ingresos. Es gratuito y sigue en desarrollo, así que puede cambiar."
+          ]
+        },
+        {
+          "heading": "Tu cuenta",
+          "body": [
+            "Entrás con tu cuenta de Google y sos responsable de mantenerla segura y de lo que se haga con ella."
+          ]
+        },
+        {
+          "heading": "Tus datos",
+          "body": [
+            "Los datos que cargás son tuyos. Cómo los tratamos está en la política de privacidad, y podés pedir su eliminación en cualquier momento."
+          ]
+        },
+        {
+          "heading": "Uso aceptable",
+          "body": [
+            "No intentes acceder a datos de otras personas, no interfieras con el funcionamiento del servicio y no lo uses para actividades ilegales."
+          ]
+        },
+        {
+          "heading": "Sin garantías",
+          "body": [
+            "miPlata se ofrece tal como está, sin garantías. Puede tener errores, interrumpirse, cambiar o dejar de funcionar. No es asesoramiento financiero: los saldos y reportes reflejan solo lo que cargaste."
+          ]
+        },
+        {
+          "heading": "Marcas de terceros",
+          "body": [
+            "Los logos de instituciones son marcas de sus dueños y se usan solo para identificarlas."
+          ]
+        },
+        {
+          "heading": "Suspensión y cierre",
+          "body": [
+            "Podemos suspender una cuenta que incumpla estos términos o cerrar el servicio. Si decidimos cerrarlo, eliminaremos los datos guardados."
+          ]
+        },
+        {
+          "heading": "Cambios en los términos",
+          "body": [
+            "Podemos actualizar estos términos; la versión vigente es la publicada en esta página, con su fecha de última actualización."
+          ]
+        }
+      ]
+    }
   }
 }

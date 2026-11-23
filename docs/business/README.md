@@ -49,3 +49,4 @@ Impact on users, cost, and technical design.
 | [BD-0020](BD-0020-search-and-filters.md) | Search and filters | Accepted |
 | [BD-0021](BD-0021-budgets.md) | Budgets | Accepted |
 | [BD-0022](BD-0022-calculation-conventions.md) | Calculation conventions | Accepted |
+| [BD-0023](BD-0023-public-google-sign-in-and-legal-pages.md) | Published Google sign-in and public legal pages | Accepted |

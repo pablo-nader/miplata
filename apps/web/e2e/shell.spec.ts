@@ -8,7 +8,7 @@ const viewports = {
 
 const schemes = ["light", "dark"] as const;
 
-const mainPaths = ["/", "/movements", "/accounts", "/reports"];
+const mainPaths = ["/home", "/movements", "/accounts", "/reports"];
 const focusedPaths = [
   "/sign-in",
   "/balance",
@@ -66,7 +66,7 @@ for (const [device, viewport] of Object.entries(viewports)) {
 
       test("marks the current section and navigates", async ({ page }) => {
         // Arrange
-        await page.goto("/");
+        await page.goto("/home");
         const navigation = page.getByRole("navigation", { name: "Navegación principal" });
 
         // Act
@@ -80,7 +80,7 @@ for (const [device, viewport] of Object.entries(viewports)) {
 
       test("opens the menu from the home band", async ({ page }) => {
         // Arrange
-        await page.goto("/");
+        await page.goto("/home");
 
         // Act
         await page.getByRole("link", { name: "Menú" }).click();
@@ -119,7 +119,7 @@ test.describe("keyboard focus on the signage band", () => {
 
   test("uses a ring color that differs from the band", async ({ page }) => {
     // Arrange
-    await page.goto("/");
+    await page.goto("/home");
 
     // Act
     await page.keyboard.press("Tab");

@@ -1,0 +1,81 @@
+.landing__hero {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-6);
+  padding-top: calc(var(--space-8) + env(safe-area-inset-top, 0px));
+  padding-left: max(var(--space-6), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--space-6), env(safe-area-inset-right, 0px));
+  background: var(--color-band);
+  color: var(--color-on-band);
+  text-align: center;
+}
+
+.landing__brand {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 36px;
+}
+
+.landing__tagline {
+  max-width: 24ch;
+  margin: 0;
+  font-size: var(--font-size-body);
+}
+
+.landing__hero .landing__google {
+  width: auto;
+  min-width: 220px;
+  margin-top: var(--space-4);
+  padding-inline: var(--space-5);
+  background: var(--color-on-band);
+  color: var(--color-band);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  font-weight: 700;
+}
+
+.landing__google-glyph {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 2px solid currentColor;
+  border-radius: var(--radius-round);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.landing__about {
+  max-width: 60ch;
+  margin: 0 auto;
+  padding: var(--space-4) 0 var(--space-8);
+}
+
+.landing__description,
+.landing__points,
+.landing__status {
+  margin: 0;
+  padding-inline: max(var(--space-4), env(safe-area-inset-left, 0px))
+    max(var(--space-4), env(safe-area-inset-right, 0px));
+}
+
+.landing__description {
+  padding-top: var(--space-2);
+}
+
+.landing__points {
+  display: grid;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  padding-left: calc(var(--space-4) + var(--space-5));
+}
+
+.landing__status {
+  padding-top: var(--space-4);
+  color: var(--color-muted);
+  font-size: var(--font-size-caption);
+}

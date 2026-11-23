@@ -43,7 +43,7 @@ describe("AppRoutes", () => {
 
   it("renders the home band with the menu entry", () => {
     // Arrange
-    renderApp(<AppRoutes />, "es", "/");
+    renderApp(<AppRoutes />, "es", "/home");
 
     // Act
     const menu = screen.getByRole("link", { name: "Menú" });
@@ -83,7 +83,7 @@ describe("AppRoutes", () => {
     const back = screen.getByRole("link", { name: "Back to home" });
 
     // Assert
-    expect(back.getAttribute("href")).toBe("/");
+    expect(back.getAttribute("href")).toBe("/home");
   });
 
   it("shows no back link on the sign in screen", () => {
@@ -123,7 +123,7 @@ describe("AppRoutes", () => {
 
   it("navigates with the tab bar", async () => {
     // Arrange
-    renderApp(<AppRoutes />, "en", "/");
+    renderApp(<AppRoutes />, "en", "/home");
 
     // Act
     await userEvent.click(screen.getAllByRole("link", { name: "Accounts" })[0] as HTMLElement);
