@@ -13,7 +13,7 @@ type BalanceProps = {
   dollars?: MoneyAmountProps;
 };
 
-type TotalProps = { label: string; amount: MoneyAmountProps };
+type TotalProps = { label: string; amount: MoneyAmountProps; secondary?: MoneyAmountProps };
 
 export type SignageBandProps = {
   brandName: string;
@@ -56,12 +56,24 @@ export function SignageBand({ brandName, menu, balance, income, expense }: Signa
             {income.label}
             <b className="signage-band__total">
               <MoneyAmount {...income.amount} />
+              {income.secondary ? (
+                <>
+                  {" · "}
+                  <MoneyAmount {...income.secondary} />
+                </>
+              ) : null}
             </b>
           </LineRule>
           <LineRule tone="expense">
             {expense.label}
             <b className="signage-band__total">
               <MoneyAmount {...expense.amount} />
+              {expense.secondary ? (
+                <>
+                  {" · "}
+                  <MoneyAmount {...expense.secondary} />
+                </>
+              ) : null}
             </b>
           </LineRule>
         </div>

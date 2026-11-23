@@ -9,7 +9,8 @@ import { CategoryEditorContainer } from "../features/categories/CategoryEditorCo
 import { GroupEditorContainer } from "../features/categories/GroupEditorContainer";
 import { HomeContainer } from "../features/home/HomeContainer";
 import { MenuContainer } from "../features/menu/MenuContainer";
-import { NewMovementContainer } from "../features/movements/NewMovementContainer";
+import { MovementFormContainer } from "../features/movements/MovementFormContainer";
+import { MovementsContainer } from "../features/movements/MovementsContainer";
 import { PlaceholderContainer } from "../features/placeholder/PlaceholderContainer";
 import { LandingContainer } from "../features/public/LandingContainer";
 import { LegalContainer } from "../features/public/LegalContainer";
@@ -35,7 +36,7 @@ export function AppRoutes() {
       <Route element={<RequireAuth />}>
         <Route element={<ShellContainer />}>
           <Route path="home" element={<HomeContainer />} />
-          <Route path="movements" element={<PlaceholderContainer screen="movements" />} />
+          <Route path="movements" element={<MovementsContainer />} />
           <Route path="accounts" element={<AccountsContainer />} />
           <Route path="reports" element={<PlaceholderContainer screen="reports" />} />
         </Route>
@@ -43,7 +44,8 @@ export function AppRoutes() {
           <Route path="balance" element={<BalanceContainer />} />
           <Route path="accounts/new" element={<AccountFormContainer />} />
           <Route path="accounts/:accountId/edit" element={<AccountFormContainer />} />
-          <Route path="movements/new" element={<NewMovementContainer />} />
+          <Route path="movements/new" element={<MovementFormContainer />} />
+          <Route path="movements/:movementId/edit" element={<MovementFormContainer />} />
           <Route path="categories" element={<CategoriesContainer />} />
           <Route path="categories/new" element={<CategoryEditorContainer mode="new" />} />
           <Route path="categories/groups/new" element={<GroupEditorContainer mode="new" />} />
