@@ -607,6 +607,7 @@
     },
     "moreFailed": "We could not load more movements. Try again."
   },
+<<<<<<< HEAD
   "reports": {
     "tabsLabel": "Reports",
     "currency": "Currency",
@@ -659,6 +660,118 @@
       "note": "Adds up card installments and pending recurring movements for each month.",
       "installments": "Installments {{amount}}",
       "recurring": "Recurring {{amount}}"
+=======
+  "statements": {
+    "loading": "Loading…",
+    "loadFailed": "We couldn't load the statement.",
+    "retry": "Try again",
+    "back": "Back to accounts",
+    "noSchedule": "This card has no closing or due day. Edit it to see its statements.",
+    "notFound": "We couldn't find this card.",
+    "periods": "Periods",
+    "closesDue": "Closes {{closing}} · due {{due}}",
+    "dollars": "Dollars",
+    "lines": {
+      "previous": "Previous balance",
+      "own": "Your purchases and installments",
+      "others": "From other people",
+      "charges": "Charges",
+      "payments": "Payments"
+    },
+    "bankTotal": "Bank total: {{amount}}",
+    "bankMissing": "You haven't entered the bank total yet.",
+    "noDifference": "No difference",
+    "difference": "Difference: {{amount}}",
+    "adjust": "Record {{amount}} as an adjustment",
+    "removeAdjustment": "Remove the adjustment",
+    "adjusting": "Recording…",
+    "othersNote": "Other people's purchases are paid with the statement, but they owe them to you: {{owed}}.",
+    "owes": "{{name}} owes you {{amount}}",
+    "someone": "Someone",
+    "chargesTitle": "Charges",
+    "editCard": "Edit card",
+    "actions": {
+      "addCharge": "Add charge",
+      "reconcile": "Reconcile",
+      "pay": "Pay statement"
+    },
+    "failures": {
+      "account_inactive": "That account is deactivated.",
+      "account_not_allowed": "Choose a money account, not a person or another card.",
+      "account_not_found": "We couldn't find that account.",
+      "bank_total_missing": "Enter the bank total first.",
+      "card_without_schedule": "Set the card's closing and due day.",
+      "category_inactive": "That category is deactivated.",
+      "category_not_allowed": "Choose a financial charges category.",
+      "category_not_found": "We couldn't find that category.",
+      "currency_not_in_account": "That account doesn't hold that currency.",
+      "no_positive_difference": "The bank doesn't charge more than the app calculated, so there is nothing to adjust.",
+      "saveFailed": "We couldn't save. Try again."
+    },
+    "pay": {
+      "title": "Pay statement",
+      "back": "Back to the statement",
+      "mode": "Amount to pay",
+      "total": "Total",
+      "minimum": "Minimum",
+      "other": "Other amount",
+      "pesosFrom": "Pesos · from",
+      "dollarsFrom": "Dollars · from",
+      "arsAmount": "Amount in pesos",
+      "usdAmount": "Amount in dollars",
+      "fromAccount": "Source account",
+      "choose": "Choose an account",
+      "usdWithPesos": "Pay the dollars with pesos",
+      "pesosSpent": "Pesos taken out",
+      "date": "Date",
+      "note": "It's a transfer: it doesn't add to your expenses. If you pay less than the total, the difference moves to the next statement.",
+      "submit": "Pay {{amount}}",
+      "submitNothing": "Pay",
+      "saving": "Paying…",
+      "errors": {
+        "source": "Choose the account you pay from.",
+        "amount": "Enter an amount above zero.",
+        "date": "Enter a valid date.",
+        "pesos": "Enter how many pesos are taken out."
+      }
+    },
+    "charge": {
+      "newTitle": "Add charge",
+      "editTitle": "Edit charge",
+      "back": "Back to the statement",
+      "category": "Category",
+      "choose": "Choose a category",
+      "currency": "Currency",
+      "amount": "Amount",
+      "description": "Description (optional)",
+      "date": "Date",
+      "save": "Save charge",
+      "saveChanges": "Save changes",
+      "saving": "Saving…",
+      "delete": "Delete charge",
+      "confirmDeleteTitle": "Delete this charge?",
+      "confirmDeleteBody": "The statement total is recalculated. This can't be undone.",
+      "hint": "The charge counts as an expense in the month of this statement.",
+      "notFound": "We couldn't find that charge.",
+      "errors": {
+        "category": "Choose a category.",
+        "amount": "Enter an amount above zero.",
+        "date": "Enter a valid date."
+      }
+    },
+    "reconcile": {
+      "title": "Reconcile with the bank",
+      "back": "Back to the statement",
+      "hint": "Enter what the bank's statement says. The app shows the difference with its own calculation.",
+      "bankTotal": "Bank total · {{currency}}",
+      "minimum": "Minimum payment · {{currency}}",
+      "calculated": "App calculation: {{amount}}",
+      "save": "Save",
+      "saving": "Saving…",
+      "errors": {
+        "amount": "Enter a valid amount."
+      }
+>>>>>>> a031101 (feat(web): add card statement, pay statement, charge and reconcile screens)
     }
   }
 }

@@ -18,6 +18,10 @@ import { PublicLayoutContainer } from "../features/public/PublicLayoutContainer"
 import { ReportsContainer } from "../features/reports/ReportsContainer";
 import { FocusedLayout } from "../features/shell/FocusedLayout";
 import { ShellContainer } from "../features/shell/ShellContainer";
+import { ChargeFormContainer } from "../features/statements/ChargeFormContainer";
+import { PayStatementContainer } from "../features/statements/PayStatementContainer";
+import { ReconcileContainer } from "../features/statements/ReconcileContainer";
+import { StatementContainer } from "../features/statements/StatementContainer";
 
 export function AppRoutes() {
   return (
@@ -52,14 +56,14 @@ export function AppRoutes() {
           <Route path="categories/groups/new" element={<GroupEditorContainer mode="new" />} />
           <Route path="categories/groups/:groupId" element={<GroupEditorContainer mode="edit" />} />
           <Route path="categories/:categoryId" element={<CategoryEditorContainer mode="edit" />} />
+          <Route path="accounts/:accountId/statement" element={<StatementContainer />} />
+          <Route path="accounts/:accountId/statement/pay" element={<PayStatementContainer />} />
+          <Route path="accounts/:accountId/statement/charge" element={<ChargeFormContainer />} />
           <Route
-            path="accounts/:accountId/statement"
-            element={<PlaceholderContainer focused screen="statement" />}
+            path="accounts/:accountId/statement/charges/:movementId"
+            element={<ChargeFormContainer />}
           />
-          <Route
-            path="accounts/:accountId/statement/pay"
-            element={<PlaceholderContainer focused screen="payStatement" />}
-          />
+          <Route path="accounts/:accountId/statement/reconcile" element={<ReconcileContainer />} />
           <Route path="to-pay" element={<PlaceholderContainer focused screen="toPay" />} />
           <Route path="menu" element={<MenuContainer />} />
         </Route>
