@@ -606,5 +606,59 @@
       }
     },
     "moreFailed": "We could not load more movements. Try again."
+  },
+  "reports": {
+    "tabsLabel": "Reports",
+    "currency": "Currency",
+    "account": "Account",
+    "category": "Category",
+    "allAccounts": "All",
+    "allCategories": "All",
+    "ungrouped": "Ungrouped",
+    "incomeGroup": "Income",
+    "unknownCategory": "Deleted category",
+    "loading": "Loading…",
+    "loadFailed": "We could not load the report.",
+    "retry": "Try again",
+    "period": {
+      "spending": "Report month",
+      "monthly": "Last month of the report",
+      "changes": "Report month",
+      "committed": "First committed month",
+      "previous": "Previous month",
+      "next": "Next month"
+    },
+    "spending": {
+      "tab": "Where it goes",
+      "empty": "There are no expenses this month.",
+      "total": "Month total: {{amount}}",
+      "allGroups": "All groups",
+      "installmentOf": "installment {{number}} of {{count}}"
+    },
+    "monthly": {
+      "tab": "Month by month",
+      "empty": "There are no movements in these 12 months.",
+      "chart": "Bar chart: money in and out for each of the last 12 months",
+      "in": "In",
+      "out": "Out",
+      "result": "Result",
+      "month": "Month",
+      "table": "In, out and result for each month"
+    },
+    "changes": {
+      "tab": "What changed",
+      "empty": "There are no expenses to compare.",
+      "nominalNote": "The comparison is nominal: it does not remove inflation, so a rise in pesos is not always more spending in real terms.",
+      "average": "3-month avg: {{amount}}",
+      "versus": "{{percent}} vs. the average",
+      "noBaseline": "No baseline to compare"
+    },
+    "committed": {
+      "tab": "Committed",
+      "empty": "Nothing is committed in the coming months.",
+      "note": "Adds up card installments and pending recurring movements for each month.",
+      "installments": "Installments {{amount}}",
+      "recurring": "Recurring {{amount}}"
+    }
   }
 }
