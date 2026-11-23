@@ -26,7 +26,8 @@
     "signOutFailed": "We could not sign you out. Try again.",
     "categories": "Categories",
     "toPay": "To pay",
-    "recurring": "Recurring"
+    "recurring": "Recurring",
+    "budgets": "Budgets"
   },
   "screens": {
     "home": {
@@ -70,6 +71,10 @@
     },
     "recurring": {
       "title": "Recurring"
+    },
+    "budgets": {
+      "title": "Budgets",
+      "description": "Your monthly limit per category or group and how much you have spent."
     }
   },
   "public": {
@@ -917,5 +922,46 @@
         "saveFailed": "We could not save the recurring item. Try again."
       }
     }
+  },
+  "budgets": {
+    "loading": "Loading budgets…",
+    "loadFailed": "We could not load your budgets.",
+    "retry": "Retry",
+    "emptyTitle": "No budgets yet",
+    "emptyDescription": "Set a monthly limit for a category or a group and see how much is left.",
+    "add": "New budget",
+    "back": "Back to menu",
+    "spentOf": "{{spent}} of {{limit}}",
+    "left": "{{amount}} left",
+    "near": "Close to the limit · {{amount}} left",
+    "reached": "Limit reached",
+    "over": "Over by {{amount}}",
+    "progressLabel": "Progress of {{name}}",
+    "form": {
+      "newTitle": "New budget",
+      "editTitle": "Edit budget",
+      "back": "Back to budgets",
+      "target": "Applies to",
+      "kindCategory": "Category",
+      "kindGroup": "Group",
+      "group": "Group",
+      "currency": "Currency",
+      "limit": "Monthly limit",
+      "save": "Save",
+      "saveChanges": "Save changes",
+      "saving": "Saving…",
+      "targetRequired": "Choose a category or a group.",
+      "limitInvalid": "Enter an amount greater than zero.",
+      "exists": "There is already a budget for that in this currency.",
+      "saveFailed": "We could not save the budget. Try again.",
+      "notFound": "We could not find that budget.",
+      "delete": "Delete budget",
+      "confirmDeleteTitle": "Delete this budget?",
+      "confirmDeleteBody": "Your movements are not changed.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "deleteFailed": "We could not delete the budget."
+    },
+    "nearLimitTitle": "Budgets close to the limit"
   }
 }

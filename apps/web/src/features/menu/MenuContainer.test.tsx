@@ -61,7 +61,7 @@ describe("MenuContainer", () => {
     expect(link.getAttribute("href")).toBe("/categories");
   });
 
-  it("links to the to-pay and recurring screens above the categories", () => {
+  it("links to the to-pay, recurring, categories and budgets screens in order", () => {
     // Arrange
     renderMenu("es");
 
@@ -73,6 +73,7 @@ describe("MenuContainer", () => {
       ["Por pagar", "/to-pay"],
       ["Gastos fijos", "/recurring"],
       ["Categorías", "/categories"],
+      ["Presupuestos", "/budgets"],
     ]);
   });
 

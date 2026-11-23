@@ -26,7 +26,8 @@
     "signOutFailed": "No pudimos cerrar la sesión. Inténtalo de nuevo.",
     "categories": "Categorías",
     "toPay": "Por pagar",
-    "recurring": "Gastos fijos"
+    "recurring": "Gastos fijos",
+    "budgets": "Presupuestos"
   },
   "screens": {
     "home": {
@@ -70,6 +71,10 @@
     },
     "recurring": {
       "title": "Gastos fijos"
+    },
+    "budgets": {
+      "title": "Presupuestos",
+      "description": "Tu tope mensual por categoría o grupo y cuánto llevás gastado."
     }
   },
   "public": {
@@ -919,5 +924,46 @@
         "saveFailed": "No pudimos guardar el gasto fijo. Probá de nuevo."
       }
     }
+  },
+  "budgets": {
+    "loading": "Cargando presupuestos…",
+    "loadFailed": "No pudimos cargar los presupuestos.",
+    "retry": "Reintentar",
+    "emptyTitle": "Todavía no hay presupuestos",
+    "emptyDescription": "Poné un tope mensual a una categoría o a un grupo y mirá cuánto te queda.",
+    "add": "Nuevo presupuesto",
+    "back": "Volver al menú",
+    "spentOf": "{{spent}} de {{limit}}",
+    "left": "Te quedan {{amount}}",
+    "near": "Cerca del tope · te quedan {{amount}}",
+    "reached": "Llegaste al tope",
+    "over": "Te pasaste por {{amount}}",
+    "progressLabel": "Progreso de {{name}}",
+    "form": {
+      "newTitle": "Nuevo presupuesto",
+      "editTitle": "Editar presupuesto",
+      "back": "Volver a presupuestos",
+      "target": "Aplica a",
+      "kindCategory": "Categoría",
+      "kindGroup": "Grupo",
+      "group": "Grupo",
+      "currency": "Moneda",
+      "limit": "Tope mensual",
+      "save": "Guardar",
+      "saveChanges": "Guardar cambios",
+      "saving": "Guardando…",
+      "targetRequired": "Elegí una categoría o un grupo.",
+      "limitInvalid": "Ingresá un monto mayor a cero.",
+      "exists": "Ya hay un presupuesto para eso en esa moneda.",
+      "saveFailed": "No pudimos guardar el presupuesto. Probá de nuevo.",
+      "notFound": "No encontramos ese presupuesto.",
+      "delete": "Eliminar presupuesto",
+      "confirmDeleteTitle": "¿Eliminar este presupuesto?",
+      "confirmDeleteBody": "Tus movimientos no se modifican.",
+      "confirm": "Eliminar",
+      "cancel": "Cancelar",
+      "deleteFailed": "No pudimos eliminar el presupuesto."
+    },
+    "nearLimitTitle": "Presupuestos cerca del tope"
   }
 }

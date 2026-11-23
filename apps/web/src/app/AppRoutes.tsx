@@ -4,6 +4,8 @@ import { AccountsContainer } from "../features/accounts/AccountsContainer";
 import { RedirectIfSignedIn } from "../features/auth/RedirectIfSignedIn";
 import { RequireAuth } from "../features/auth/RequireAuth";
 import { BalanceContainer } from "../features/balance/BalanceContainer";
+import { BudgetFormContainer } from "../features/budgets/BudgetFormContainer";
+import { BudgetsContainer } from "../features/budgets/BudgetsContainer";
 import { CategoriesContainer } from "../features/categories/CategoriesContainer";
 import { CategoryEditorContainer } from "../features/categories/CategoryEditorContainer";
 import { GroupEditorContainer } from "../features/categories/GroupEditorContainer";
@@ -54,6 +56,9 @@ export function AppRoutes() {
           <Route path="accounts/:accountId/edit" element={<AccountFormContainer />} />
           <Route path="movements/new" element={<MovementFormContainer />} />
           <Route path="movements/:movementId/edit" element={<MovementFormContainer />} />
+          <Route path="budgets" element={<BudgetsContainer />} />
+          <Route path="budgets/new" element={<BudgetFormContainer />} />
+          <Route path="budgets/:budgetId/edit" element={<BudgetFormContainer />} />
           <Route path="categories" element={<CategoriesContainer />} />
           <Route path="categories/new" element={<CategoryEditorContainer mode="new" />} />
           <Route path="categories/groups/new" element={<GroupEditorContainer mode="new" />} />
