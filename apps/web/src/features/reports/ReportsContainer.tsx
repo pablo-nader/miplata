@@ -9,6 +9,7 @@ import { useCategories } from "../categories/useCategories";
 import { ChangesContainer } from "./ChangesContainer";
 import { CommittedContainer } from "./CommittedContainer";
 import { MonthlyContainer } from "./MonthlyContainer";
+import { PanelState } from "./PanelState";
 import type { PanelContainerProps } from "./panel-props";
 import { ReportsScreen } from "./ReportsScreen";
 import { createLookup } from "./report-catalog";
@@ -114,14 +115,25 @@ export function ReportsContainer() {
         onChange: setCategoryId,
       }}
     >
-      <Panel
-        key={[tab, month, currency, accountId, categoryId].join("|")}
-        month={month}
-        filters={filters}
-        lookup={lookup}
-        locale={locale}
-        messages={messages}
-      />
+      {categories.state.status === "ready" ? (
+        <Panel
+          key={[tab, month, currency, accountId, categoryId].join("|")}
+          month={month}
+          filters={filters}
+          lookup={lookup}
+          locale={locale}
+          messages={messages}
+        />
+      ) : (
+        <PanelState
+          status={categories.state.status}
+          empty={false}
+          messages={messages}
+          onRetry={categories.reload}
+        >
+          {null}
+        </PanelState>
+      )}
     </ReportsScreen>
   );
 }
