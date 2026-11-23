@@ -431,6 +431,30 @@ describe("payments and the previous balance", () => {
   });
 });
 
+describe("deactivated cards", () => {
+  it("still accepts a payment so a closed card can be paid off", async () => {
+    // Arrange
+    const user = await newUser();
+    await record(user, purchase(user, { amountMinor: 100_00 }));
+    const november = await statementOf(user, "2026-11");
+    await ok(await call(user.cookie, "POST", `/accounts/${user.visa}/deactivate`), 200);
+
+    // Act
+    const paid = await ok(
+      await call(user.cookie, "POST", `/statements/${november.id}/payments`, {
+        fromAccountId: user.bank,
+        occurredOn: "2026-12-05",
+        arsMinor: 100_00,
+      }),
+      201,
+    );
+
+    // Assert
+    expect(totalsOf(paid).totalMinor).toBe(0);
+    expect(await balanceOf(user, user.visa, "ARS")).toBe(0);
+  });
+});
+
 describe("correcting a statement's dates", () => {
   it("moves the purchases made after the new closing date to the next statement", async () => {
     // Arrange
@@ -741,6 +765,35 @@ describe("the bank total and the adjustment", () => {
     expect(readjusted.charges).toHaveLength(1);
     expect(readjusted.charges[0]).toMatchObject({ amountMinor: 50_00, isAdjustment: true });
     expect(totalsOf(readjusted)).toMatchObject({ totalMinor: 150_00, differenceMinor: 0 });
+  });
+
+  it("collapses several Adjustment charges into one in a single step", async () => {
+    // Arrange
+    const user = await newUser();
+    await record(user, purchase(user, { amountMinor: 100_00 }));
+    const november = await statementOf(user, "2026-11");
+    for (const amountMinor of [10_00, 20_00]) {
+      await ok(
+        await call(
+          user.cookie,
+          "POST",
+          `/statements/${november.id}/charges`,
+          charge(user, { categoryId: user.adjustment, amountMinor }),
+        ),
+        201,
+      );
+    }
+    await figures(user, november.id, { bankTotalArsMinor: 160_00 });
+
+    // Act
+    const adjusted = await ok(
+      await call(user.cookie, "POST", `/statements/${november.id}/adjustment`, { currency: "ARS" }),
+    );
+
+    // Assert
+    expect(adjusted.charges).toHaveLength(1);
+    expect(adjusted.charges[0]).toMatchObject({ amountMinor: 60_00, isAdjustment: true });
+    expect(totalsOf(adjusted)).toMatchObject({ totalMinor: 160_00, differenceMinor: 0 });
   });
 
   it.each([

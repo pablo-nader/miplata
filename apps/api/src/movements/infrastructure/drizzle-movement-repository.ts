@@ -9,6 +9,7 @@ import {
   installment,
   lte,
   movement,
+  ne,
   posting,
   type SQL,
   sql,
@@ -257,7 +258,7 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
       return rows[0]?.statementId != null;
     },
 
-    async replace(userId, movementId, plan) {
+    async replace(userId, movementId, plan, alsoRemove = []) {
       const replaced = await db.transaction(async (tx) => {
         const [row] = await tx
           .update(movement)
@@ -272,6 +273,17 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
           .returning({ id: movement.id });
         if (!row) {
           return false;
+        }
+        if (alsoRemove.length > 0) {
+          await tx
+            .delete(movement)
+            .where(
+              and(
+                eq(movement.userId, userId),
+                inArray(movement.id, alsoRemove),
+                ne(movement.id, movementId),
+              ),
+            );
         }
         await tx
           .delete(posting)

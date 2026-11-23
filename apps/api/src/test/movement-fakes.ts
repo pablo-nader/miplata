@@ -59,10 +59,16 @@ export function inMemoryMovements() {
     async isStatementBound(userId, movementId) {
       return bound.has(`${userId}:${movementId}`);
     },
-    async replace(userId, movementId, plan) {
+    async replace(userId, movementId, plan, alsoRemove = []) {
       const row = rows.find((item) => item.userId === userId && item.movement.id === movementId);
       if (!row) {
         return null;
+      }
+      for (const id of alsoRemove) {
+        const index = rows.findIndex((item) => item.userId === userId && item.movement.id === id);
+        if (index >= 0) {
+          rows.splice(index, 1);
+        }
       }
       row.movement = toMovement(movementId, plan);
       plans.push(plan);
