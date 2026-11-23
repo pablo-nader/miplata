@@ -90,4 +90,46 @@ describe("MoneyInput", () => {
     expect(input.value).toBe("19.234");
     expect(input.selectionStart).toBe(2);
   });
+
+  it("reads a pasted Spanish amount in English and a pasted English one in Spanish", async () => {
+    const english = await renderIn("en");
+    await userEvent.click(english);
+    await userEvent.paste("2.500,75");
+    expect(english.value).toBe("2,500.75");
+  });
+
+  it("ignores a paste that is not an amount", async () => {
+    const input = await renderIn("es", "15");
+
+    await userEvent.click(input);
+    await userEvent.paste("abc");
+
+    expect(input.value).toBe("15");
+  });
+
+  it("deletes the digit before a group separator when backspacing over it", async () => {
+    const input = await renderIn("es", "1234");
+
+    input.focus();
+    input.setSelectionRange(2, 2);
+    await userEvent.keyboard("{Backspace}");
+
+    expect(input.value).toBe("234");
+  });
+
+  it("starts a sub-unit amount with a leading zero", async () => {
+    const input = await renderIn("es");
+
+    await userEvent.type(input, ",5");
+
+    expect(input.value).toBe("0,5");
+  });
+
+  it("limits the digits", async () => {
+    const input = await renderIn("en");
+
+    await userEvent.type(input, "12345678901234");
+
+    expect(input.value).toBe("1,234,567,890");
+  });
 });

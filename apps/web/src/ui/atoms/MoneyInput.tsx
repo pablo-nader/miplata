@@ -3,6 +3,7 @@ import {
   type ClipboardEvent,
   type InputHTMLAttributes,
   useLayoutEffect,
+  useReducer,
   useRef,
 } from "react";
 import { useTranslation } from "react-i18next";
@@ -39,6 +40,7 @@ export function MoneyInput({
   const locale = localeForLanguage(i18n.language);
   const inputRef = useRef<HTMLInputElement>(null);
   const pendingCaret = useRef<number | null>(null);
+  const [, refresh] = useReducer((tick: number) => tick + 1, 0);
   const display = formatCanonical(value, locale);
 
   useLayoutEffect(() => {
@@ -49,23 +51,42 @@ export function MoneyInput({
     pendingCaret.current = null;
   });
 
-  function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    const raw = event.target.value;
-    const caret = event.target.selectionStart ?? raw.length;
+  function apply(raw: string, caret: number) {
     const next = interpretTyping(raw, caret, locale, allowNegative);
     pendingCaret.current = caretAfter(
       formatCanonical(next.canonical, locale),
       next.significantBefore,
       locale,
     );
+    if (next.canonical === value) {
+      refresh();
+      return;
+    }
     onValueChange(next.canonical);
+  }
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const raw = event.target.value;
+    const caret = event.target.selectionStart ?? raw.length;
+    const removedSeparator =
+      raw.length === display.length - 1 && interpretTyping(raw, caret, locale).canonical === value;
+    if (removedSeparator && caret > 0) {
+      apply(raw.slice(0, caret - 1) + raw.slice(caret), caret - 1);
+      return;
+    }
+    apply(raw, caret);
   }
 
   function handlePaste(event: ClipboardEvent<HTMLInputElement>) {
     event.preventDefault();
-    const canonical = parseLocalized(event.clipboardData.getData("text"), allowNegative);
-    pendingCaret.current = formatCanonical(canonical, locale).length;
-    onValueChange(canonical);
+    const pasted = parseLocalized(event.clipboardData.getData("text"), allowNegative);
+    if (pasted === "") {
+      return;
+    }
+    const start = event.currentTarget.selectionStart ?? display.length;
+    const end = event.currentTarget.selectionEnd ?? display.length;
+    const inserted = formatCanonical(pasted, locale);
+    apply(display.slice(0, start) + inserted + display.slice(end), start + inserted.length);
   }
 
   return (

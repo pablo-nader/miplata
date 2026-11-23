@@ -5,6 +5,7 @@ import {
   MAX_AMOUNT_MINOR,
   parseMoney,
 } from "@miplata/shared";
+import { minorToCanonical } from "../../ui/format/money-input";
 
 export const CURRENCY_LIST: readonly Currency[] = ["ARS", "USD"];
 
@@ -37,7 +38,7 @@ export function formFromBudget(budget: Budget): BudgetFormState {
     categoryId: budget.categoryId,
     groupId: budget.groupId,
     currency: budget.currency,
-    limit: String(budget.limitMinor / 100),
+    limit: minorToCanonical(budget.limitMinor),
   };
 }
 

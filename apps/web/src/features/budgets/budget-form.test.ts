@@ -86,7 +86,7 @@ describe("formFromBudget", () => {
       categoryId: null,
       groupId: id,
       currency: "USD",
-      limit: "125.5",
+      limit: "125.50",
     });
   });
 });

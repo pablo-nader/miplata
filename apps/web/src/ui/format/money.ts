@@ -39,6 +39,9 @@ export function formatMoney(
 }
 
 export function formatRate(rate: number, locale: MoneyLocale): string {
-  const body = new Intl.NumberFormat(locale, { maximumFractionDigits: 4 }).format(rate);
+  const body = new Intl.NumberFormat(locale, {
+    useGrouping: "always",
+    maximumFractionDigits: 4,
+  }).format(rate);
   return `${prefixes.ARS}${SPACE}${body}`;
 }
