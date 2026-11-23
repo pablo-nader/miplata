@@ -763,6 +763,28 @@ describe("charges", () => {
     // Assert
     expect(await ok(response, 409)).toEqual({ error: "statement_movement" });
   });
+
+  it("tells the movements endpoint which statement a charge belongs to", async () => {
+    // Arrange
+    const user = await newUser();
+    await record(user, purchase(user));
+    const november = await statementOf(user, "2026-11");
+    const added = await ok(
+      await call(user.cookie, "POST", `/statements/${november.id}/charges`, charge(user)),
+      201,
+    );
+    const movementId = added.charges[0].movementId;
+
+    // Act
+    const found = await ok(await call(user.cookie, "GET", `/movements/${movementId}`));
+
+    // Assert
+    expect(found.statement).toEqual({
+      id: november.id,
+      accountId: november.accountId,
+      periodMonth: "2026-11",
+    });
+  });
 });
 
 describe("the bank total and the adjustment", () => {

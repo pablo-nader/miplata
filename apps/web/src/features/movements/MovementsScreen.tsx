@@ -170,12 +170,7 @@ export function MovementsScreen({
           </h2>
           <MovementList>
             {group.rows.map((row) => (
-              <MovementRowView
-                key={row.id}
-                row={row}
-                locale={locale}
-                to={`/movements/${row.id}/edit`}
-              />
+              <MovementRowView key={row.id} row={row} locale={locale} to={row.to} />
             ))}
           </MovementList>
         </section>

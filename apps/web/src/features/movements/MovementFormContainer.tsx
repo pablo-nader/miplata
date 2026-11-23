@@ -25,7 +25,7 @@ import {
   isCardExpense,
 } from "./movement-form";
 import { deleteMovement, fetchMovement, saveMovement } from "./movements-api";
-import { localDate } from "./present-movement";
+import { localDate, statementPathOf } from "./present-movement";
 import { useLookups } from "./useLookups";
 
 const ALL_CURRENCIES: Currency[] = ["ARS", "USD"];
@@ -39,6 +39,7 @@ const KNOWN_FAILURES = new Set([
   "currency_not_in_account",
   "installments_not_allowed",
   "person_share_invalid",
+  "statement_movement",
   "transfer_amount_mismatch",
   "transfer_same_account",
 ]);
@@ -96,6 +97,26 @@ export function MovementFormContainer() {
               }}
             >
               {t("movements.retry")}
+            </Button>
+          }
+        />
+      </>
+    );
+  }
+  const statementPath =
+    existing.state.status === "ready" && existing.state.data
+      ? statementPathOf(existing.state.data)
+      : null;
+  if (statementPath) {
+    return (
+      <>
+        <ScreenHeader title={title} back={back} />
+        <EmptyState
+          title={t("movements.form.statementBound.title")}
+          description={t("movements.form.statementBound.body")}
+          action={
+            <Button onClick={() => navigate(statementPath)}>
+              {t("movements.form.statementBound.link")}
             </Button>
           }
         />

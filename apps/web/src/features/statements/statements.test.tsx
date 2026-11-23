@@ -1,5 +1,5 @@
 import type { StatementDetail, StatementTotals } from "@miplata/shared";
-import { screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -706,5 +706,85 @@ describe("ReconcileContainer", () => {
     expect((await screen.findByRole("alert")).textContent).toBe(
       "No pudimos guardar. Probá de nuevo.",
     );
+  });
+});
+
+describe("correcting the statement dates", () => {
+  function openStatement() {
+    screenAt(
+      "/accounts/card-1/statement",
+      <StatementContainer />,
+      "/accounts/:accountId/statement",
+    );
+  }
+
+  it("sends the corrected dates and tells that the installments were reassigned", async () => {
+    // Arrange
+    const corrected = detailOf({ closingDate: "2026-11-25", dueDate: "2026-12-03" });
+    const { calls } = stubApi({
+      ...lookups,
+      "PATCH /api/statements/st-nov": { body: corrected },
+    });
+    const user = userEvent.setup();
+    openStatement();
+
+    // Act
+    await user.click(await screen.findByRole("button", { name: "Editar fechas" }));
+    fireEvent.change(screen.getByLabelText("Fecha de cierre"), {
+      target: { value: "2026-11-25" },
+    });
+    fireEvent.change(screen.getByLabelText("Fecha de vencimiento"), {
+      target: { value: "2026-12-03" },
+    });
+    await user.click(screen.getByRole("button", { name: "Guardar fechas" }));
+
+    // Assert
+    expect(await screen.findByText(/cuotas de este período se reasignaron/)).toBeDefined();
+    expect(calls.find((call) => call.key === "PATCH /api/statements/st-nov")?.body).toEqual({
+      closingDate: "2026-11-25",
+      dueDate: "2026-12-03",
+    });
+  });
+
+  it("refuses a closing date outside the month without calling the server", async () => {
+    // Arrange
+    const { calls } = stubApi(lookups);
+    const user = userEvent.setup();
+    openStatement();
+
+    // Act
+    await user.click(await screen.findByRole("button", { name: "Editar fechas" }));
+    fireEvent.change(screen.getByLabelText("Fecha de cierre"), {
+      target: { value: "2026-12-01" },
+    });
+    await user.click(screen.getByRole("button", { name: "Guardar fechas" }));
+
+    // Assert
+    expect(
+      await screen.findByText("La fecha de cierre tiene que estar dentro del mes del resumen."),
+    ).toBeDefined();
+    expect(calls.some((call) => call.key.startsWith("PATCH"))).toBe(false);
+  });
+
+  it("explains a rejection from the server", async () => {
+    // Arrange
+    stubApi({
+      ...lookups,
+      "PATCH /api/statements/st-nov": {
+        status: 400,
+        body: { error: "invalid_request", reason: "due_before_closing" },
+      },
+    });
+    const user = userEvent.setup();
+    openStatement();
+
+    // Act
+    await user.click(await screen.findByRole("button", { name: "Editar fechas" }));
+    await user.click(screen.getByRole("button", { name: "Guardar fechas" }));
+
+    // Assert
+    expect(
+      await screen.findByText("El vencimiento tiene que ser posterior al cierre."),
+    ).toBeDefined();
   });
 });

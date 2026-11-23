@@ -613,7 +613,13 @@
         "installments_not_allowed": "Solo las compras con tarjeta admiten cuotas.",
         "person_share_invalid": "Tu parte tiene que ser menor que el total.",
         "transfer_amount_mismatch": "Con la misma moneda, los dos montos tienen que ser iguales.",
-        "transfer_same_account": "Elegí cuentas distintas."
+        "transfer_same_account": "Elegí cuentas distintas.",
+        "statement_movement": "Este movimiento pertenece a un resumen de tarjeta. Editalo desde el resumen."
+      },
+      "statementBound": {
+        "title": "Este movimiento pertenece a un resumen",
+        "body": "Los cargos y pagos se editan desde el resumen de la tarjeta.",
+        "link": "Ir al resumen"
       }
     },
     "moreFailed": "No pudimos traer más movimientos. Probá de nuevo."
@@ -781,6 +787,23 @@
       "saving": "Guardando…",
       "errors": {
         "amount": "Ingresá un monto válido."
+      }
+    },
+    "dates": {
+      "open": "Editar fechas",
+      "title": "Fechas del resumen",
+      "closing": "Fecha de cierre",
+      "due": "Fecha de vencimiento",
+      "save": "Guardar fechas",
+      "saving": "Guardando…",
+      "cancel": "Cancelar",
+      "saved": "Fechas actualizadas. Las cuotas de este período se reasignaron según las nuevas fechas.",
+      "failures": {
+        "closing_outside_period": "La fecha de cierre tiene que estar dentro del mes del resumen.",
+        "due_before_closing": "El vencimiento tiene que ser posterior al cierre.",
+        "invalid_date": "Ingresá fechas válidas.",
+        "card_without_schedule": "Definí el día de cierre y de vencimiento de la tarjeta.",
+        "saveFailed": "No pudimos guardar las fechas. Probá de nuevo."
       }
     }
   },

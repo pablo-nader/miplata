@@ -95,6 +95,7 @@ export function makeMovement(overrides: Partial<Movement> = {}): Movement {
         ownAmountMinor: 48_300_00,
       },
     ],
+    statement: null,
     ...overrides,
   };
 }

@@ -2,6 +2,7 @@ import type { StatementChargeLine, StatementTotals } from "@miplata/shared";
 import { describe, expect, it } from "vitest";
 import {
   buildCharge,
+  buildDates,
   buildReconcile,
   chargeFormFrom,
   emptyChargeForm,
@@ -138,5 +139,36 @@ describe("buildReconcile", () => {
 
     // Assert
     expect(form).toEqual({ arsTotal: "130", arsMinimum: "", usdTotal: "", usdMinimum: "" });
+  });
+});
+
+describe("buildDates", () => {
+  it("builds a request when the closing is inside the period and the due date is later", () => {
+    // Arrange
+    const form = { closingDate: "2026-11-25", dueDate: "2026-12-03" };
+
+    // Act
+    const built = buildDates("2026-11", form);
+
+    // Assert
+    expect(built).toEqual({
+      ok: true,
+      value: { closingDate: "2026-11-25", dueDate: "2026-12-03" },
+    });
+  });
+
+  it.each([
+    ["a closing outside the period", "2026-12-01", "2026-12-10", "closing_outside_period"],
+    ["a due date that is not after the closing", "2026-11-25", "2026-11-25", "due_before_closing"],
+    ["an empty date", "", "2026-12-03", "invalid_date"],
+  ])("rejects %s", (_name, closingDate, dueDate, error) => {
+    // Arrange
+    const form = { closingDate, dueDate };
+
+    // Act
+    const built = buildDates("2026-11", form);
+
+    // Assert
+    expect(built).toEqual({ ok: false, error });
   });
 });

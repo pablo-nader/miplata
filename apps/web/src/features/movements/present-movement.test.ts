@@ -11,6 +11,7 @@ import {
   type PresentContext,
   presentMovement,
   shiftDays,
+  statementPathOf,
 } from "./present-movement";
 
 const t = createI18n("es").t;
@@ -61,6 +62,7 @@ function expense(changes: Partial<Movement> = {}): Movement {
         ownAmountMinor: 48_300_00,
       },
     ],
+    statement: null,
     ...changes,
   };
 }
@@ -380,5 +382,43 @@ describe("grouping and dates", () => {
 
     // Assert
     expect(today).toMatch(pattern);
+  });
+});
+
+describe("routing a movement to its statement", () => {
+  const statement = { id: "st-nov", accountId: "visa", periodMonth: "2026-11" };
+
+  it("opens the charge on the statement when the expense is a statement charge", () => {
+    // Arrange
+    const movement = expense({ statement });
+
+    // Act
+    const row = presentMovement(movement, context);
+
+    // Assert
+    expect(row.to).toBe("/accounts/visa/statement/charges/m1?period=2026-11");
+  });
+
+  it("opens the statement itself when the movement is a payment", () => {
+    // Arrange
+    const movement = expense({ type: "transfer", statement });
+
+    // Act
+    const path = statementPathOf(movement);
+
+    // Assert
+    expect(path).toBe("/accounts/visa/statement?period=2026-11");
+  });
+
+  it("opens the movement form when the movement does not belong to a statement", () => {
+    // Arrange
+    const movement = expense();
+
+    // Act
+    const row = presentMovement(movement, context);
+
+    // Assert
+    expect(row.to).toBe("/movements/m1/edit");
+    expect(statementPathOf(movement)).toBeNull();
   });
 });
