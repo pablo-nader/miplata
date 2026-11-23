@@ -220,7 +220,7 @@ export function CategoryEditorContainer({ mode }: { mode: Mode }) {
       return (
         <PlaceholderScreen
           title={t("categories.editor.editTitle")}
-          description={t("categories.errors.notFound")}
+          description={t("categories.back")}
           note={t("categories.errors.notFound")}
           back={{ to: "/categories", label: t("categories.back") }}
         />

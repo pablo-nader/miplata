@@ -89,64 +89,66 @@ export function CategoryEditorScreen({
           {title}
         </h1>
       </header>
-      <form className="category-editor" onSubmit={submit} noValidate hidden={confirm !== null}>
-        <div className="category-editor__name">
-          <CategoryBadge
-            name={preview.name}
-            icon={preview.icon}
-            color={preview.color}
-            size="picker"
+      {confirm ? null : (
+        <form className="category-editor" onSubmit={submit} noValidate>
+          <div className="category-editor__name">
+            <CategoryBadge
+              name={preview.name}
+              icon={preview.icon}
+              color={preview.color}
+              size="picker"
+            />
+            <Field
+              label={name.label}
+              value={name.value}
+              autoComplete="off"
+              {...(name.error ? { error: name.error } : {})}
+              onChange={(event) => name.onChange(event.target.value)}
+            />
+          </div>
+          {groups ? (
+            <fieldset className="category-editor__groups">
+              <legend className="category-picker__legend">{groups.label}</legend>
+              <div className="category-editor__chips">
+                {groups.options.map((option) => (
+                  <FilterChip
+                    key={option.id}
+                    label={option.label}
+                    selected={option.id === groups.selectedId}
+                    onClick={() => groups.onSelect(option.id)}
+                  />
+                ))}
+              </div>
+            </fieldset>
+          ) : null}
+          <ColorPicker
+            label={colors.label}
+            swatchName={colors.swatchName}
+            options={colors.options}
+            value={colors.value}
+            onSelect={colors.onSelect}
           />
-          <Field
-            label={name.label}
-            value={name.value}
-            autoComplete="off"
-            {...(name.error ? { error: name.error } : {})}
-            onChange={(event) => name.onChange(event.target.value)}
+          <IconPicker
+            label={icons.label}
+            noIconLabel={icons.noIconLabel}
+            options={icons.options}
+            value={icons.value}
+            color={colors.value}
+            fallbackName={preview.name}
+            onSelect={icons.onSelect}
           />
-        </div>
-        {groups ? (
-          <fieldset className="category-editor__groups">
-            <legend className="category-picker__legend">{groups.label}</legend>
-            <div className="category-editor__chips">
-              {groups.options.map((option) => (
-                <FilterChip
-                  key={option.id}
-                  label={option.label}
-                  selected={option.id === groups.selectedId}
-                  onClick={() => groups.onSelect(option.id)}
-                />
-              ))}
-            </div>
-          </fieldset>
-        ) : null}
-        <ColorPicker
-          label={colors.label}
-          swatchName={colors.swatchName}
-          options={colors.options}
-          value={colors.value}
-          onSelect={colors.onSelect}
-        />
-        <IconPicker
-          label={icons.label}
-          noIconLabel={icons.noIconLabel}
-          options={icons.options}
-          value={icons.value}
-          color={colors.value}
-          fallbackName={preview.name}
-          onSelect={icons.onSelect}
-        />
-        {errorMessage ? (
-          <p role="alert" className="category-editor__error">
-            {errorMessage}
-          </p>
-        ) : null}
-        <div className="category-editor__actions">
-          <Button type="submit" disabled={save.busy}>
-            {save.label}
-          </Button>
-        </div>
-      </form>
+          {errorMessage ? (
+            <p role="alert" className="category-editor__error">
+              {errorMessage}
+            </p>
+          ) : null}
+          <div className="category-editor__actions">
+            <Button type="submit" disabled={save.busy}>
+              {save.label}
+            </Button>
+          </div>
+        </form>
+      )}
       {confirm ? <ConfirmPanel {...confirm} /> : null}
       {actions.length > 0 && !confirm ? (
         <div className="category-editor__secondary">
