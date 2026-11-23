@@ -86,6 +86,7 @@ describe("MenuContainer", () => {
         ["Gastos fijos2", "/recurring"],
         ["Categorías3", "/categories"],
         ["Presupuestos1", "/budgets"],
+        ["Préstamos", "/loans"],
         ["Ver guías", "/guides"],
         ["IdiomaEspañol", "/menu/language"],
       ]),

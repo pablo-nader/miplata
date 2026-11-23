@@ -1,7 +1,7 @@
 import type { Account, Currency } from "@miplata/shared";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useOnline } from "../../shared/use-online";
 import { useResource } from "../../shared/use-resource";
 import { Button } from "../../ui/atoms/Button";
@@ -27,6 +27,7 @@ import {
   isCardExpense,
   NEW_PERSON_OPTION,
 } from "./movement-form";
+import { prefillFromSearch } from "./movement-prefill";
 import { deleteMovement, fetchMovement, saveMovement } from "./movements-api";
 import { localDate, statementPathOf } from "./present-movement";
 import { useLookups } from "./useLookups";
@@ -53,6 +54,7 @@ export function MovementFormContainer() {
   const locale = localeForLanguage(i18n.language);
   const navigate = useNavigate();
   const { movementId } = useParams();
+  const [search] = useSearchParams();
   const isEdit = movementId !== undefined;
   const lookups = useLookups();
   const loadExisting = useCallback(
@@ -77,10 +79,10 @@ export function MovementFormContainer() {
     initialised.current = true;
     const base = existing.state.data
       ? formFromMovement(existing.state.data)
-      : emptyForm(localDate());
+      : (prefillFromSearch(search, localDate()) ?? emptyForm(localDate()));
     const accountId = base.accountId ?? defaultAccountId(lookups.accounts);
     setForm(existing.state.data ? base : applyChange(base, { accountId }, lookups.accounts));
-  }, [lookups.status, lookups.accounts, existing.state]);
+  }, [lookups.status, lookups.accounts, existing.state, search]);
 
   const back = {
     to: isEdit ? "/movements" : "/home",

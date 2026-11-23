@@ -302,6 +302,56 @@ describe("presenting income and transfers", () => {
   });
 });
 
+describe("presenting a forgiven debt", () => {
+  const forgiven = (changes: Partial<Movement> = {}) =>
+    expense({
+      account: null,
+      person: { personId: "juan", ownAmountMinor: 700_00 },
+      installments: [
+        {
+          number: 1,
+          periodMonth: "2026-11",
+          statementId: null,
+          amountMinor: 700_00,
+          ownAmountMinor: 700_00,
+        },
+      ],
+      ...changes,
+    });
+
+  it("shows what the person owed as an expense in its category", () => {
+    // Arrange
+    const movement = forgiven();
+
+    // Act
+    const row = presentMovement(movement, context);
+
+    // Assert
+    expect(row).toMatchObject({
+      title: "Supermercado",
+      caption: "Deuda perdonada · Juan",
+      amount: { amount: 700, currency: "ARS", direction: "expense" },
+      badge: { kind: "category", name: "Supermercado" },
+      impact: { currency: "ARS", minor: -700_00 },
+    });
+  });
+
+  it("shows what the user owed as an income in the currency of the person's leg", () => {
+    // Arrange
+    const movement = forgiven({
+      type: "income",
+      account: { accountId: "juan", currency: "USD", amountMinor: 700_00 },
+    });
+
+    // Act
+    const row = presentMovement(movement, context);
+
+    // Assert
+    expect(row.amount).toEqual({ amount: 700, currency: "USD", direction: "income" });
+    expect(row.impact).toEqual({ currency: "USD", minor: 700_00 });
+  });
+});
+
 describe("grouping and dates", () => {
   it("groups consecutive rows by day and sums the user's impact per currency", () => {
     // Arrange

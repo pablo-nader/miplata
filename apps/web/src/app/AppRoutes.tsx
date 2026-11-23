@@ -10,6 +10,8 @@ import { CategoriesContainer } from "../features/categories/CategoriesContainer"
 import { CategoryEditorContainer } from "../features/categories/CategoryEditorContainer";
 import { GroupEditorContainer } from "../features/categories/GroupEditorContainer";
 import { HomeContainer } from "../features/home/HomeContainer";
+import { LoanDetailContainer } from "../features/loans/LoanDetailContainer";
+import { LoansContainer } from "../features/loans/LoansContainer";
 import { LanguageContainer } from "../features/menu/LanguageContainer";
 import { MenuContainer } from "../features/menu/MenuContainer";
 import { MovementFormContainer } from "../features/movements/MovementFormContainer";
@@ -77,6 +79,8 @@ export function AppRoutes() {
           <Route path="recurring" element={<RecurringListContainer />} />
           <Route path="recurring/new" element={<RecurringFormContainer />} />
           <Route path="recurring/:recurringId/edit" element={<RecurringFormContainer />} />
+          <Route path="loans" element={<LoansContainer />} />
+          <Route path="loans/:personId" element={<LoanDetailContainer />} />
           <Route path="menu" element={<MenuContainer />} />
           <Route path="menu/language" element={<LanguageContainer />} />
           <Route path="guides" element={<GuidesContainer />} />

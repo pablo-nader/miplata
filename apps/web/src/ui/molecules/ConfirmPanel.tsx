@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef } from "react";
+import { type ReactNode, useEffect, useId, useRef } from "react";
 import { Button } from "../atoms/Button";
 import "./confirm-panel.css";
 
@@ -10,6 +10,8 @@ type ConfirmPanelProps = {
   onConfirm: () => void;
   onCancel: () => void;
   busy?: boolean;
+  confirmDisabled?: boolean;
+  children?: ReactNode;
 };
 
 export function ConfirmPanel({
@@ -20,6 +22,8 @@ export function ConfirmPanel({
   onConfirm,
   onCancel,
   busy = false,
+  confirmDisabled = false,
+  children,
 }: ConfirmPanelProps) {
   const titleId = useId();
   const ref = useRef<HTMLElement>(null);
@@ -43,8 +47,9 @@ export function ConfirmPanel({
         {title}
       </h2>
       <p className="confirm-panel__body">{body}</p>
+      {children}
       <div className="confirm-panel__actions">
-        <Button onClick={onConfirm} disabled={busy}>
+        <Button onClick={onConfirm} disabled={busy || confirmDisabled}>
           {confirmLabel}
         </Button>
         <Button variant="ghost" onClick={onCancel} disabled={busy}>

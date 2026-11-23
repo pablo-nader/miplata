@@ -69,6 +69,35 @@ function transferRow(movement: Movement, ctx: PresentContext): Omit<RowData, "to
   };
 }
 
+function isForgiveness(movement: Movement): boolean {
+  const { person, account } = movement;
+  return person !== null && (account === null || account.accountId === person.personId);
+}
+
+function forgivenessRow(movement: Movement, ctx: PresentContext): Omit<RowData, "to"> {
+  const category = movement.categoryId ? ctx.category(movement.categoryId) : undefined;
+  const person = movement.person ? ctx.account(movement.person.personId) : undefined;
+  const categoryName = category ? ctx.categoryName(category) : "";
+  const personName = person ? ctx.accountName(person) : "";
+  const currency = movement.account?.currency ?? "ARS";
+  const isIncome = movement.type === "income";
+  const minor = movement.person?.ownAmountMinor ?? 0;
+  return {
+    id: movement.id,
+    occurredOn: movement.occurredOn,
+    badge: {
+      kind: "category",
+      name: categoryName,
+      icon: category?.icon ?? null,
+      color: category ? colorOf(category) : 1,
+    },
+    title: movement.description ?? categoryName,
+    caption: `${ctx.t("loans.forgiven")} · ${personName}`,
+    amount: { amount: toUnits(minor), currency, direction: isIncome ? "income" : "expense" },
+    impact: { currency, minor: isIncome ? minor : -minor },
+  };
+}
+
 function entryRow(movement: Movement, ctx: PresentContext): Omit<RowData, "to"> {
   const leg = movement.account;
   const category = movement.categoryId ? ctx.category(movement.categoryId) : undefined;
@@ -125,7 +154,12 @@ export function statementPathOf(movement: Movement): string | null {
 }
 
 export function presentMovement(movement: Movement, ctx: PresentContext): RowData {
-  const row = movement.type === "transfer" ? transferRow(movement, ctx) : entryRow(movement, ctx);
+  const row =
+    movement.type === "transfer"
+      ? transferRow(movement, ctx)
+      : isForgiveness(movement)
+        ? forgivenessRow(movement, ctx)
+        : entryRow(movement, ctx);
   return { ...row, to: statementPathOf(movement) ?? `/movements/${movement.id}/edit` };
 }
 

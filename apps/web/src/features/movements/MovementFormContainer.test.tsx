@@ -344,6 +344,29 @@ describe("when the browser is offline", () => {
   });
 });
 
+describe("prefilled repayment", () => {
+  it("opens a transfer from the person with the amount and currency and saves it", async () => {
+    // Arrange
+    const { calls } = stubApi({ ...lookupHandlers, "POST /api/movements": created });
+    renderForm("/movements/new?type=transfer&from=acc-juan&currency=ARS&amountMinor=70000");
+    await screen.findByRole("button", { name: "Guardar transferencia" });
+
+    // Act
+    await userEvent.selectOptions(screen.getByLabelText("Cuenta de destino"), "acc-cash");
+    await userEvent.click(screen.getByRole("button", { name: "Guardar transferencia" }));
+
+    // Assert
+    await screen.findByText("home screen");
+    expect(calls.find((call) => call.key === "POST /api/movements")?.body).toEqual({
+      type: "transfer",
+      occurredOn: "2026-11-25",
+      description: null,
+      from: { accountId: "acc-juan", currency: "ARS", amountMinor: 70_000 },
+      to: { accountId: "acc-cash", currency: "ARS", amountMinor: 70_000 },
+    });
+  });
+});
+
 describe("editing and deleting", () => {
   const existing = makeMovement({
     description: "Coto",

@@ -289,6 +289,24 @@ describe("forgiving a debt", () => {
     expect(summary.totals[0]).toEqual({ currency: "ARS", inMinor: 0, outMinor: 700_00 });
   });
 
+  it("keeps the currency of the person's leg on the forgiveness movement", async () => {
+    // Arrange
+    const user = await newUser();
+    await record(user, transfer(user.cash, user.juan, 50_00, "USD"));
+
+    // Act
+    const forgiven = await ok(
+      await call(user.cookie, "POST", `/loans/${user.juan}/forgive`, {
+        currency: "USD",
+        categoryId: user.food,
+      }),
+      201,
+    );
+
+    // Assert
+    expect(forgiven.account).toEqual({ accountId: user.juan, currency: "USD", amountMinor: 50_00 });
+  });
+
   it("turns what the user owes a person into income and settles the balance", async () => {
     // Arrange
     const user = await newUser();

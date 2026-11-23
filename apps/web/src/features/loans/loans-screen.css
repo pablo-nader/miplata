@@ -1,0 +1,49 @@
+.loans-screen__head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3) var(--space-4) var(--space-1);
+  color: var(--color-muted);
+  font-size: var(--font-size-caption);
+  font-weight: 700;
+}
+
+.loans-screen__head-label {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.loans-screen__detail {
+  color: var(--color-muted);
+  font-size: var(--font-size-caption);
+}
+
+.loans-screen__amounts {
+  display: grid;
+  justify-items: end;
+}
+
+.loans-line {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.loans-line__amount {
+  font-family: var(--font-display);
+  font-size: var(--font-size-title);
+  font-weight: 800;
+}
+
+.loans-line__actions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.loans-screen__failure {
+  margin: 0;
+  color: var(--color-ink);
+  font-weight: 700;
+}
