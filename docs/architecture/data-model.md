@@ -129,4 +129,4 @@ erDiagram
 - `installment (user_id, period_month)` for monthly totals and reports.
 - `installment (user_id, statement_id)` for statements.
 - `movement (user_id, occurred_on desc)` for the movements list.
-- Trigram index on `movement.description` for search.
+- Trigram index on `immutable_unaccent(lower(movement.description))` for accent- and case-insensitive search (ADR 0042).
