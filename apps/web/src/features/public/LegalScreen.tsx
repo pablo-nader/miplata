@@ -1,12 +1,11 @@
 import markUrl from "@brand/mark.svg";
 import { Link } from "react-router-dom";
-import type { NavAction } from "../../ui/organisms/nav";
 import "./legal-screen.css";
 
 export type LegalSection = { heading: string; body: string[] };
 
 type LegalScreenProps = {
-  home: NavAction;
+  homeTo: string;
   brandName: string;
   title: string;
   updated: string;
@@ -16,7 +15,7 @@ type LegalScreenProps = {
 };
 
 export function LegalScreen({
-  home,
+  homeTo,
   brandName,
   title,
   updated,
@@ -26,7 +25,7 @@ export function LegalScreen({
 }: LegalScreenProps) {
   return (
     <article className="legal">
-      <Link className="legal__brand" to={home.to} aria-label={home.label}>
+      <Link className="legal__brand" to={homeTo}>
         <img src={markUrl} alt="" width={28} height={28} />
         <span>{brandName}</span>
       </Link>

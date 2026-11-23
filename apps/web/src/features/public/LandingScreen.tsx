@@ -1,5 +1,5 @@
 import markUrl from "@brand/mark-inverse.svg";
-import { Button } from "../../ui/atoms/Button";
+import { ButtonLink } from "../../ui/atoms/Button";
 import { SectionLabel } from "../../ui/atoms/SectionLabel";
 import "./landing-screen.css";
 
@@ -7,6 +7,7 @@ type LandingScreenProps = {
   brandName: string;
   tagline: string;
   signInLabel: string;
+  signInTo: string;
   aboutLabel: string;
   description: string;
   points: string[];
@@ -17,6 +18,7 @@ export function LandingScreen({
   brandName,
   tagline,
   signInLabel,
+  signInTo,
   aboutLabel,
   description,
   points,
@@ -28,7 +30,8 @@ export function LandingScreen({
         <img src={markUrl} alt="" width={84} height={84} />
         <h1 className="landing__brand">{brandName}</h1>
         <p className="landing__tagline">{tagline}</p>
-        <Button
+        <ButtonLink
+          to={signInTo}
           className="landing__google"
           icon={
             <span className="landing__google-glyph" aria-hidden="true">
@@ -37,7 +40,7 @@ export function LandingScreen({
           }
         >
           {signInLabel}
-        </Button>
+        </ButtonLink>
       </header>
       <section className="landing__about">
         <SectionLabel>{aboutLabel}</SectionLabel>

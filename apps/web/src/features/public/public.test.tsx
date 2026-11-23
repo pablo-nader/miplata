@@ -16,13 +16,13 @@ describe("landing page", () => {
 
     // Act
     const heading = screen.getByRole("heading", { level: 1 });
-    const signIn = screen.getByRole("button", { name: text.signIn });
+    const signIn = screen.getByRole("link", { name: text.signIn });
 
     // Assert
     expect(heading.textContent).toBe("miPlata");
     expect(screen.getByText(text.tagline)).toBeDefined();
     expect(screen.getByText(text.description)).toBeDefined();
-    expect(signIn).toBeDefined();
+    expect(signIn.getAttribute("href")).toBe("/sign-in");
     for (const point of text.points) expect(screen.getByText(point)).toBeDefined();
   });
 
@@ -92,7 +92,7 @@ describe.each([
     renderApp(<AppRoutes />, "es", path);
 
     // Act
-    const home = screen.getByRole("link", { name: "Ir al inicio" });
+    const home = screen.getByRole("link", { name: "miPlata" });
 
     // Assert
     expect(home.getAttribute("href")).toBe("/");
