@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createI18n, detectLanguage, resources } from "./index";
+import { createI18n, detectLanguage, resources, syncDocumentLanguage } from "./index";
 
 function flatten(value: unknown, prefix = ""): string[] {
   if (typeof value !== "object" || value === null) return [prefix];
@@ -71,5 +71,18 @@ describe("createI18n", () => {
 
     // Assert
     expect(text).toBe("Version 1.0.0");
+  });
+});
+
+describe("syncDocumentLanguage", () => {
+  it("sets the lang attribute of the document", () => {
+    // Arrange
+    const target = document.implementation.createHTMLDocument("t");
+
+    // Act
+    syncDocumentLanguage("en", target);
+
+    // Assert
+    expect(target.documentElement.lang).toBe("en");
   });
 });

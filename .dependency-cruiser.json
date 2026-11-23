@@ -2,7 +2,6 @@
   "forbidden": [
     {
       "name": "domain-is-pure",
-      "comment": "",
       "severity": "error",
       "from": { "path": "^apps/api/src/[^/]+/domain/" },
       "to": {
@@ -25,7 +24,7 @@
       "name": "application-has-no-frameworks",
       "severity": "error",
       "from": { "path": "^apps/api/src/[^/]+/application/" },
-      "to": { "path": "node_modules/(hono|drizzle-orm|pg|@hono)" }
+      "to": { "path": "^packages/db/|node_modules/(hono|drizzle-orm|pg|@hono)(/|$)" }
     },
     {
       "name": "infrastructure-does-not-see-http",

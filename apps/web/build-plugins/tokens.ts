@@ -8,6 +8,12 @@ export type DesignTokens = {
   [group: string]: unknown;
 };
 
+export function themeColor(tokens: DesignTokens, scheme: "light" | "dark", name: string): string {
+  const value = tokens.theme[scheme][name]?.$value;
+  if (typeof value !== "string") throw new Error(`Missing ${scheme} color token "${name}"`);
+  return value;
+}
+
 function formatValue(value: string | string[]): string {
   if (typeof value === "string") return value;
   return value.map((name) => (name.includes(" ") ? `"${name}"` : name)).join(", ");
@@ -33,6 +39,20 @@ export function tokensToCss(tokens: DesignTokens): string {
   ].join("\n");
 }
 
+export function themeColorTags(tokens: DesignTokens) {
+  return [
+    { tag: "meta", attrs: { name: "theme-color", content: themeColor(tokens, "light", "band") } },
+    {
+      tag: "meta",
+      attrs: {
+        name: "theme-color",
+        content: themeColor(tokens, "dark", "band"),
+        media: "(prefers-color-scheme: dark)",
+      },
+    },
+  ];
+}
+
 const virtualId = "virtual:design-tokens.css";
 
 export function designTokens(tokens: DesignTokens): Plugin {
@@ -40,5 +60,6 @@ export function designTokens(tokens: DesignTokens): Plugin {
     name: "design-tokens",
     resolveId: (id) => (id === virtualId ? `\0${virtualId}` : null),
     load: (id) => (id === `\0${virtualId}` ? tokensToCss(tokens) : null),
+    transformIndexHtml: () => themeColorTags(tokens),
   };
 }
