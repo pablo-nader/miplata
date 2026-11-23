@@ -98,7 +98,7 @@ test.describe("keyboard focus", () => {
 
   test("shows a visible focus ring in the ink color", async ({ page }) => {
     // Arrange
-    await page.goto("/");
+    await page.goto("/balance");
 
     // Act
     await page.keyboard.press("Tab");
@@ -111,6 +111,30 @@ test.describe("keyboard focus", () => {
     expect(outline.width).toBe("2px");
     expect(outline.style).toBe("solid");
     expect(outline.color).toBe("rgb(28, 31, 34)");
+  });
+});
+
+test.describe("keyboard focus on the signage band", () => {
+  test.use({ viewport: viewports.phone, colorScheme: "light" });
+
+  test("uses a ring color that differs from the band", async ({ page }) => {
+    // Arrange
+    await page.goto("/");
+
+    // Act
+    await page.keyboard.press("Tab");
+    const colors = await page.evaluate(() => {
+      const focused = document.activeElement as Element;
+      const band = focused.closest(".signage-band") as Element;
+      return {
+        ring: getComputedStyle(focused).outlineColor,
+        band: getComputedStyle(band).backgroundColor,
+      };
+    });
+
+    // Assert
+    expect(colors.ring).not.toBe(colors.band);
+    expect(colors.ring).toBe("rgb(255, 255, 255)");
   });
 });
 

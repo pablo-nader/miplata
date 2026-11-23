@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { HomeContainer } from "../features/home/HomeContainer";
 import { PlaceholderContainer } from "../features/placeholder/PlaceholderContainer";
+import { FocusedLayout } from "../features/shell/FocusedLayout";
 import { ShellContainer } from "../features/shell/ShellContainer";
 
 export function AppRoutes() {
@@ -12,19 +13,24 @@ export function AppRoutes() {
         <Route path="accounts" element={<PlaceholderContainer screen="accounts" />} />
         <Route path="reports" element={<PlaceholderContainer screen="reports" />} />
       </Route>
-      <Route path="sign-in" element={<PlaceholderContainer screen="signIn" />} />
-      <Route path="balance" element={<PlaceholderContainer screen="balance" />} />
-      <Route path="movements/new" element={<PlaceholderContainer screen="newMovement" />} />
-      <Route
-        path="accounts/:accountId/statement"
-        element={<PlaceholderContainer screen="statement" />}
-      />
-      <Route
-        path="accounts/:accountId/statement/pay"
-        element={<PlaceholderContainer screen="payStatement" />}
-      />
-      <Route path="to-pay" element={<PlaceholderContainer screen="toPay" />} />
-      <Route path="menu" element={<PlaceholderContainer screen="menu" />} />
+      <Route element={<FocusedLayout />}>
+        <Route path="sign-in" element={<PlaceholderContainer screen="signIn" />} />
+        <Route path="balance" element={<PlaceholderContainer focused screen="balance" />} />
+        <Route
+          path="movements/new"
+          element={<PlaceholderContainer focused screen="newMovement" />}
+        />
+        <Route
+          path="accounts/:accountId/statement"
+          element={<PlaceholderContainer focused screen="statement" />}
+        />
+        <Route
+          path="accounts/:accountId/statement/pay"
+          element={<PlaceholderContainer focused screen="payStatement" />}
+        />
+        <Route path="to-pay" element={<PlaceholderContainer focused screen="toPay" />} />
+        <Route path="menu" element={<PlaceholderContainer focused screen="menu" />} />
+      </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

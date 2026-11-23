@@ -13,15 +13,16 @@ export type ScreenKey =
   | "reports"
   | "menu";
 
-type PlaceholderContainerProps = { screen: ScreenKey };
+type PlaceholderContainerProps = { screen: ScreenKey; focused?: boolean };
 
-export function PlaceholderContainer({ screen }: PlaceholderContainerProps) {
+export function PlaceholderContainer({ screen, focused = false }: PlaceholderContainerProps) {
   const { t } = useTranslation();
   return (
     <PlaceholderScreen
       title={t(`screens.${screen}.title`)}
       description={t(`screens.${screen}.description`)}
       note={t("placeholder.comingSoon")}
+      {...(focused ? { back: { to: "/", label: t("nav.backHome") } } : {})}
     />
   );
 }

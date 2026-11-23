@@ -10,3 +10,22 @@
   font-weight: 800;
   line-height: 24px;
 }
+
+.placeholder-screen__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.placeholder-screen__back {
+  display: grid;
+  place-items: center;
+  width: var(--size-touch-target);
+  height: var(--size-touch-target);
+  margin-left: calc(var(--space-2) * -1);
+}
+
+.placeholder-screen__back svg {
+  width: 20px;
+  height: 20px;
+}

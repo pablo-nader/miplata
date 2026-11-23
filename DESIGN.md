@@ -133,6 +133,6 @@ Approved screens and flows: [design/mockups/screens.html](design/mockups/screens
 
 - Target WCAG 2.1 AA in both themes.
 - Text at least 4.5 : 1; large text and UI components at least 3 : 1.
-- Visible focus ring in `ink`, 2 px with 3 px offset. Orange is not used for focus: it reaches only about 2.6 : 1 on white.
+- Visible focus ring in `ink`, 2 px with 3 px offset; on the signage band it is `on-band`, because `ink` and `band` are both dark in the light theme. Orange is not used for focus: it reaches only about 2.6 : 1 on white.
 - Meaning never depends on color alone: categories have icons or letters, amounts have signs.
 - Badge icons are decorative next to the category name; when a badge appears without its name, it carries the name as its accessible label.

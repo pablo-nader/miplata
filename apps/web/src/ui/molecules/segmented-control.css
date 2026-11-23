@@ -18,7 +18,7 @@
 .segmented-control__text {
   display: grid;
   place-items: center;
-  min-height: 36px;
+  min-height: var(--size-touch-target);
   padding: var(--space-2) var(--space-1);
   border-radius: var(--radius-segment);
   color: var(--color-muted);
