@@ -50,3 +50,4 @@ What becomes easier, harder, or constrained.
 | [0021](0021-serverless-packaging-and-quality-gates.md) | Serverless packaging and quality gates | Accepted |
 | [0022](0022-domain-may-use-the-shared-package.md) | The domain may use the shared package | Accepted |
 | [0023](0023-money-as-safe-integers-in-the-domain.md) | Money as safe integers in the domain | Accepted |
+| [0024](0024-web-routing-and-ui-foundation.md) | Web routing and UI foundation | Accepted |

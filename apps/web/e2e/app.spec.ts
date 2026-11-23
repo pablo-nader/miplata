@@ -13,47 +13,35 @@ function toRgb(hex: string): string {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-test.describe("home screen", () => {
+test.describe("language", () => {
   test.use({ locale: "es-AR" });
 
-  test("shows the app name and the API status in Spanish", async ({ page }) => {
+  test("shows the home band in Spanish and sets the document language", async ({ page }) => {
     // Arrange
     await page.goto("/");
 
     // Act
-    const status = page.getByRole("status");
+    const heading = page.getByRole("heading", { level: 1 });
 
     // Assert
-    await expect(page.getByRole("heading", { name: "miPlata" })).toBeVisible();
-    await expect(status).toHaveText("Conectado");
-    await expect(page.getByText(/^Versión /)).toBeVisible();
+    await expect(heading).toHaveText("miPlata");
+    await expect(page.getByRole("link", { name: "Menú" })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("lang", "es");
-  });
-
-  test("shows the unavailable state when the API is down", async ({ page }) => {
-    // Arrange
-    await page.route("**/api/health", (route) => route.fulfill({ status: 503, body: "{}" }));
-
-    // Act
-    await page.goto("/");
-
-    // Assert
-    await expect(page.getByRole("status")).toHaveText("Sin conexión con el servidor");
   });
 });
 
-test.describe("home screen in English", () => {
+test.describe("language in English", () => {
   test.use({ locale: "en-US" });
 
-  test("shows the API status in English and sets the document language", async ({ page }) => {
+  test("shows the home band in English and sets the document language", async ({ page }) => {
     // Arrange
     await page.goto("/");
 
     // Act
-    const status = page.getByRole("status");
+    const menu = page.getByRole("link", { name: "Menu" });
 
     // Assert
-    await expect(status).toHaveText("Connected");
+    await expect(menu).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
   });
 });

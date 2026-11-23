@@ -1,0 +1,59 @@
+.category-badge {
+  --badge-size: var(--size-badge);
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--badge-size);
+  height: var(--badge-size);
+  border-radius: var(--radius-round);
+  background: var(--badge-color, var(--category-5));
+  color: var(--category-on-category);
+}
+
+.category-badge--picker {
+  --badge-size: var(--size-badge-picker);
+}
+
+.category-badge--color-1 {
+  --badge-color: var(--category-1);
+}
+
+.category-badge--color-2 {
+  --badge-color: var(--category-2);
+}
+
+.category-badge--color-3 {
+  --badge-color: var(--category-3);
+}
+
+.category-badge--color-4 {
+  --badge-color: var(--category-4);
+}
+
+.category-badge--color-5 {
+  --badge-color: var(--category-5);
+}
+
+.category-badge svg {
+  width: 55%;
+  height: 55%;
+}
+
+.category-badge__letter {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: calc(var(--badge-size) * 0.44);
+  line-height: 1;
+}
+
+.category-badge--selected {
+  box-shadow:
+    0 0 0 3px var(--color-surface),
+    0 0 0 5px var(--color-ink);
+}
+
+.category-badge--add {
+  background: transparent;
+  border: 2px dashed var(--color-muted);
+  color: var(--color-ink);
+}

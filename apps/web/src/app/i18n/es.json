@@ -2,11 +2,62 @@
   "app": {
     "name": "miPlata"
   },
-  "health": {
-    "label": "Estado del servidor",
-    "checking": "Verificando…",
-    "ok": "Conectado",
-    "unavailable": "Sin conexión con el servidor",
-    "version": "Versión {{version}}"
+  "nav": {
+    "primary": "Navegación principal",
+    "home": "Inicio",
+    "movements": "Movimientos",
+    "accounts": "Cuentas",
+    "reports": "Reportes",
+    "newMovement": "Nuevo movimiento",
+    "menu": "Menú"
+  },
+  "placeholder": {
+    "comingSoon": "Esta pantalla llega en una etapa próxima."
+  },
+  "screens": {
+    "signIn": {
+      "title": "Entrar",
+      "description": "Entrar con Google."
+    },
+    "home": {
+      "title": "Inicio",
+      "description": "Acá vas a ver tu saldo y tus últimos movimientos."
+    },
+    "balance": {
+      "title": "Saldo total",
+      "description": "Cuánto hay en cada cuenta y moneda."
+    },
+    "newMovement": {
+      "title": "Nuevo movimiento",
+      "description": "Gasto, ingreso o transferencia."
+    },
+    "movements": {
+      "title": "Movimientos",
+      "description": "Búsqueda, filtros y la lista agrupada por día."
+    },
+    "accounts": {
+      "title": "Cuentas",
+      "description": "Efectivo, bancos, billeteras, tarjetas y personas."
+    },
+    "statement": {
+      "title": "Resumen de tarjeta",
+      "description": "El resumen del período, sus cargos y el cuadre."
+    },
+    "payStatement": {
+      "title": "Pagar resumen",
+      "description": "Total, mínimo u otro monto, desde la cuenta que elijas."
+    },
+    "toPay": {
+      "title": "Por pagar",
+      "description": "Los gastos fijos del período."
+    },
+    "reports": {
+      "title": "Reportes",
+      "description": "En qué se va la plata y cómo cambia mes a mes."
+    },
+    "menu": {
+      "title": "Menú",
+      "description": "Por pagar, categorías, presupuestos, idioma y salir."
+    }
   }
 }

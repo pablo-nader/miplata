@@ -1,0 +1,39 @@
+.tab-bar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: end;
+  padding: 6px var(--space-1) calc(10px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(var(--space-1), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--space-1), env(safe-area-inset-right, 0px));
+  border-top: 1px solid var(--color-rule);
+  background: var(--color-surface);
+}
+
+.tab-bar__item {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 2px;
+  min-height: var(--size-touch-target);
+  color: var(--color-muted);
+  font-size: 0.68rem;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.tab-bar__item svg {
+  width: 20px;
+  height: 20px;
+}
+
+.tab-bar__item[aria-current="page"] {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.tab-bar__add {
+  display: grid;
+  justify-items: center;
+  margin-top: -18px;
+}

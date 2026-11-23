@@ -2,11 +2,62 @@
   "app": {
     "name": "miPlata"
   },
-  "health": {
-    "label": "Server status",
-    "checking": "Checking…",
-    "ok": "Connected",
-    "unavailable": "Cannot reach the server",
-    "version": "Version {{version}}"
+  "nav": {
+    "primary": "Main navigation",
+    "home": "Home",
+    "movements": "Movements",
+    "accounts": "Accounts",
+    "reports": "Reports",
+    "newMovement": "New movement",
+    "menu": "Menu"
+  },
+  "placeholder": {
+    "comingSoon": "This screen arrives in a later stage."
+  },
+  "screens": {
+    "signIn": {
+      "title": "Sign in",
+      "description": "Sign in with Google."
+    },
+    "home": {
+      "title": "Home",
+      "description": "Your balance and latest movements will show up here."
+    },
+    "balance": {
+      "title": "Total balance",
+      "description": "How much there is in each account and currency."
+    },
+    "newMovement": {
+      "title": "New movement",
+      "description": "Expense, income or transfer."
+    },
+    "movements": {
+      "title": "Movements",
+      "description": "Search, filters and the list grouped by day."
+    },
+    "accounts": {
+      "title": "Accounts",
+      "description": "Cash, banks, wallets, cards and people."
+    },
+    "statement": {
+      "title": "Card statement",
+      "description": "The period statement, its charges and reconciliation."
+    },
+    "payStatement": {
+      "title": "Pay statement",
+      "description": "Total, minimum or another amount, from the account you choose."
+    },
+    "toPay": {
+      "title": "To pay",
+      "description": "The fixed expenses of the period."
+    },
+    "reports": {
+      "title": "Reports",
+      "description": "Where the money goes and how it changes month to month."
+    },
+    "menu": {
+      "title": "Menu",
+      "description": "To pay, categories, budgets, language and sign out."
+    }
   }
 }
