@@ -236,10 +236,12 @@ async function writeCharge(
     return failure("category_not_found");
   }
   const existing = existingId ? await deps.movements.find(userId, existingId) : null;
-  const keepInactive = new Set<string>(
-    existing?.categoryId ? [existing.categoryId, loaded.card.id] : [],
-  );
-  const planned = planCharge(targetOf(loaded.row), request, {
+  const keepInactive = new Set<string>(existing?.categoryId ? [existing.categoryId] : []);
+  const dated: ChargeRequest =
+    existing && request.occurredOn === null
+      ? { ...request, occurredOn: existing.occurredOn }
+      : request;
+  const planned = planCharge(targetOf(loaded.row), dated, {
     card: loaded.card,
     category: refs.category,
     financialGroupId: refs.financialGroupId,
@@ -295,8 +297,8 @@ export async function removeCharge(
   if (!loaded || !(await chargeIdsOf(deps, userId, statementId)).has(movementId)) {
     return failure("not_found");
   }
-  await deps.movements.remove(userId, movementId);
-  return respond(deps, userId, statementId);
+  const removed = await deps.movements.remove(userId, movementId);
+  return removed === "deleted" ? respond(deps, userId, statementId) : failure("not_found");
 }
 
 export async function payStatement(
@@ -321,7 +323,18 @@ export async function payStatement(
   return respond(deps, userId, statementId);
 }
 
-export async function adjustStatement(
+export function adjustStatement(
+  deps: StatementDependencies,
+  userId: string,
+  statementId: string,
+  request: AdjustmentRequest,
+): Promise<StatementResult<StatementDetail>> {
+  return deps.statements.exclusive(userId, statementId, () =>
+    adjustUnlocked(deps, userId, statementId, request),
+  );
+}
+
+async function adjustUnlocked(
   deps: StatementDependencies,
   userId: string,
   statementId: string,
@@ -345,7 +358,13 @@ export async function adjustStatement(
   const alreadyAdjusted = existing.reduce((sum, line) => sum + line.amountMinor, 0);
   const amountMinor = totals.bankTotalMinor - (totals.totalMinor - alreadyAdjusted);
   if (amountMinor <= 0) {
-    return failure("no_positive_difference");
+    if (existing.length === 0) {
+      return failure("no_positive_difference");
+    }
+    for (const line of existing) {
+      await deps.movements.remove(userId, line.movementId);
+    }
+    return respond(deps, userId, statementId);
   }
   const categories = await deps.categories.listCategories(userId);
   const category = adjustmentCategoryOf(categories);

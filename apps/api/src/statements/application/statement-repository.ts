@@ -27,6 +27,7 @@ export type DetailLines = {
 };
 
 export type StatementRepository = {
+  exclusive<T>(userId: string, statementId: string, work: () => Promise<T>): Promise<T>;
   ensureOpen(userId: string, schedule: CardSchedule, today: IsoDate): Promise<void>;
   rows(userId: string, accountId: string): Promise<StatementRow[]>;
   find(userId: string, statementId: string): Promise<StatementRow | null>;

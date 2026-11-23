@@ -51,6 +51,7 @@ function scriptedStatements(state: Scripted) {
     setBankFigures: vi.fn(),
   };
   const repository: StatementRepository = {
+    exclusive: (_userId, _statementId, work) => work(),
     async ensureOpen(...args) {
       calls.ensureOpen(...args);
     },
