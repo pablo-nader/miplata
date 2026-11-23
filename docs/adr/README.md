@@ -72,3 +72,4 @@ What becomes easier, harder, or constrained.
 | [0043](0043-guided-tours.md) | Guided tours with driver.js and a per-device seen state | Accepted |
 | [0044](0044-loans-api.md) | Loans API | Accepted |
 | [0045](0045-no-preview-deployments-and-pg-driver.md) | Previews out of the delivery flow and the pg driver for Neon | Accepted |
+| [0046](0046-no-vercel-git-deployments.md) | No Vercel Git deployments | Accepted |
