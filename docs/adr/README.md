@@ -46,3 +46,4 @@ What becomes easier, harder, or constrained.
 | [0017](0017-project-structure.md) | Project structure | Accepted |
 | [0018](0018-ci-cd-pipeline.md) | CI/CD pipeline | Accepted |
 | [0019](0019-hosting-region.md) | Hosting region: São Paulo | Accepted |
+| [0020](0020-brand-name-is-not-translated.md) | The brand name is not translated | Accepted |
