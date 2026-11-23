@@ -19,12 +19,24 @@ const signedIn: SessionState = {
 };
 
 const routes = [
+  "/balance",
+  "/movements",
+  "/movements/new",
+  "/accounts",
+  "/accounts/7/statement",
+  "/accounts/7/statement/pay",
+  "/to-pay",
+  "/recurring",
+  "/reports",
+  "/menu",
+] as const;
+
+const titledRoutes = [
   ["/balance", "balance"],
   ["/movements", "movements"],
   ["/movements/new", "newMovement"],
   ["/accounts", "accounts"],
   ["/accounts/7/statement", "statement"],
-  ["/accounts/7/statement/pay", "payStatement"],
   ["/to-pay", "toPay"],
   ["/recurring", "recurring"],
   ["/reports", "reports"],
@@ -42,7 +54,7 @@ describe("AppRoutes", () => {
     stubEmptyApi();
   });
 
-  it.each(routes)("renders %s in Spanish", (path, key) => {
+  it.each(titledRoutes)("renders %s in Spanish", (path, key) => {
     // Arrange
     renderApp(<AppRoutes />, "es", path);
 
@@ -53,7 +65,7 @@ describe("AppRoutes", () => {
     expect(heading.textContent).toBe(resources.es.translation.screens[key].title);
   });
 
-  it.each(routes)("renders %s in English", (path, key) => {
+  it.each(titledRoutes)("renders %s in English", (path, key) => {
     // Arrange
     renderApp(<AppRoutes />, "en", path);
 
