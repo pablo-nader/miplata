@@ -152,6 +152,9 @@ importers:
       drizzle-kit:
         specifier: ^0.31.11
         version: 0.31.11
+      lucide:
+        specifier: ^1.78.0
+        version: 1.78.0
       vitest:
         specifier: ^5.1.1
         version: 5.1.1(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(jsdom@31.0.1)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15))
@@ -3122,6 +3125,9 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  lucide@1.78.0:
+    resolution: {integrity: sha512-4lMWPv+OZGL1N2jkTNGjw86Rd3+4gyCdBHHXw+emfCvbQEojOPwPQo20y4SEUxy5ZBc3IDp3KC1vA7PPiuLbQA==}
 
   lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
@@ -6597,6 +6603,8 @@ snapshots:
       react: 19.3.1
     optionalDependencies:
       '@types/react': 19.3.0
+
+  lucide@1.78.0: {}
 
   lz-string@1.5.0: {}
 

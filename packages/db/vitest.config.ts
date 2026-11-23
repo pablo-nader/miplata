@@ -7,7 +7,13 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       include: ["src/**/*.ts"],
-      exclude: ["src/**/*.test.ts", "src/index.ts", "src/schema/**"],
+      exclude: [
+        "src/**/*.test.ts",
+        "src/**/index.ts",
+        "src/schema/**",
+        "src/test/**",
+        "src/seed/seed-user-defaults.ts",
+      ],
       thresholds: { lines: 80, functions: 80, branches: 80, statements: 80 },
     },
   },

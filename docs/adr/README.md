@@ -51,3 +51,4 @@ What becomes easier, harder, or constrained.
 | [0022](0022-domain-may-use-the-shared-package.md) | The domain may use the shared package | Accepted |
 | [0023](0023-money-as-safe-integers-in-the-domain.md) | Money as safe integers in the domain | Accepted |
 | [0024](0024-web-routing-and-ui-foundation.md) | Web routing and UI foundation | Accepted |
+| [0025](0025-database-schema-implementation.md) | Database schema implementation | Accepted |
