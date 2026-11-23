@@ -28,6 +28,7 @@ const routes = [
   ["/to-pay", "toPay"],
   ["/recurring", "recurring"],
   ["/reports", "reports"],
+  ["/loans", "loans"],
   ["/menu", "menu"],
 ] as const;
 

@@ -4,6 +4,7 @@ import {
   ChevronRight,
   Clock,
   Download,
+  HandCoins,
   Languages,
   LogOut,
   Repeat,
@@ -32,6 +33,7 @@ type MenuScreenProps = {
   recurring: MenuLink;
   categories: MenuLink;
   budgets: MenuLink;
+  loans: MenuLink;
   guides: MenuLink;
   language: NavAction & { value: string };
   install: InstallRow;
@@ -47,6 +49,7 @@ export function MenuScreen({
   recurring,
   categories,
   budgets,
+  loans,
   guides,
   language,
   install,
@@ -69,6 +72,7 @@ export function MenuScreen({
             [recurring, Repeat],
             [categories, Tags],
             [budgets, Target],
+            [loans, HandCoins],
             [guides, BookOpen],
           ] as const
         ).map(([link, Icon]) => (

@@ -29,7 +29,8 @@
     "toPay": "To pay",
     "recurring": "Recurring",
     "budgets": "Budgets",
-    "guides": "Show guides"
+    "guides": "Show guides",
+    "loans": "Loans"
   },
   "screens": {
     "home": {
@@ -77,6 +78,14 @@
     "budgets": {
       "title": "Budgets",
       "description": "Your monthly limit per category or group and how much you have spent."
+    },
+    "loans": {
+      "title": "Loans",
+      "description": "Who owes you and whom you owe."
+    },
+    "loanDetail": {
+      "title": "Loan",
+      "description": "The detail of what a person owes you or you owe them."
     }
   },
   "public": {
@@ -1245,5 +1254,48 @@
     "reset": "Show all again",
     "resetDone": "Done. Each guide will show again when you open its screen.",
     "resetFailed": "We could not reset the guides. Try again."
+  },
+  "loans": {
+    "back": "Back to Accounts",
+    "backToList": "Back to Loans",
+    "link": "See loans",
+    "loading": "Loading…",
+    "loadFailed": "We could not load the loans.",
+    "retry": "Try again",
+    "owesYou": "Owe you",
+    "youOwe": "You owe",
+    "personOwesYou": "Owes you",
+    "personYouOwe": "You owe",
+    "emptyOwesYou": "Nobody owes you money right now.",
+    "emptyYouOwe": "You do not owe money to anyone.",
+    "dueNow": "On this statement: {{amount}}",
+    "pendingTotal": "Pending in total: {{amount}}",
+    "forgiven": "Debt forgiven",
+    "detail": {
+      "notFound": "We could not find this person.",
+      "movements": "Movements",
+      "noMovements": "There are no movements with this person yet.",
+      "settled": "There are no pending debts with this person.",
+      "repay": "Record repayment",
+      "forgiveOwesYou": "Forgive debt",
+      "forgiveYouOwe": "They forgave my debt"
+    },
+    "forgive": {
+      "titleOwesYou": "Forgive {{name}}'s debt?",
+      "titleYouOwe": "Record that {{name}} forgave your debt?",
+      "bodyOwesYou": "{{name}} owes you {{amount}}. Forgiving the debt records an expense of {{amount}} in the category you choose and the balance with {{name}} is settled.",
+      "bodyYouOwe": "You owe {{name}} {{amount}}. Recording the forgiveness adds an income of {{amount}} in the category you choose and the balance with {{name}} is settled.",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "working": "Saving…",
+      "failures": {
+        "category_type_mismatch": "That category does not fit: choose another.",
+        "category_inactive": "That category is inactive. Choose another.",
+        "category_not_found": "We could not find that category.",
+        "nothing_owed": "There is no debt left to forgive.",
+        "not_found": "We could not find this person.",
+        "saveFailed": "We could not forgive the debt. Try again."
+      }
+    }
   }
 }

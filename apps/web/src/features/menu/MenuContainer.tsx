@@ -69,6 +69,7 @@ export function MenuContainer() {
       recurring={{ to: "/recurring", label: t("menu.recurring"), count: recurringCount }}
       categories={{ to: "/categories", label: t("menu.categories"), count: categoriesCount }}
       budgets={{ to: "/budgets", label: t("menu.budgets"), count: budgetsCount }}
+      loans={{ to: "/loans", label: t("menu.loans"), count: null }}
       guides={{ to: "/guides", label: t("menu.guides"), count: null }}
       language={{
         to: "/menu/language",

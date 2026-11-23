@@ -1,7 +1,7 @@
 import { Plus, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AccountBadge, type AccountBadgeType, type AccountLogo } from "../../ui/atoms/AccountBadge";
-import { Button } from "../../ui/atoms/Button";
+import { Button, ButtonLink } from "../../ui/atoms/Button";
 import { MoneyAmount, type MoneyAmountProps } from "../../ui/atoms/MoneyAmount";
 import { SectionLabel } from "../../ui/atoms/SectionLabel";
 import { EmptyState } from "../../ui/molecules/EmptyState";
@@ -35,6 +35,7 @@ type AccountsScreenProps = {
   title: string;
   menu: NavAction;
   add: NavAction;
+  loansLink: NavAction;
   status: "loading" | "error" | "ready";
   isEmpty: boolean;
   sections: AccountSectionData[];
@@ -52,6 +53,7 @@ export function AccountsScreen({
   title,
   menu,
   add,
+  loansLink,
   status,
   isEmpty,
   sections,
@@ -118,6 +120,13 @@ export function AccountsScreen({
                   />
                 ))}
               </MovementList>
+              {section.key === "people" ? (
+                <div className="screen-note">
+                  <ButtonLink variant="ghost" to={loansLink.to}>
+                    {loansLink.label}
+                  </ButtonLink>
+                </div>
+              ) : null}
             </section>
           ))
         : null}

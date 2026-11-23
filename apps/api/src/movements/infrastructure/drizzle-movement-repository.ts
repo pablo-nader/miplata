@@ -146,7 +146,11 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
         occurredOn: row.occurredOn,
         description: row.description,
         categoryId: row.categoryId,
-        account: !isTransfer && main ? leg(main) : null,
+        account: isTransfer
+          ? null
+          : (main ?? personPosting)
+            ? leg((main ?? personPosting) as (typeof own)[number])
+            : null,
         from: isTransfer && source ? leg(source) : null,
         to: isTransfer && target ? leg(target) : null,
         person:

@@ -29,7 +29,8 @@
     "toPay": "Por pagar",
     "recurring": "Gastos fijos",
     "budgets": "Presupuestos",
-    "guides": "Ver guías"
+    "guides": "Ver guías",
+    "loans": "Préstamos"
   },
   "screens": {
     "home": {
@@ -77,6 +78,14 @@
     "budgets": {
       "title": "Presupuestos",
       "description": "Tu tope mensual por categoría o grupo y cuánto llevás gastado."
+    },
+    "loans": {
+      "title": "Préstamos",
+      "description": "Quién te debe y a quién le debés."
+    },
+    "loanDetail": {
+      "title": "Préstamo",
+      "description": "El detalle de lo que te debe o le debés a una persona."
     }
   },
   "public": {
@@ -1247,5 +1256,48 @@
     "reset": "Mostrar todas de nuevo",
     "resetDone": "Listo. Cada guía volverá a aparecer al abrir su pantalla.",
     "resetFailed": "No pudimos restablecer las guías. Inténtalo de nuevo."
+  },
+  "loans": {
+    "back": "Volver a Cuentas",
+    "backToList": "Volver a Préstamos",
+    "link": "Ver préstamos",
+    "loading": "Cargando…",
+    "loadFailed": "No pudimos cargar los préstamos.",
+    "retry": "Reintentar",
+    "owesYou": "Te deben",
+    "youOwe": "Debés",
+    "personOwesYou": "Te debe",
+    "personYouOwe": "Le debés",
+    "emptyOwesYou": "Nadie te debe plata por ahora.",
+    "emptyYouOwe": "No le debés plata a nadie.",
+    "dueNow": "En este resumen: {{amount}}",
+    "pendingTotal": "Pendiente en total: {{amount}}",
+    "forgiven": "Deuda perdonada",
+    "detail": {
+      "notFound": "No encontramos a esta persona.",
+      "movements": "Movimientos",
+      "noMovements": "Todavía no hay movimientos con esta persona.",
+      "settled": "No hay deudas pendientes con esta persona.",
+      "repay": "Registrar devolución",
+      "forgiveOwesYou": "Perdonar deuda",
+      "forgiveYouOwe": "Me perdonaron la deuda"
+    },
+    "forgive": {
+      "titleOwesYou": "¿Perdonar la deuda de {{name}}?",
+      "titleYouOwe": "¿Registrar que {{name}} te perdonó la deuda?",
+      "bodyOwesYou": "{{name}} te debe {{amount}}. Al perdonar la deuda se registra un gasto de {{amount}} en la categoría que elijas y el saldo con {{name}} queda en cero.",
+      "bodyYouOwe": "Le debés {{amount}} a {{name}}. Al registrar el perdón se anota un ingreso de {{amount}} en la categoría que elijas y el saldo con {{name}} queda en cero.",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "working": "Guardando…",
+      "failures": {
+        "category_type_mismatch": "La categoría no corresponde: elegí otra.",
+        "category_inactive": "Esa categoría está desactivada. Elegí otra.",
+        "category_not_found": "No encontramos esa categoría.",
+        "nothing_owed": "Ya no hay deuda para perdonar.",
+        "not_found": "No encontramos a esta persona.",
+        "saveFailed": "No pudimos perdonar la deuda. Probá de nuevo."
+      }
+    }
   }
 }

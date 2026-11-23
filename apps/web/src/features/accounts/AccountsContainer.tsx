@@ -76,6 +76,7 @@ export function AccountsContainer() {
       title={t("screens.accounts.title")}
       menu={{ to: "/menu", label: t("nav.menu") }}
       add={{ to: "/accounts/new", label: t("accounts.add") }}
+      loansLink={{ to: "/loans", label: t("loans.link") }}
       status={state.status}
       isEmpty={accounts.length === 0}
       sections={sections}
