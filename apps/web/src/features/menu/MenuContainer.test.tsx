@@ -6,7 +6,7 @@ import { renderApp } from "../../test/render";
 import { MenuContainer } from "./MenuContainer";
 
 const refresh = vi.fn(async () => {});
-const signOut = vi.fn(async () => {});
+const signOut = vi.fn(async (): Promise<{ error?: unknown } | undefined> => undefined);
 
 vi.mock("../auth/useSession", () => ({
   useSession: () => ({
@@ -99,6 +99,39 @@ describe("MenuContainer", () => {
 
     // Assert
     expect(await screen.findByRole("alert")).toBeDefined();
+  });
+
+  it("stays on the menu and warns when sign out fails", async () => {
+    // Arrange
+    signOut.mockResolvedValueOnce({ error: { status: 500 } });
+    renderMenu("es");
+
+    // Act
+    await userEvent.click(screen.getByRole("button", { name: "Cerrar sesión" }));
+
+    // Assert
+    expect((await screen.findByRole("alert")).textContent).toContain("cerrar la sesión");
+    expect(screen.queryByText("root")).toBeNull();
+  });
+
+  it("saves rapid language changes in order", async () => {
+    // Arrange
+    const sent: string[] = [];
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (_url: string, init: { body: string }) => {
+        sent.push(JSON.parse(init.body).locale);
+        return new Response("{}", { status: 200 });
+      }),
+    );
+    renderMenu("es");
+
+    // Act
+    await userEvent.click(screen.getByRole("radio", { name: "English" }));
+    await userEvent.click(screen.getByRole("radio", { name: "Español" }));
+
+    // Assert
+    await waitFor(() => expect(sent).toEqual(["en", "es"]));
   });
 
   it("signs out and goes back to the root", async () => {
