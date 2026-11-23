@@ -188,6 +188,27 @@ describe("budgets endpoints", () => {
     expect(stored).toHaveLength(1);
   });
 
+  it("lets only one of two simultaneous edits onto the same target through", async () => {
+    // Arrange
+    const user = await newUser();
+    const first = await budget(user, { categoryId: user.food });
+    const second = await budget(user, { categoryId: user.otherFood });
+    const edit = (id: string) =>
+      call(user.cookie, "PUT", `/budgets/${id}`, {
+        categoryId: user.elsewhere,
+        currency: "ARS",
+        limitMinor: 100,
+      });
+
+    // Act
+    const responses = await Promise.all([edit(first.id), edit(second.id)]);
+    const stored = await progress(user);
+
+    // Assert
+    expect(responses.map((response) => response.status).sort()).toEqual([200, 409]);
+    expect(stored.filter((item) => item.categoryId === user.elsewhere)).toHaveLength(1);
+  });
+
   it("requires a session", async () => {
     // Arrange
     const id = "00000000-0000-4000-8000-000000000001";
