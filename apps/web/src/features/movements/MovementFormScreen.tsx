@@ -1,4 +1,4 @@
-import type { Currency } from "@miplata/shared";
+import { type Currency, DESCRIPTION_MAX_LENGTH } from "@miplata/shared";
 import { type FormEvent, type ReactNode, useEffect, useId, useRef } from "react";
 import { Button } from "../../ui/atoms/Button";
 import { FilterChip } from "../../ui/atoms/Chip";
@@ -134,10 +134,12 @@ export function MovementFormScreen(props: MovementFormScreenProps) {
   const isTransfer = values.type === "transfer";
   const removeRef = useRef<HTMLDivElement>(null);
 
+  const hadConfirm = useRef(false);
   useEffect(() => {
-    if (!props.confirm) {
+    if (hadConfirm.current && !props.confirm) {
       removeRef.current?.querySelector<HTMLElement>("button")?.focus();
     }
+    hadConfirm.current = Boolean(props.confirm);
   }, [props.confirm]);
 
   function handleSubmit(event: FormEvent) {
@@ -261,7 +263,7 @@ export function MovementFormScreen(props: MovementFormScreenProps) {
           <Field
             label={copy.description}
             value={values.description}
-            maxLength={200}
+            maxLength={DESCRIPTION_MAX_LENGTH}
             onChange={(event) => onChange({ description: event.target.value })}
           />
           <Field

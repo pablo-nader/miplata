@@ -255,6 +255,26 @@ describe("presenting income and transfers", () => {
     });
   });
 
+  it("shows selling dollars with the dollars as the amount too", () => {
+    // Arrange
+    const sale: Movement = {
+      ...expense(),
+      type: "transfer",
+      categoryId: null,
+      account: null,
+      installments: [],
+      from: { accountId: "galicia", currency: "USD", amountMinor: 1_000_00 },
+      to: { accountId: "galicia", currency: "ARS", amountMinor: 1_200_000_00 },
+    };
+
+    // Act
+    const row = presentMovement(sale, context);
+
+    // Assert
+    expect(row.amount).toMatchObject({ amount: 1000, currency: "USD" });
+    expect(row.note).toMatchObject({ amount: 1_200_000, currency: "ARS" });
+  });
+
   it("shows a same-currency transfer with the outgoing amount and a default title", () => {
     // Arrange
     const transfer: Movement = {

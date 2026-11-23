@@ -539,7 +539,9 @@
       "max": "Monto máximo",
       "clear": "Limpiar filtros",
       "minChip": "Desde {{amount}}",
-      "maxChip": "Hasta {{amount}}"
+      "maxChip": "Hasta {{amount}}",
+      "remove": "Quitar filtro {{label}}",
+      "invalidRange": "El rango no es válido: el inicio es mayor que el fin."
     },
     "form": {
       "type": "Tipo de movimiento",

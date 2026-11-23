@@ -2,7 +2,13 @@ import type { CategoriesResponse } from "@miplata/shared";
 import { describe, expect, it } from "vitest";
 import { createI18n } from "../../app/i18n";
 import { makeAccount } from "../../test/fake-api";
-import { activeChips, defaultFilters, emptyFilters, toQuery } from "./movement-filters";
+import {
+  activeChips,
+  defaultFilters,
+  emptyFilters,
+  isInvertedRange,
+  toQuery,
+} from "./movement-filters";
 
 const t = createI18n("es").t;
 
@@ -147,6 +153,24 @@ describe("active filter chips", () => {
       "Hasta 20",
     ]);
     expect(chips[1]?.clear).toEqual({ accountId: "" });
+  });
+
+  it("does not show a chip for an amount that is not applied and flags inverted ranges", () => {
+    // Arrange
+    const unreadable = { ...emptyFilters(), min: "abc" };
+    const inverted = { ...emptyFilters(), min: "50", max: "10" };
+    const dates = { ...emptyFilters(), from: "2026-12-01", to: "2026-11-01" };
+
+    // Act
+    const chips = activeChips(unreadable, context);
+
+    // Assert
+    expect(chips).toEqual([]);
+    expect([
+      isInvertedRange(inverted),
+      isInvertedRange(dates),
+      isInvertedRange(unreadable),
+    ]).toEqual([true, true, false]);
   });
 
   it("falls back to the raw id when the catalog or account is unknown", () => {

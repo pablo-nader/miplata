@@ -45,10 +45,12 @@ function transferRow(movement: Movement, ctx: PresentContext): RowData {
     return leg.currency === "USD" ? `${base} US$` : base;
   };
   const exchange = from && to && from.currency !== to.currency;
-  const main = exchange ? to : from;
+  const dollars = from?.currency === "USD" ? from : to;
+  const pesos = from?.currency === "USD" ? to : from;
+  const main = exchange ? dollars : from;
   const note: RowAmount | undefined =
-    exchange && from
-      ? { amount: toUnits(from.amountMinor), currency: from.currency, direction: "neutral" }
+    exchange && pesos
+      ? { amount: toUnits(pesos.amountMinor), currency: pesos.currency, direction: "neutral" }
       : undefined;
   return {
     id: movement.id,

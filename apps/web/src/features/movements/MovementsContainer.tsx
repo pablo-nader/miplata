@@ -4,7 +4,13 @@ import { useTranslation } from "react-i18next";
 import { localeForLanguage } from "../../ui/format/money";
 import { MovementFiltersPanel, type UiFilters } from "./MovementFiltersPanel";
 import { MovementsScreen } from "./MovementsScreen";
-import { activeChips, defaultFilters, emptyFilters, toQuery } from "./movement-filters";
+import {
+  activeChips,
+  defaultFilters,
+  emptyFilters,
+  isInvertedRange,
+  toQuery,
+} from "./movement-filters";
 import { fetchMovements, PAGE_SIZE } from "./movements-api";
 import { dayLabel, groupByDay, localDate, monthOfDate } from "./present-movement";
 import { useLookups } from "./useLookups";
@@ -36,9 +42,17 @@ export function MovementsContainer() {
 
   const query = useMemo(() => toQuery(filters, q), [filters, q]);
 
+  const inverted = isInvertedRange(filters);
+  const [loadingMore, setLoadingMore] = useState(false);
+
   const load = useCallback(() => {
     token.current += 1;
     const current = token.current;
+    setLoadingMore(false);
+    if (inverted) {
+      setList({ status: "ready", items: [], hasMore: false });
+      return;
+    }
     setList((previous) => ({ ...previous, status: "loading" }));
     fetchMovements(query).then(
       (page) => {
@@ -52,7 +66,7 @@ export function MovementsContainer() {
         }
       },
     );
-  }, [query]);
+  }, [query, inverted]);
 
   useEffect(() => {
     load();
@@ -62,6 +76,10 @@ export function MovementsContainer() {
   }, [load]);
 
   function loadMore() {
+    if (loadingMore) {
+      return;
+    }
+    setLoadingMore(true);
     const current = token.current;
     fetchMovements(query, PAGE_SIZE, list.items.length).then(
       (page) => {
@@ -71,11 +89,12 @@ export function MovementsContainer() {
             items: [...previous.items, ...page.items],
             hasMore: page.hasMore,
           }));
+          setLoadingMore(false);
         }
       },
       () => {
         if (token.current === current) {
-          setList((previous) => ({ ...previous, status: "error" }));
+          setLoadingMore(false);
         }
       },
     );
@@ -87,7 +106,8 @@ export function MovementsContainer() {
     accounts: lookups.accounts,
     catalog: lookups.catalog,
   });
-  const rows = list.items.map((movement) => lookups.present(movement));
+  const lookupsReady = lookups.status === "ready";
+  const rows = lookupsReady ? list.items.map((movement) => lookups.present(movement)) : [];
   const groups = groupByDay(rows).map((group) => ({
     ...group,
     label: dayLabel(group.date, today, locale, t),
@@ -110,6 +130,7 @@ export function MovementsContainer() {
           label: chip.label,
           selected: true,
           kind: "active" as const,
+          ariaLabel: t("movements.filters.remove", { label: chip.label }),
           onClick: () => setFilters({ ...filters, ...chip.clear }),
         })),
         {
@@ -132,13 +153,13 @@ export function MovementsContainer() {
         ) : null
       }
       groups={groups}
-      status={list.status}
-      hasMore={list.hasMore}
+      status={lookups.status === "error" ? "error" : lookupsReady ? list.status : "loading"}
+      hasMore={list.hasMore && !loadingMore}
       messages={{
         loading: t("movements.loading"),
         loadFailed: t("movements.loadFailed"),
         retry: t("movements.retry"),
-        emptyTitle: t("movements.emptyTitle"),
+        emptyTitle: inverted ? t("movements.filters.invalidRange") : t("movements.emptyTitle"),
         emptyDescription: t("movements.emptyDescription"),
         more: t("movements.more"),
       }}

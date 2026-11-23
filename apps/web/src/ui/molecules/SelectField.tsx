@@ -59,7 +59,7 @@ export function SelectField({
         <ChevronDown aria-hidden="true" />
       </div>
       {error ? (
-        <p id={errorId} className="select-field__error">
+        <p id={errorId} className="select-field__error" role="alert">
           {error}
         </p>
       ) : null}

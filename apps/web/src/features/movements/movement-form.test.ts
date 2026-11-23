@@ -348,6 +348,21 @@ describe("changing the form", () => {
     expect(back).toMatchObject({ accountId: "cash", currency: "USD", amount: "900.000" });
   });
 
+  it("keeps the account when a transfer from a person becomes an expense", () => {
+    // Arrange
+    const form = {
+      ...emptyForm("2026-11-25", "transfer"),
+      fromAccountId: "juan",
+      accountId: "cash",
+    };
+
+    // Act
+    const next = applyChange(form, { type: "expense" }, ACCOUNTS);
+
+    // Assert
+    expect(next.accountId).toBe("cash");
+  });
+
   it("fixes the currency of each transfer leg", () => {
     // Arrange
     const dollars = makeAccount({
