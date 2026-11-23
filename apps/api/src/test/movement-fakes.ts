@@ -59,6 +59,9 @@ export function inMemoryMovements(claimOccurrence: OccurrenceClaim = () => false
       plans.push(plan);
       return movement;
     },
+    async createIfBalance(userId, plan) {
+      return repository.create(userId, plan);
+    },
     async createAll(userId, batch) {
       return Promise.all(batch.map((plan) => repository.create(userId, plan)));
     },

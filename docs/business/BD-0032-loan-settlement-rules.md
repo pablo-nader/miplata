@@ -21,3 +21,7 @@
 ## Consequences
 - A repayment above the debt creates two movements: the transfer for the balance and an income for the excess.
 - A forgiveness movement has no account of the user, only the person.
+
+## Limits
+- Installments of past statements are already due and appear only in the person's balance, not in the "current statement" or "pending" figures.
+- If the user has no active income category, a repayment above the debt is recorded as a plain transfer and the balance goes negative.

@@ -46,6 +46,9 @@ export function loanRoutes(resolveSession: SessionResolver, deps: LoanDependenci
       if (result.error === "not_found") {
         return c.json(notFound, 404);
       }
+      if (result.error === "balance_changed") {
+        return c.json({ error: result.error }, 409);
+      }
       return c.json({ ...invalidRequest, reason: result.error }, 400);
     });
 }

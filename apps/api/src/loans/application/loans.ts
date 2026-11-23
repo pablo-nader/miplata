@@ -18,7 +18,8 @@ export type LoanError =
   | "category_not_found"
   | "category_type_mismatch"
   | "category_inactive"
-  | "nothing_owed";
+  | "nothing_owed"
+  | "balance_changed";
 
 export type LoanResult<T> = { ok: true; value: T } | { ok: false; error: LoanError };
 
@@ -115,5 +116,10 @@ export async function forgiveDebt(
     ],
     statementPlan: null,
   };
-  return { ok: true, value: await deps.movements.create(userId, plan) };
+  const created = await deps.movements.createIfBalance(userId, plan, {
+    accountId: person.id,
+    currency: request.currency,
+    balanceMinor,
+  });
+  return created === "balance_changed" ? failure("balance_changed") : { ok: true, value: created };
 }

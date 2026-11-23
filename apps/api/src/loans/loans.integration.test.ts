@@ -307,6 +307,45 @@ describe("forgiving a debt", () => {
     expect(forgiven.account).toEqual({ accountId: user.juan, currency: "USD", amountMinor: 50_00 });
   });
 
+  it("settles once when the same debt is forgiven twice at the same time", async () => {
+    // Arrange
+    const user = await newUser();
+    await record(user, transfer(user.cash, user.juan, 700_00));
+    const forgive = () =>
+      call(user.cookie, "POST", `/loans/${user.juan}/forgive`, {
+        currency: "ARS",
+        categoryId: user.food,
+      });
+
+    // Act
+    const responses = await Promise.all([forgive(), forgive()]);
+
+    // Assert
+    const statuses = responses.map((response) => response.status).sort();
+    expect(statuses[0]).toBe(201);
+    expect([400, 409]).toContain(statuses[1]);
+    expect(await balanceOf(user, user.juan, "ARS", "/people")).toBe(0);
+  });
+
+  it("cannot forgive with another user's category", async () => {
+    // Arrange
+    const user = await newUser();
+    const stranger = await newUser();
+    await record(user, transfer(user.cash, user.juan, 700_00));
+
+    // Act
+    const body = await ok(
+      await call(user.cookie, "POST", `/loans/${user.juan}/forgive`, {
+        currency: "ARS",
+        categoryId: stranger.food,
+      }),
+      400,
+    );
+
+    // Assert
+    expect(body.reason).toBe("category_not_found");
+  });
+
   it("turns what the user owes a person into income and settles the balance", async () => {
     // Arrange
     const user = await newUser();
