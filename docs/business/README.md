@@ -53,3 +53,4 @@ Impact on users, cost, and technical design.
 | [BD-0024](BD-0024-category-names-and-editing-rules.md) | Category names and editing rules | Accepted |
 | [BD-0025](BD-0025-account-balances-and-opening-amounts.md) | Account balances and opening amounts | Accepted |
 | [BD-0026](BD-0026-movement-recording-rules.md) | Movement recording rules | Accepted |
+| [BD-0027](BD-0027-statement-rules.md) | Statement rules | Accepted |
