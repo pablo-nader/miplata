@@ -7,10 +7,9 @@ import {
   useRef,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { type Currency, localeForLanguage } from "../format/money";
+import { type Currency, currencySymbol, localeForLanguage } from "../format/money";
 import {
   caretAfter,
-  currencySymbol,
   formatCanonical,
   interpretTyping,
   parseLocalized,
@@ -51,8 +50,13 @@ export function MoneyInput({
     pendingCaret.current = null;
   });
 
-  function apply(raw: string, caret: number) {
+  function apply(raw: string, caret: number): boolean {
     const next = interpretTyping(raw, caret, locale, allowNegative);
+    if (next.truncated) {
+      pendingCaret.current = Math.max(caret - 1, 0);
+      refresh();
+      return false;
+    }
     pendingCaret.current = caretAfter(
       formatCanonical(next.canonical, locale),
       next.significantBefore,
@@ -60,17 +64,20 @@ export function MoneyInput({
     );
     if (next.canonical === value) {
       refresh();
-      return;
+      return true;
     }
     onValueChange(next.canonical);
+    return true;
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const raw = event.target.value;
     const caret = event.target.selectionStart ?? raw.length;
-    const removedSeparator =
-      raw.length === display.length - 1 && interpretTyping(raw, caret, locale).canonical === value;
-    if (removedSeparator && caret > 0) {
+    const backspace =
+      (event.nativeEvent as InputEvent).inputType === "deleteContentBackward" &&
+      raw.length === display.length - 1;
+    const sameValue = interpretTyping(raw, caret, locale, allowNegative).canonical === value;
+    if (backspace && sameValue && caret > 0) {
       apply(raw.slice(0, caret - 1) + raw.slice(caret), caret - 1);
       return;
     }
@@ -80,7 +87,7 @@ export function MoneyInput({
   function handlePaste(event: ClipboardEvent<HTMLInputElement>) {
     event.preventDefault();
     const pasted = parseLocalized(event.clipboardData.getData("text"), allowNegative);
-    if (pasted === "") {
+    if (pasted === "" || pasted === "-") {
       return;
     }
     const start = event.currentTarget.selectionStart ?? display.length;
