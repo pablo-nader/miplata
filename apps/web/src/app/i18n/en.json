@@ -319,11 +319,11 @@
     },
     "confirm": {
       "deleteTitle": "Delete {{name}}?",
-      "deleteBody": "This cannot be undone. If it already has movements it cannot be deleted, and you can deactivate it instead.",
+      "deleteBody": "This cannot be undone and its budgets are deleted too. If it already has movements it cannot be deleted, and you can deactivate it instead.",
       "deactivateTitle": "Deactivate {{name}}?",
       "deactivateBody": "It will not be offered when recording new movements. Past movements and reports keep showing it, and you can reactivate it.",
       "deleteGroupTitle": "Delete the group {{name}}?",
-      "deleteGroupBody": "This cannot be undone. Only a group without categories can be deleted.",
+      "deleteGroupBody": "This cannot be undone and its budgets are deleted too. Only a group without categories can be deleted.",
       "confirm": "Confirm",
       "cancel": "Cancel"
     },

@@ -3,7 +3,7 @@ import { CategoryBadge, type CategoryColor } from "../atoms/CategoryBadge";
 import { SectionLabel } from "../atoms/SectionLabel";
 import { BadgeChoice } from "./BadgeChoice";
 import "./category-picker.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export type PickerItem = {
   id: string;
@@ -57,6 +57,15 @@ export function CategoryPicker({
   featuredCount = defaultFeaturedCount,
 }: CategoryPickerProps) {
   const [expanded, setExpanded] = useState(false);
+  const container = useRef<HTMLFieldSetElement>(null);
+
+  function toggle(next: boolean) {
+    setExpanded(next);
+    setTimeout(() => {
+      container.current?.querySelector<HTMLElement>("[aria-expanded]")?.focus();
+    }, 0);
+  }
+
   const all = sections.flatMap((section) => section.items);
 
   function choice(item: PickerItem) {
@@ -85,7 +94,7 @@ export function CategoryPicker({
   }
 
   return (
-    <fieldset className="category-picker">
+    <fieldset ref={container} className="category-picker">
       <legend className="visually-hidden">{label}</legend>
       {expanded ? (
         <>
@@ -103,7 +112,7 @@ export function CategoryPicker({
               caption={fewerLabel}
               selected={false}
               expanded
-              onSelect={() => setExpanded(false)}
+              onSelect={() => toggle(false)}
               badge={
                 <span className="category-picker__more">
                   <ChevronUp aria-hidden="true" strokeWidth={2} />
@@ -120,7 +129,7 @@ export function CategoryPicker({
             caption={allLabel}
             selected={false}
             expanded={false}
-            onSelect={() => setExpanded(true)}
+            onSelect={() => toggle(true)}
             badge={
               <span className="category-picker__more">
                 <Ellipsis aria-hidden="true" strokeWidth={2} />

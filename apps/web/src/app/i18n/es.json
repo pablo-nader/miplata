@@ -321,11 +321,11 @@
     },
     "confirm": {
       "deleteTitle": "¿Eliminar {{name}}?",
-      "deleteBody": "No se puede deshacer. Si ya tiene movimientos, no se podrá eliminar y vas a poder desactivarla.",
+      "deleteBody": "No se puede deshacer y también se borran sus presupuestos. Si ya tiene movimientos, no se podrá eliminar y vas a poder desactivarla.",
       "deactivateTitle": "¿Desactivar {{name}}?",
       "deactivateBody": "No se va a ofrecer al cargar movimientos nuevos. Los movimientos anteriores y los reportes la siguen mostrando, y la podés reactivar.",
       "deleteGroupTitle": "¿Eliminar el grupo {{name}}?",
-      "deleteGroupBody": "No se puede deshacer. Solo se puede eliminar un grupo sin categorías.",
+      "deleteGroupBody": "No se puede deshacer y también se borran sus presupuestos. Solo se puede eliminar un grupo sin categorías.",
       "confirm": "Confirmar",
       "cancel": "Cancelar"
     },

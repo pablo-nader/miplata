@@ -54,12 +54,13 @@ function CategoryEditorForm({ catalog, category, type, initialGroupId }: FormPro
   const [busy, setBusy] = useState(false);
   const [pending, setPending] = useState<Pending>(null);
   const isExpense = type === "expense";
+  const listPath = isExpense ? "/categories" : "/categories?tab=income";
 
   async function finish(action: Promise<{ ok: boolean; error?: ApiFailure }>) {
     setBusy(true);
     const result = await action;
     if (result.ok) {
-      navigate("/categories", { replace: true });
+      navigate(listPath, { replace: true });
       return;
     }
     setBusy(false);
@@ -102,7 +103,7 @@ function CategoryEditorForm({ catalog, category, type, initialGroupId }: FormPro
       ...(isExpense && groupId && groupId !== category.groupId ? { groupId } : {}),
     };
     if (Object.keys(patch).length === 0) {
-      navigate("/categories", { replace: true });
+      navigate(listPath, { replace: true });
       return;
     }
     await finish(categoriesApi.update(category.id, patch));
@@ -135,6 +136,7 @@ function CategoryEditorForm({ catalog, category, type, initialGroupId }: FormPro
                 : categoriesApi.deactivate(category.id),
             ),
           onCancel: () => setPending(null),
+          busy,
         }
       : null;
 
