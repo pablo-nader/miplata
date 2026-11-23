@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { brandIcons } from "./build-plugins/icons.ts";
-import { type DesignTokens, designTokens } from "./build-plugins/tokens.ts";
+import { type DesignTokens, designTokens, themeColor } from "./build-plugins/tokens.ts";
 
 const root = join(import.meta.dirname, "../..");
 const tokens: DesignTokens = JSON.parse(readFileSync(join(root, "design/tokens.json"), "utf8"));
@@ -24,8 +24,8 @@ export default defineConfig({
         start_url: "/",
         scope: "/",
         display: "standalone",
-        theme_color: tokens.theme.light.band?.$value as string,
-        background_color: tokens.theme.light.surface?.$value as string,
+        theme_color: themeColor(tokens, "light", "band"),
+        background_color: themeColor(tokens, "light", "surface"),
         icons: [
           { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
           { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },

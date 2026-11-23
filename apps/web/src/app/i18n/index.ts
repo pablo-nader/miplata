@@ -29,3 +29,7 @@ export function createI18n(language: Language) {
   });
   return instance;
 }
+
+export function syncDocumentLanguage(language: Language, target: Document = document) {
+  target.documentElement.lang = language;
+}

@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "allowImportingTsExtensions": true,
+    "types": ["vite/client", "node"]
+  },
+  "include": [
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/test",
+    "src/vite-env.d.ts",
+    "build-plugins",
+    "e2e",
+    "*.ts"
+  ]
+}
