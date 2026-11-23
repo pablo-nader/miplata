@@ -91,7 +91,12 @@ export const movementSchema = z.object({
 });
 export type Movement = z.infer<typeof movementSchema>;
 
-const optionalInt = (minimum: number) => z.coerce.number().int().min(minimum).optional();
+const optionalAmount = z
+  .string()
+  .regex(/^\d+$/)
+  .transform(Number)
+  .pipe(z.int().max(MAX_AMOUNT_MINOR))
+  .optional();
 
 export const movementQuerySchema = z
   .object({
@@ -104,10 +109,10 @@ export const movementQuerySchema = z
     groupId: z.uuid().optional(),
     categoryId: z.uuid().optional(),
     currency: currencySchema.optional(),
-    minAmountMinor: optionalInt(0),
-    maxAmountMinor: optionalInt(0),
+    minAmountMinor: optionalAmount,
+    maxAmountMinor: optionalAmount,
     limit: z.coerce.number().int().min(1).max(100).default(50),
-    offset: z.coerce.number().int().min(0).default(0),
+    offset: z.coerce.number().int().min(0).max(100_000).default(0),
   })
   .refine((query) => !query.from || !query.to || query.from <= query.to)
   .refine(
