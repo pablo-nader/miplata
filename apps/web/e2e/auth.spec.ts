@@ -25,13 +25,25 @@ test.describe("signed out", () => {
 
       // Assert
       await expect(page).toHaveURL(/\/$/);
-      await expect(page.getByRole("navigation")).toHaveCount(0);
+      await expect(page.getByRole("button", { name: "Entrar con Google" })).toBeVisible();
+      await expect(page.getByRole("navigation", { name: "Navegación principal" })).toHaveCount(0);
     });
   }
 });
 
 test.describe("signed in", () => {
   test.use({ locale: "es-AR" });
+
+  test("moves a signed-in visitor from the landing page to the home screen", async ({ page }) => {
+    // Arrange
+    await mockSignedIn(page);
+
+    // Act
+    await page.goto("/");
+
+    // Assert
+    await expect(page).toHaveURL(/\/home$/);
+  });
 
   test("keeps the protected route and offers sign out in the menu", async ({ page }) => {
     // Arrange
