@@ -1,6 +1,6 @@
 # 0014. UI preview approval before merge
 
-- Status: Accepted; narrowed by [0015](0015-approved-screen-designs.md) to screens not in the approved mockups
+- Status: Superseded by [0035](0035-no-ui-previews.md)
 - Date: 2026-11-23
 - Amends: the automatic merge in [0006](0006-agent-driven-delivery-workflow.md)
 

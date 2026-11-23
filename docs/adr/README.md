@@ -40,7 +40,7 @@ What becomes easier, harder, or constrained.
 | [0011](0011-design-system-source-of-truth.md) | Design system source of truth | Accepted |
 | [0012](0012-category-icons-with-lucide.md) | Category icons with Lucide | Accepted |
 | [0013](0013-internationalization.md) | Internationalization | Accepted |
-| [0014](0014-ui-preview-approval.md) | UI preview approval before merge | Accepted |
+| [0014](0014-ui-preview-approval.md) | UI preview approval before merge | Superseded by 0035 |
 | [0015](0015-approved-screen-designs.md) | Approved screen designs | Accepted |
 | [0016](0016-data-model.md) | Data model | Accepted |
 | [0017](0017-project-structure.md) | Project structure | Accepted |
@@ -61,3 +61,4 @@ What becomes easier, harder, or constrained.
 | [0032](0032-reports-api.md) | Reports API | Accepted |
 | [0033](0033-statements-api.md) | Statements API | Accepted |
 | [0034](0034-recurring-movements-api.md) | Recurring movements API | Accepted |
+| [0035](0035-no-ui-previews.md) | No UI previews: every pull request merges on green CI | Accepted |
