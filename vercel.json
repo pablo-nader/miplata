@@ -5,6 +5,14 @@
   "buildCommand": "pnpm build",
   "outputDirectory": "apps/web/dist",
   "git": { "deploymentEnabled": { "main": false } },
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "^miplata-beta\\.vercel\\.app$" }],
+      "destination": "https://miplata.enargentina.online/:path*",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
