@@ -1,6 +1,6 @@
 # 0045. Previews out of the delivery flow and the pg driver for Neon
 
-- Status: Accepted
+- Status: Accepted; preview builds settled by [0046](0046-no-vercel-git-deployments.md)
 - Date: 2026-11-23
 - Supersedes: the preview rule of [0001](0001-hosting-on-vercel.md), the preview deployments and preview database branches of [0018](0018-ci-cd-pipeline.md), and the serverless driver of [0003](0003-postgres-on-neon-with-drizzle.md)
 
