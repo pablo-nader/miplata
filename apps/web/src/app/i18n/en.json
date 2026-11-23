@@ -607,7 +607,6 @@
     },
     "moreFailed": "We could not load more movements. Try again."
   },
-<<<<<<< HEAD
   "reports": {
     "tabsLabel": "Reports",
     "currency": "Currency",
@@ -660,7 +659,8 @@
       "note": "Adds up card installments and pending recurring movements for each month.",
       "installments": "Installments {{amount}}",
       "recurring": "Recurring {{amount}}"
-=======
+    }
+  },
   "statements": {
     "loading": "Loading…",
     "loadFailed": "We couldn't load the statement.",
@@ -771,7 +771,6 @@
       "errors": {
         "amount": "Enter a valid amount."
       }
->>>>>>> a031101 (feat(web): add card statement, pay statement, charge and reconcile screens)
     }
   }
 }
