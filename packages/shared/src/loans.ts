@@ -45,6 +45,7 @@ export type LoanDetail = z.infer<typeof loanDetailSchema>;
 
 export const forgiveRequestSchema = z.object({
   currency: currencySchema,
+  amountMinor: z.int().min(1),
   categoryId: z.uuid(),
   occurredOn: isoDateSchema.optional(),
 });

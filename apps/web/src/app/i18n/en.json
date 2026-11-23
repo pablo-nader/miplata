@@ -1293,6 +1293,7 @@
         "category_inactive": "That category is inactive. Choose another.",
         "category_not_found": "We could not find that category.",
         "nothing_owed": "There is no debt left to forgive.",
+        "balance_changed": "The balance changed since you opened this screen. Review it and try again.",
         "not_found": "We could not find this person.",
         "saveFailed": "We could not forgive the debt. Try again."
       }

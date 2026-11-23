@@ -1295,6 +1295,7 @@
         "category_inactive": "Esa categoría está desactivada. Elegí otra.",
         "category_not_found": "No encontramos esa categoría.",
         "nothing_owed": "Ya no hay deuda para perdonar.",
+        "balance_changed": "El saldo cambió desde que abriste esta pantalla. Revisalo y probá de nuevo.",
         "not_found": "No encontramos a esta persona.",
         "saveFailed": "No pudimos perdonar la deuda. Probá de nuevo."
       }
