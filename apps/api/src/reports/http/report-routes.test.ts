@@ -2,11 +2,12 @@ import { describe, expect, it } from "vitest";
 import { createApp } from "../../app";
 import { unusedAccountDependencies } from "../../test/account-fakes";
 import { recordingReports } from "../../test/report-fakes";
+import type { RecurringCommitments } from "../application/report-use-cases";
 import type { TotalRow } from "../domain/report-aggregation";
 
 const unusedCategories = {} as never;
 
-function build(rows: TotalRow[] = []) {
+function build(rows: TotalRow[] = [], recurring?: RecurringCommitments) {
   const { repository, calls } = recordingReports(rows);
   const app = createApp({
     readVersion: () => "t",
@@ -16,6 +17,7 @@ function build(rows: TotalRow[] = []) {
     categories: unusedCategories,
     ...unusedAccountDependencies(),
     reports: repository,
+    ...(recurring ? { recurringCommitments: recurring } : {}),
   });
   return { app, calls };
 }
@@ -99,6 +101,28 @@ describe("report routes", () => {
     expect(body.months).toEqual([
       { month: "2026-12", installmentsMinor: 500, recurringMinor: 0, totalMinor: 500 },
       { month: "2027-01", installmentsMinor: 0, recurringMinor: 0, totalMinor: 0 },
+    ]);
+  });
+
+  it("merges pending recurring amounts into the committed months", async () => {
+    // Arrange
+    const received: unknown[] = [];
+    const recurring: RecurringCommitments = {
+      async pendingByMonth(userId, filter) {
+        received.push([userId, filter.from, filter.to]);
+        return new Map([["2026-12", 700]]);
+      },
+    };
+    const { app } = build([], recurring);
+
+    // Act
+    const response = await get(app, "/committed?from=2026-12&months=1");
+    const body = (await response.json()) as { months: unknown };
+
+    // Assert
+    expect(received).toEqual([["u1", "2026-12", "2026-12"]]);
+    expect(body.months).toEqual([
+      { month: "2026-12", installmentsMinor: 0, recurringMinor: 700, totalMinor: 700 },
     ]);
   });
 });

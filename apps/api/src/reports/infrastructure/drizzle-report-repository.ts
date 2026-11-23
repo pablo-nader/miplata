@@ -101,6 +101,7 @@ export function drizzleReportRepository(db: Database): ReportRepository {
           and(
             ...conditions(userId, filter),
             eq(movement.type, "expense"),
+            sql`${installment.ownAmountMinor} > 0`,
             eq(installment.periodMonth, firstDay(filter.month)),
           ),
         )
