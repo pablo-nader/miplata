@@ -5,6 +5,7 @@ import {
   currentMonth,
   formatMonthLabel,
   formatPercentChange,
+  formatShare,
   formatShortMonth,
 } from "./report-view";
 
@@ -148,5 +149,18 @@ describe("chartBars", () => {
 
     // Assert
     expect(bars).toEqual([]);
+  });
+});
+
+describe("formatShare", () => {
+  it("keeps one decimal and drops a trailing zero", () => {
+    // Arrange
+    const values = [33.3, 0.4, 75, 0];
+
+    // Act
+    const result = values.map((value) => formatShare(value, "es-AR"));
+
+    // Assert
+    expect(result).toEqual(["33,3 %", "0,4 %", "75 %", "0 %"]);
   });
 });

@@ -48,9 +48,7 @@ export function formatPercentChange(value: number, locale: MoneyLocale): string 
 }
 
 export function formatShare(value: number, locale: MoneyLocale): string {
-  const body = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(
-    Math.round(value),
-  );
+  const body = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(value);
   return `${body} %`;
 }
 

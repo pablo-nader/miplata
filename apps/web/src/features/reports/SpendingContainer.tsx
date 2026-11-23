@@ -11,6 +11,8 @@ import { type BarRowData, type SpendingMovementRowData, SpendingPanel } from "./
 
 type Selection = { groupId: string | null; categoryId: string | null } | null;
 
+type MovementsState = { forCategory: string | null; result: SpendingMovements };
+
 const NO_MOVEMENTS: SpendingMovements = { items: [] };
 
 function shortDate(date: string, locale: string): string {
@@ -40,10 +42,12 @@ export function SpendingContainer({
 
   const drilledCategory = selection?.categoryId ?? null;
   const loadMovements = useCallback(
-    () =>
+    (): Promise<MovementsState> =>
       drilledCategory
-        ? fetchSpendingMovements(month, { currency, accountId, categoryId }, drilledCategory)
-        : Promise.resolve(NO_MOVEMENTS),
+        ? fetchSpendingMovements(month, { currency, accountId, categoryId }, drilledCategory).then(
+            (result) => ({ forCategory: drilledCategory, result }),
+          )
+        : Promise.resolve({ forCategory: null, result: NO_MOVEMENTS }),
     [month, currency, accountId, categoryId, drilledCategory],
   );
   const movementsResource = useResource(loadMovements);
@@ -73,9 +77,17 @@ export function SpendingContainer({
     };
   });
 
+  const movementsState = movementsResource.state;
+  const movementsStale =
+    movementsState.status === "ready" && movementsState.data.forCategory !== drilledCategory;
+  const movementsStatus = !drilledCategory
+    ? "ready"
+    : movementsStale
+      ? "loading"
+      : movementsState.status;
   const movementRows: SpendingMovementRowData[] | null = drilledCategory
-    ? movementsResource.state.status === "ready"
-      ? movementsResource.state.data.items.map((item) => {
+    ? movementsState.status === "ready" && !movementsStale
+      ? movementsState.data.result.items.map((item) => {
           const info = lookup.category(item.categoryId);
           const installment =
             item.installmentCount > 1 && item.installmentNumber
@@ -111,7 +123,6 @@ export function SpendingContainer({
       : null;
 
   const status = state.status;
-  const movementsStatus = drilledCategory ? movementsResource.state.status : "ready";
 
   return (
     <SpendingPanel

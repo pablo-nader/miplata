@@ -30,15 +30,17 @@ export function PanelState({ status, empty, messages, onRetry, children }: Panel
   }
   if (status === "error") {
     return (
-      <EmptyState
-        icon={<PieChart />}
-        title={messages.loadFailed}
-        action={
-          <Button variant="ghost" onClick={onRetry}>
-            {messages.retry}
-          </Button>
-        }
-      />
+      <div role="alert">
+        <EmptyState
+          icon={<PieChart />}
+          title={messages.loadFailed}
+          action={
+            <Button variant="ghost" onClick={onRetry}>
+              {messages.retry}
+            </Button>
+          }
+        />
+      </div>
     );
   }
   if (empty) {

@@ -54,12 +54,14 @@ function onTabKey(
   onTab: (id: string) => void,
 ) {
   const index = tabs.findIndex((tab) => tab.id === activeTab);
+  const jump: Record<string, number> = { Home: 0, End: tabs.length - 1 };
   const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
-  if (step === 0) {
+  const target = event.key in jump ? jump[event.key] : step === 0 ? undefined : index + step;
+  if (target === undefined) {
     return;
   }
   event.preventDefault();
-  const next = tabs[(index + step + tabs.length) % tabs.length];
+  const next = tabs[(target + tabs.length) % tabs.length];
   if (next) {
     onTab(next.id);
     document.getElementById(`report-tab-${next.id}`)?.focus();
