@@ -21,7 +21,8 @@
           "npm-peer",
           "npm-optional",
           "npm-unknown"
-        ]
+        ],
+        "pathNot": "^(@miplata/shared|packages/shared/)"
       }
     },
     {
