@@ -2,6 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-11-23
+- Related: widens who can sign up compared to [BD-0001](BD-0001-personal-non-commercial-use.md) and [BD-0003](BD-0003-google-sign-in.md)
 
 ## Context
 [BD-0001](BD-0001-personal-non-commercial-use.md) and [BD-0003](BD-0003-google-sign-in.md) assumed a small circle of users: the owner, family and friends. While the Google OAuth consent screen is in "Testing" mode, only users added by hand can sign in. Publishing it is the only way for the people the owner invites to sign in without being added one by one, and Google requires a public home page and a public privacy policy link to publish.
