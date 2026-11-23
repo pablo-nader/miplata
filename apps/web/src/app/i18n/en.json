@@ -611,7 +611,13 @@
         "installments_not_allowed": "Only card purchases can have installments.",
         "person_share_invalid": "Your share must be less than the total.",
         "transfer_amount_mismatch": "With the same currency, both amounts must be equal.",
-        "transfer_same_account": "Choose different accounts."
+        "transfer_same_account": "Choose different accounts.",
+        "statement_movement": "This movement belongs to a card statement. Edit it from the statement."
+      },
+      "statementBound": {
+        "title": "This movement belongs to a statement",
+        "body": "Charges and payments are edited from the card statement.",
+        "link": "Go to statement"
       }
     },
     "moreFailed": "We could not load more movements. Try again."
@@ -779,6 +785,23 @@
       "saving": "Saving…",
       "errors": {
         "amount": "Enter a valid amount."
+      }
+    },
+    "dates": {
+      "open": "Edit dates",
+      "title": "Statement dates",
+      "closing": "Closing date",
+      "due": "Due date",
+      "save": "Save dates",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "saved": "Dates updated. The installments of this period were reassigned to match.",
+      "failures": {
+        "closing_outside_period": "The closing date must fall within the statement's month.",
+        "due_before_closing": "The due date must be after the closing date.",
+        "invalid_date": "Enter valid dates.",
+        "card_without_schedule": "Set the card's closing and due day.",
+        "saveFailed": "We couldn't save the dates. Try again."
       }
     }
   },

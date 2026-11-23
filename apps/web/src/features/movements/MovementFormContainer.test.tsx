@@ -25,6 +25,10 @@ function renderForm(path: string) {
         <Routes>
           <Route path="/home" element={<p>home screen</p>} />
           <Route path="/movements" element={<p>movements list</p>} />
+          <Route
+            path="/accounts/:accountId/statement/charges/:movementId"
+            element={<p>statement screen</p>}
+          />
           <Route path="/movements/new" element={<MovementFormContainer />} />
           <Route path="/movements/:movementId/edit" element={<MovementFormContainer />} />
         </Routes>
@@ -273,6 +277,47 @@ describe("recording a transfer", () => {
     // Assert
     expect(await screen.findByText("Elegí la cuenta de origen.")).toBeDefined();
     expect(screen.getByText("Elegí la cuenta de destino.")).toBeDefined();
+  });
+});
+
+describe("a movement that belongs to a statement", () => {
+  const bound = makeMovement({
+    statement: { id: "st-nov", accountId: "acc-visa", periodMonth: "2026-11" },
+  });
+
+  it("explains it and sends the user to the statement instead of showing the form", async () => {
+    // Arrange
+    stubApi({ ...lookupHandlers, "GET /api/movements/mov-1": { body: bound } });
+    renderForm("/movements/mov-1/edit");
+
+    // Act
+    const link = await screen.findByRole("button", { name: "Ir al resumen" });
+    await userEvent.click(link);
+
+    // Assert
+    expect(await screen.findByText("statement screen")).toBeDefined();
+    expect(screen.queryByRole("button", { name: "Guardar cambios" })).toBeNull();
+  });
+
+  it("maps the statement_movement refusal to a translated message", async () => {
+    // Arrange
+    stubApi({
+      ...lookupHandlers,
+      "GET /api/movements/mov-1": { body: makeMovement() },
+      "PUT /api/movements/mov-1": { status: 409, body: { error: "statement_movement" } },
+    });
+    renderForm("/movements/mov-1/edit");
+    await screen.findByLabelText("Monto");
+
+    // Act
+    await userEvent.click(screen.getByRole("button", { name: "Guardar cambios" }));
+
+    // Assert
+    expect(
+      await screen.findByText(
+        "Este movimiento pertenece a un resumen de tarjeta. Editalo desde el resumen.",
+      ),
+    ).toBeDefined();
   });
 });
 

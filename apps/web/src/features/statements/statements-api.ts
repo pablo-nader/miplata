@@ -2,6 +2,7 @@ import {
   type AdjustmentRequest,
   type BankFiguresRequest,
   type ChargeRequest,
+  type StatementDatesRequest,
   type StatementDetail,
   type StatementPaymentRequest,
   type StatementSummary,
@@ -76,4 +77,8 @@ export function payStatement(statementId: string, request: StatementPaymentReque
 
 export function adjustStatement(statementId: string, request: AdjustmentRequest) {
   return send(`/api/statements/${statementId}/adjustment`, "POST", request);
+}
+
+export function updateStatementDates(statementId: string, request: StatementDatesRequest) {
+  return send(`/api/statements/${statementId}`, "PATCH", request);
 }

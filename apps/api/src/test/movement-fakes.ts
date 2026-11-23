@@ -32,6 +32,7 @@ function toMovement(id: string, plan: MovementPlan): Movement {
       amountMinor: item.amountMinor,
       ownAmountMinor: item.ownAmountMinor,
     })),
+    statement: null,
   };
 }
 

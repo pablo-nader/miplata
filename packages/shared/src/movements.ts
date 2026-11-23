@@ -77,6 +77,13 @@ export const movementInstallmentSchema = z.object({
 });
 export type MovementInstallment = z.infer<typeof movementInstallmentSchema>;
 
+export const movementStatementSchema = z.object({
+  id: z.string().min(1),
+  accountId: z.string().min(1),
+  periodMonth: yearMonthSchema,
+});
+export type MovementStatement = z.infer<typeof movementStatementSchema>;
+
 export const movementSchema = z.object({
   id: z.string().min(1),
   type: movementTypeSchema,
@@ -88,6 +95,7 @@ export const movementSchema = z.object({
   to: legSchema.nullable(),
   person: z.object({ personId: z.string().min(1), ownAmountMinor: z.int() }).nullable(),
   installments: z.array(movementInstallmentSchema),
+  statement: movementStatementSchema.nullable(),
 });
 export type Movement = z.infer<typeof movementSchema>;
 

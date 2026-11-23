@@ -6,6 +6,7 @@ import {
   MAX_AMOUNT_MINOR,
   parseMoney,
   type StatementChargeLine,
+  type StatementDatesRequest,
   type StatementTotals,
 } from "@miplata/shared";
 
@@ -141,4 +142,28 @@ export function buildReconcile(form: ReconcileForm): ReconcileBuilt {
       minimumUsdMinor: value("usdMinimum"),
     },
   };
+}
+
+export type DatesForm = { closingDate: string; dueDate: string };
+
+export type DatesErrorKey = "closing_outside_period" | "due_before_closing" | "invalid_date";
+
+export type DatesBuilt =
+  | { ok: true; value: StatementDatesRequest }
+  | { ok: false; error: DatesErrorKey };
+
+export function buildDates(periodMonth: string, form: DatesForm): DatesBuilt {
+  if (
+    !isoDateSchema.safeParse(form.closingDate).success ||
+    !isoDateSchema.safeParse(form.dueDate).success
+  ) {
+    return { ok: false, error: "invalid_date" };
+  }
+  if (form.closingDate.slice(0, 7) !== periodMonth) {
+    return { ok: false, error: "closing_outside_period" };
+  }
+  if (form.dueDate <= form.closingDate) {
+    return { ok: false, error: "due_before_closing" };
+  }
+  return { ok: true, value: { closingDate: form.closingDate, dueDate: form.dueDate } };
 }

@@ -8,6 +8,7 @@ import { EmptyState } from "../../ui/molecules/EmptyState";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { displayName } from "../accounts/account-display";
 import { StatementScreen } from "./StatementScreen";
+import { buildDates } from "./statement-forms";
 import {
   adjustmentOf,
   hasActivity,
@@ -17,10 +18,11 @@ import {
   shortDate,
   totalsFor,
 } from "./statement-view";
-import { adjustStatement } from "./statements-api";
+import { adjustStatement, updateStatementDates } from "./statements-api";
 import { useStatementData } from "./useStatementData";
 
 const CURRENCIES: Currency[] = ["ARS", "USD"];
+const DATES_FAILURES = new Set(["closing_outside_period", "due_before_closing", "invalid_date"]);
 const KNOWN_FAILURES = new Set([
   "bank_total_missing",
   "category_inactive",
@@ -38,6 +40,11 @@ export function StatementContainer() {
   const data = useStatementData(accountId, period);
   const [failure, setFailure] = useState<string | null>(null);
   const [busy, setBusy] = useState<Currency | null>(null);
+  const [editingDates, setEditingDates] = useState(false);
+  const [datesForm, setDatesForm] = useState({ closingDate: "", dueDate: "" });
+  const [datesError, setDatesError] = useState<string | null>(null);
+  const [datesBusy, setDatesBusy] = useState(false);
+  const [datesSaved, setDatesSaved] = useState(false);
 
   const back = { to: "/accounts", label: t("statements.back") };
   const base = `/accounts/${accountId}/statement`;
@@ -168,6 +175,36 @@ export function StatementContainer() {
     );
   }
 
+  function openDates(current: StatementDetail) {
+    setDatesForm({ closingDate: current.closingDate, dueDate: current.dueDate });
+    setDatesError(null);
+    setDatesSaved(false);
+    setEditingDates(true);
+  }
+
+  async function saveDates(current: StatementDetail) {
+    const built = buildDates(current.periodMonth, datesForm);
+    if (!built.ok) {
+      setDatesError(t(`statements.dates.failures.${built.error}`));
+      return;
+    }
+    setDatesBusy(true);
+    setDatesError(null);
+    const result = await updateStatementDates(current.id, built.value);
+    setDatesBusy(false);
+    if (result.ok) {
+      setEditingDates(false);
+      setDatesSaved(true);
+      data.reload();
+      return;
+    }
+    setDatesError(
+      DATES_FAILURES.has(result.error)
+        ? t(`statements.dates.failures.${result.error}`)
+        : t("statements.dates.failures.saveFailed"),
+    );
+  }
+
   const adjustments = held.flatMap((currency) => {
     const totals = totalsFor(detail, currency);
     const stale = adjustmentOf(detail, currency) > 0 && (totals?.differenceMinor ?? 0) < 0;
@@ -214,6 +251,9 @@ export function StatementContainer() {
         selected: item.id === selected.id,
         onSelect: () => {
           setFailure(null);
+          setEditingDates(false);
+          setDatesError(null);
+          setDatesSaved(false);
           navigate(`${base}?period=${item.periodMonth}`, { replace: true });
         },
       }))}
@@ -242,6 +282,31 @@ export function StatementContainer() {
       }))}
       note={owed ? t("statements.othersNote", { owed }) : null}
       failure={failure}
+      success={datesSaved ? t("statements.dates.saved") : null}
+      datesEditor={{
+        openLabel: t("statements.dates.open"),
+        open: editingDates,
+        onOpen: () => openDates(detail),
+        title: t("statements.dates.title"),
+        lang: i18n.language,
+        closing: {
+          label: t("statements.dates.closing"),
+          value: datesForm.closingDate,
+          onChange: (closingDate) => setDatesForm((current) => ({ ...current, closingDate })),
+        },
+        due: {
+          label: t("statements.dates.due"),
+          value: datesForm.dueDate,
+          onChange: (dueDate) => setDatesForm((current) => ({ ...current, dueDate })),
+        },
+        error: datesError,
+        submit: {
+          label: datesBusy ? t("statements.dates.saving") : t("statements.dates.save"),
+          busy: datesBusy,
+        },
+        cancel: { label: t("statements.dates.cancel"), onCancel: () => setEditingDates(false) },
+        onSubmit: () => saveDates(detail),
+      }}
       actions={{
         addCharge: { to: `${base}/charge${query}`, label: t("statements.actions.addCharge") },
         reconcile: { to: `${base}/reconcile${query}`, label: t("statements.actions.reconcile") },

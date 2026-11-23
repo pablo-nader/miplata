@@ -1,8 +1,10 @@
 import { Receipt, Scale } from "lucide-react";
+import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Button, ButtonLink } from "../../ui/atoms/Button";
 import { FilterChip } from "../../ui/atoms/Chip";
 import { SectionLabel } from "../../ui/atoms/SectionLabel";
+import { Field, FieldGroup } from "../../ui/molecules/Field";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
 import "./statement-screen.css";
@@ -12,6 +14,20 @@ export type PeriodChip = { key: string; label: string; selected: boolean; onSele
 export type SummaryRow = { key: string; label: string; value: string };
 
 export type AdjustAction = { key: string; label: string; busy: boolean; onClick: () => void };
+
+export type DatesEditor = {
+  openLabel: string;
+  open: boolean;
+  onOpen: () => void;
+  title: string;
+  lang: string;
+  closing: { label: string; value: string; onChange: (value: string) => void };
+  due: { label: string; value: string; onChange: (value: string) => void };
+  error: string | null;
+  submit: { label: string; busy: boolean };
+  cancel: { label: string; onCancel: () => void };
+  onSubmit: () => void;
+};
 
 export type StatementScreenProps = {
   title: string;
@@ -28,9 +44,51 @@ export type StatementScreenProps = {
   charges: { key: string; label: string; value: string; to: string }[];
   note: string | null;
   failure: string | null;
+  success: string | null;
+  datesEditor: DatesEditor;
   actions: { addCharge: NavAction; reconcile: NavAction; pay: NavAction };
   editCard: NavAction;
 };
+
+function DatesPanel({ editor }: { editor: DatesEditor }) {
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    editor.onSubmit();
+  }
+  return (
+    <form className="statement-screen__dates" onSubmit={handleSubmit} noValidate>
+      <FieldGroup label={editor.title}>
+        <Field
+          type="date"
+          lang={editor.lang}
+          label={editor.closing.label}
+          value={editor.closing.value}
+          onChange={(event) => editor.closing.onChange(event.target.value)}
+        />
+        <Field
+          type="date"
+          lang={editor.lang}
+          label={editor.due.label}
+          value={editor.due.value}
+          onChange={(event) => editor.due.onChange(event.target.value)}
+        />
+      </FieldGroup>
+      {editor.error ? (
+        <p className="statement-screen__error" role="alert">
+          {editor.error}
+        </p>
+      ) : null}
+      <div className="statement-screen__dates-actions">
+        <Button type="submit" disabled={editor.submit.busy}>
+          {editor.submit.label}
+        </Button>
+        <Button variant="ghost" onClick={editor.cancel.onCancel}>
+          {editor.cancel.label}
+        </Button>
+      </div>
+    </form>
+  );
+}
 
 export function StatementScreen(props: StatementScreenProps) {
   return (
@@ -88,6 +146,20 @@ export function StatementScreen(props: StatementScreenProps) {
           {props.failure}
         </p>
       ) : null}
+      {props.success ? (
+        <p className="statement-screen__success" role="status">
+          {props.success}
+        </p>
+      ) : null}
+      {props.datesEditor.open ? (
+        <DatesPanel editor={props.datesEditor} />
+      ) : (
+        <div className="statement-screen__adjust">
+          <Button variant="ghost" onClick={props.datesEditor.onOpen}>
+            {props.datesEditor.openLabel}
+          </Button>
+        </div>
+      )}
       {props.charges.length > 0 ? (
         <section className="statement-screen__charges" aria-label={props.chargesTitle}>
           <SectionLabel as="h2">{props.chargesTitle}</SectionLabel>

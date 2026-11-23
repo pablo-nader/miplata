@@ -21,6 +21,7 @@ export type RowData = {
   note?: RowAmount | string;
   tag?: string;
   impact: { currency: Currency; minor: number } | null;
+  to: string;
 };
 
 export type PresentContext = {
@@ -37,7 +38,7 @@ function sum(values: readonly number[]): number {
   return values.reduce((total, value) => total + value, 0);
 }
 
-function transferRow(movement: Movement, ctx: PresentContext): RowData {
+function transferRow(movement: Movement, ctx: PresentContext): Omit<RowData, "to"> {
   const { from, to } = movement;
   const name = (leg: NonNullable<Movement["from"]>) => {
     const account = ctx.account(leg.accountId);
@@ -68,7 +69,7 @@ function transferRow(movement: Movement, ctx: PresentContext): RowData {
   };
 }
 
-function entryRow(movement: Movement, ctx: PresentContext): RowData {
+function entryRow(movement: Movement, ctx: PresentContext): Omit<RowData, "to"> {
   const leg = movement.account;
   const category = movement.categoryId ? ctx.category(movement.categoryId) : undefined;
   const account = leg ? ctx.account(leg.accountId) : undefined;
@@ -113,8 +114,19 @@ function entryRow(movement: Movement, ctx: PresentContext): RowData {
   };
 }
 
+export function statementPathOf(movement: Movement): string | null {
+  const { statement } = movement;
+  if (!statement) {
+    return null;
+  }
+  const base = `/accounts/${statement.accountId}/statement`;
+  const query = `?period=${statement.periodMonth}`;
+  return movement.type === "expense" ? `${base}/charges/${movement.id}${query}` : `${base}${query}`;
+}
+
 export function presentMovement(movement: Movement, ctx: PresentContext): RowData {
-  return movement.type === "transfer" ? transferRow(movement, ctx) : entryRow(movement, ctx);
+  const row = movement.type === "transfer" ? transferRow(movement, ctx) : entryRow(movement, ctx);
+  return { ...row, to: statementPathOf(movement) ?? `/movements/${movement.id}/edit` };
 }
 
 export type DayGroup = {

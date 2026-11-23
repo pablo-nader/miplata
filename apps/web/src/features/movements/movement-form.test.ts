@@ -433,6 +433,7 @@ describe("editing an existing movement", () => {
       { number: 1, periodMonth: "2026-11", statementId: null, amountMinor: 1, ownAmountMinor: 1 },
       { number: 2, periodMonth: "2026-12", statementId: null, amountMinor: 1, ownAmountMinor: 1 },
     ],
+    statement: null,
   };
 
   it("fills the form from an expense with its installments and share", () => {

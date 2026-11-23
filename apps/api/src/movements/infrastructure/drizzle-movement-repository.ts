@@ -14,6 +14,7 @@ import {
   recurringOccurrence,
   type SQL,
   sql,
+  statement,
 } from "@miplata/db";
 import {
   currencySchema,
@@ -88,7 +89,10 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
       return [];
     }
     const ids = rows.map((row) => row.id);
-    const [postings, installments] = await Promise.all([
+    const statementIds = [
+      ...new Set(rows.flatMap((row) => (row.statementId ? [row.statementId] : []))),
+    ];
+    const [postings, installments, statementRows] = await Promise.all([
       db
         .select({
           movementId: posting.movementId,
@@ -108,8 +112,19 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
         .from(installment)
         .where(and(eq(installment.userId, userId), inArray(installment.movementId, ids)))
         .orderBy(installment.number),
+      statementIds.length === 0
+        ? Promise.resolve([])
+        : db
+            .select({
+              id: statement.id,
+              accountId: statement.accountId,
+              periodMonth: statement.periodMonth,
+            })
+            .from(statement)
+            .where(and(eq(statement.userId, userId), inArray(statement.id, statementIds))),
     ]);
     return rows.map((row) => {
+      const bound = statementRows.find((entry) => entry.id === row.statementId);
       const own = postings.filter((entry) => entry.movementId === row.id);
       const parts = installments.filter((entry) => entry.movementId === row.id);
       const leg = (entry: (typeof own)[number]) => ({
@@ -148,6 +163,9 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
           amountMinor: toSafeInteger(part.amountMinor),
           ownAmountMinor: toSafeInteger(part.ownAmountMinor),
         })),
+        statement: bound
+          ? { id: bound.id, accountId: bound.accountId, periodMonth: bound.periodMonth.slice(0, 7) }
+          : null,
       };
     });
   }
