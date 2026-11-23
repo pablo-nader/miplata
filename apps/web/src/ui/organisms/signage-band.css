@@ -79,3 +79,7 @@
   display: block;
   font-size: var(--font-size-body);
 }
+
+.signage-band :focus-visible {
+  outline-color: var(--color-on-band);
+}

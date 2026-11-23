@@ -17,10 +17,10 @@ export function Field({ label, error, ...input }: FieldProps) {
         {label}
       </label>
       <TextInput
+        {...input}
         id={inputId}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : undefined}
-        {...input}
       />
       {error ? (
         <p id={errorId} className="field__error">

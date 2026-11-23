@@ -64,6 +64,39 @@ describe("AppRoutes", () => {
     expect(heading.textContent).toBe("miPlata");
   });
 
+  it.each(routes)("renders a main landmark on %s", (path) => {
+    // Arrange
+    renderApp(<AppRoutes />, "es", path);
+
+    // Act
+    const landmarks = screen.getAllByRole("main");
+
+    // Assert
+    expect(landmarks).toHaveLength(1);
+  });
+
+  it("offers a way back home on focused screens only", () => {
+    // Arrange
+    renderApp(<AppRoutes />, "en", "/balance");
+
+    // Act
+    const back = screen.getByRole("link", { name: "Back to home" });
+
+    // Assert
+    expect(back.getAttribute("href")).toBe("/");
+  });
+
+  it("shows no back link on the sign in screen", () => {
+    // Arrange
+    renderApp(<AppRoutes />, "en", "/sign-in");
+
+    // Act
+    const back = screen.queryByRole("link", { name: "Back to home" });
+
+    // Assert
+    expect(back).toBeNull();
+  });
+
   it("shows navigation only on the main sections", () => {
     // Arrange
     renderApp(<AppRoutes />, "en", "/movements/new");
