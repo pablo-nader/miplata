@@ -145,6 +145,33 @@ describe("budgets endpoints", () => {
     expect(after).toEqual([]);
   });
 
+  it("keeps the same target in two currencies and refuses an edit that clashes or targets a foreign category", async () => {
+    // Arrange
+    const alice = await newUser();
+    const bob = await newUser();
+    const ars = await budget(alice, { categoryId: alice.food });
+    await budget(alice, { categoryId: alice.food, currency: "USD" });
+    const other = await budget(alice, { categoryId: alice.otherFood });
+
+    // Act
+    const clash = await call(alice.cookie, "PUT", `/budgets/${other.id}`, {
+      categoryId: alice.food,
+      currency: "ARS",
+      limitMinor: 1,
+    });
+    const foreign = await call(alice.cookie, "PUT", `/budgets/${ars.id}`, {
+      categoryId: bob.food,
+      currency: "ARS",
+      limitMinor: 1,
+    });
+    const stored = await progress(alice);
+
+    // Assert
+    expect(clash.status).toBe(409);
+    expect(foreign.status).toBe(400);
+    expect(stored).toHaveLength(3);
+  });
+
   it("lets only one of several simultaneous identical creations through", async () => {
     // Arrange
     const user = await newUser();

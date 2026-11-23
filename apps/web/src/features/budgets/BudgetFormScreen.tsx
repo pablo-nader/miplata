@@ -1,4 +1,4 @@
-import { type FormEvent, useId } from "react";
+import type { FormEvent } from "react";
 import { Button } from "../../ui/atoms/Button";
 import { FilterChip } from "../../ui/atoms/Chip";
 import { SectionLabel } from "../../ui/atoms/SectionLabel";
@@ -87,8 +87,6 @@ export function BudgetFormScreen({
   errorMessage,
   manage,
 }: BudgetFormScreenProps) {
-  const errorId = useId();
-
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
     submit.onSubmit();
@@ -137,7 +135,7 @@ export function BudgetFormScreen({
           {...(limit.error ? { error: limit.error } : {})}
         />
         {errorMessage ? (
-          <p id={errorId} className="budget-form__error" role="alert">
+          <p className="budget-form__error" role="alert">
             {errorMessage}
           </p>
         ) : null}
