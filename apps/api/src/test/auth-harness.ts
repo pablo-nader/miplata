@@ -10,6 +10,7 @@ import { createAuth, type SeedDefaults } from "../shared/auth/create-auth";
 import { sessionResolverFor } from "../shared/auth/session-resolver";
 import { accountDependencies } from "../shared/compose";
 import type { Env } from "../shared/env/env";
+import { drizzleStatementRepository } from "../statements/infrastructure/drizzle-statement-repository";
 
 export const testEnv: Env = {
   DATABASE_URL: "postgres://unused",
@@ -39,6 +40,8 @@ export async function createAuthHarness(seedDefaults?: SeedDefaults) {
     ...accountDependencies(db),
     movements: drizzleMovementRepository(db),
     reports: drizzleReportRepository(db),
+    statements: drizzleStatementRepository(db),
+    today: () => "2026-11-23",
   });
 
   async function signUpWithGoogle(email: string, name = "Test Person") {

@@ -35,7 +35,7 @@ function failureOf(error: MovementError): Failure {
   if (error === "not_found") {
     return notFound;
   }
-  if (error === "movement_in_use") {
+  if (error === "movement_in_use" || error === "statement_movement") {
     return { status: 409, body: { error } };
   }
   return { status: 400, body: { error: "invalid_request", reason: error } };

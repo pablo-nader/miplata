@@ -4,6 +4,7 @@ import type { CategoryRepository } from "../../categories/application/category-r
 import { inMemoryAccounts, inMemoryInstitutions } from "../../test/account-fakes";
 import { inMemoryMovements } from "../../test/movement-fakes";
 import { emptyReports } from "../../test/report-fakes";
+import { inertStatements } from "../../test/statement-fakes";
 
 const unusedCategories = new Proxy({} as CategoryRepository, {
   get: () => async () => {
@@ -27,6 +28,8 @@ function buildApp() {
     categories: unusedCategories,
     movements: inMemoryMovements().repository,
     reports: emptyReports(),
+    statements: inertStatements,
+    today: () => "2026-11-23",
   });
   return { app, store };
 }

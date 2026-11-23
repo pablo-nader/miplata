@@ -15,6 +15,8 @@ export type MovementRepository = {
     toMonth: YearMonth,
   ): Promise<StatementOverrides>;
   create(userId: string, plan: MovementPlan): Promise<Movement>;
+  createAll(userId: string, plans: MovementPlan[]): Promise<Movement[]>;
+  isStatementBound(userId: string, movementId: string): Promise<boolean>;
   replace(userId: string, movementId: string, plan: MovementPlan): Promise<Movement | null>;
   find(userId: string, movementId: string): Promise<Movement | null>;
   list(userId: string, query: MovementQuery): Promise<MovementPage>;

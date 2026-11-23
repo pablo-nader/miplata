@@ -1,3 +1,4 @@
+import type { IsoDate } from "@miplata/shared";
 import { Hono } from "hono";
 import type { AccountRepository } from "./accounts/application/accounts";
 import {
@@ -20,6 +21,8 @@ import type { ReportRepository } from "./reports/application/report-repository";
 import type { RecurringCommitments } from "./reports/application/report-use-cases";
 import { reportRoutes } from "./reports/http/report-routes";
 import type { SessionResolver } from "./shared/auth/auth-middleware";
+import type { StatementRepository } from "./statements/application/statement-repository";
+import { statementRoutes } from "./statements/http/statement-routes";
 
 export type AppDependencies = {
   readVersion: VersionSource;
@@ -32,6 +35,8 @@ export type AppDependencies = {
   movements: MovementRepository;
   reports: ReportRepository;
   recurringCommitments?: RecurringCommitments;
+  statements: StatementRepository;
+  today: () => IsoDate;
 };
 
 export function createApp({
@@ -45,6 +50,8 @@ export function createApp({
   movements,
   reports,
   recurringCommitments,
+  statements,
+  today,
 }: AppDependencies) {
   return new Hono()
     .basePath("/api")
@@ -65,7 +72,17 @@ export function createApp({
         categories,
       }),
     )
-    .route("/reports", reportRoutes(resolveSession, { reports, recurring: recurringCommitments }));
+    .route("/reports", reportRoutes(resolveSession, { reports, recurring: recurringCommitments }))
+    .route(
+      "/statements",
+      statementRoutes(resolveSession, {
+        statements,
+        movements,
+        accounts: accounts.everyAccount,
+        categories,
+        today,
+      }),
+    );
 }
 
 export type AppType = ReturnType<typeof createApp>;
