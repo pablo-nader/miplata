@@ -609,6 +609,7 @@
     },
     "moreFailed": "No pudimos traer más movimientos. Probá de nuevo."
   },
+<<<<<<< HEAD
   "reports": {
     "tabsLabel": "Reportes",
     "currency": "Moneda",
@@ -661,6 +662,118 @@
       "note": "Suma las cuotas de tarjeta y los movimientos recurrentes pendientes de cada mes.",
       "installments": "Cuotas {{amount}}",
       "recurring": "Recurrentes {{amount}}"
+=======
+  "statements": {
+    "loading": "Cargando…",
+    "loadFailed": "No pudimos cargar el resumen.",
+    "retry": "Reintentar",
+    "back": "Volver a cuentas",
+    "noSchedule": "Esta tarjeta no tiene día de cierre ni de vencimiento. Editala para ver sus resúmenes.",
+    "notFound": "No encontramos esta tarjeta.",
+    "periods": "Períodos",
+    "closesDue": "Cierra {{closing}} · vence {{due}}",
+    "dollars": "Dólares",
+    "lines": {
+      "previous": "Saldo anterior",
+      "own": "Tus compras y cuotas",
+      "others": "De otras personas",
+      "charges": "Cargos",
+      "payments": "Pagos"
+    },
+    "bankTotal": "Total del banco: {{amount}}",
+    "bankMissing": "Todavía no cargaste el total del banco.",
+    "noDifference": "Sin diferencia",
+    "difference": "Diferencia: {{amount}}",
+    "adjust": "Registrar {{amount}} como ajuste",
+    "removeAdjustment": "Quitar el ajuste",
+    "adjusting": "Registrando…",
+    "othersNote": "Las compras de otras personas se pagan con el resumen, pero te las deben: {{owed}}.",
+    "owes": "{{name}} te debe {{amount}}",
+    "someone": "Alguien",
+    "chargesTitle": "Cargos",
+    "editCard": "Editar tarjeta",
+    "actions": {
+      "addCharge": "Agregar cargo",
+      "reconcile": "Cuadrar",
+      "pay": "Pagar resumen"
+    },
+    "failures": {
+      "account_inactive": "Esa cuenta está desactivada.",
+      "account_not_allowed": "Elegí una cuenta de dinero, no una persona ni otra tarjeta.",
+      "account_not_found": "No encontramos esa cuenta.",
+      "bank_total_missing": "Primero cargá el total del banco.",
+      "card_without_schedule": "Cargá el día de cierre y de vencimiento de la tarjeta.",
+      "category_inactive": "Esa categoría está desactivada.",
+      "category_not_allowed": "Elegí una categoría de cargos financieros.",
+      "category_not_found": "No encontramos esa categoría.",
+      "currency_not_in_account": "Esa cuenta no tiene esa moneda.",
+      "no_positive_difference": "El banco no cobra más de lo que la app calculó, no hay nada para ajustar.",
+      "saveFailed": "No pudimos guardar. Probá de nuevo."
+    },
+    "pay": {
+      "title": "Pagar resumen",
+      "back": "Volver al resumen",
+      "mode": "Monto a pagar",
+      "total": "Total",
+      "minimum": "Mínimo",
+      "other": "Otro monto",
+      "pesosFrom": "Pesos · desde",
+      "dollarsFrom": "Dólares · desde",
+      "arsAmount": "Monto en pesos",
+      "usdAmount": "Monto en dólares",
+      "fromAccount": "Cuenta de origen",
+      "choose": "Elegí una cuenta",
+      "usdWithPesos": "Pagar los dólares con pesos",
+      "pesosSpent": "Pesos que se descuentan",
+      "date": "Fecha",
+      "note": "Es una transferencia: no suma a tus gastos. Si pagás menos del total, la diferencia pasa al próximo resumen.",
+      "submit": "Pagar {{amount}}",
+      "submitNothing": "Pagar",
+      "saving": "Pagando…",
+      "errors": {
+        "source": "Elegí desde qué cuenta pagás.",
+        "amount": "Ingresá un monto mayor a cero.",
+        "date": "Ingresá una fecha válida.",
+        "pesos": "Ingresá cuántos pesos se descuentan."
+      }
+    },
+    "charge": {
+      "newTitle": "Agregar cargo",
+      "editTitle": "Editar cargo",
+      "back": "Volver al resumen",
+      "category": "Categoría",
+      "choose": "Elegí una categoría",
+      "currency": "Moneda",
+      "amount": "Monto",
+      "description": "Descripción (opcional)",
+      "date": "Fecha",
+      "save": "Guardar cargo",
+      "saveChanges": "Guardar cambios",
+      "saving": "Guardando…",
+      "delete": "Eliminar cargo",
+      "confirmDeleteTitle": "¿Eliminar este cargo?",
+      "confirmDeleteBody": "El total del resumen se recalcula. No se puede deshacer.",
+      "hint": "El cargo cuenta como gasto en el mes de este resumen.",
+      "notFound": "No encontramos ese cargo.",
+      "errors": {
+        "category": "Elegí una categoría.",
+        "amount": "Ingresá un monto mayor a cero.",
+        "date": "Ingresá una fecha válida."
+      }
+    },
+    "reconcile": {
+      "title": "Cuadrar con el banco",
+      "back": "Volver al resumen",
+      "hint": "Cargá lo que dice el resumen del banco. La app te muestra la diferencia con su cálculo.",
+      "bankTotal": "Total del banco · {{currency}}",
+      "minimum": "Pago mínimo · {{currency}}",
+      "calculated": "Cálculo de la app: {{amount}}",
+      "save": "Guardar",
+      "saving": "Guardando…",
+      "errors": {
+        "amount": "Ingresá un monto válido."
+      }
+>>>>>>> a031101 (feat(web): add card statement, pay statement, charge and reconcile screens)
     }
   }
 }

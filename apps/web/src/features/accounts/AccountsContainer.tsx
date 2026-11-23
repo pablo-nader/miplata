@@ -38,7 +38,10 @@ function rowFor(account: Account, t: ReturnType<typeof useTranslation>["t"], lan
       locale,
       direction: owed ? "income" : "neutral",
     },
-    to: `/accounts/${account.id}/edit`,
+    to:
+      account.type === "credit_card"
+        ? `/accounts/${account.id}/statement`
+        : `/accounts/${account.id}/edit`,
     ...(note ? { note } : {}),
   };
   return row;

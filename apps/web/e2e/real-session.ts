@@ -34,3 +34,23 @@ export async function signInAsNewUser(context: BrowserContext) {
     await client.end();
   }
 }
+
+export async function seedFinancialCharges(userId: string) {
+  const client = new pg.Client({ connectionString: databaseUrl });
+  await client.connect();
+  try {
+    const group = await client.query(
+      "insert into category_group (user_id, name_key, sort_order) values ($1, 'defaults.group.financialCharges', 90) returning id",
+      [userId],
+    );
+    const names = ["defaults.category.interest", "defaults.category.adjustment"];
+    for (const [index, nameKey] of names.entries()) {
+      await client.query(
+        "insert into category (user_id, type, group_id, name_key, color, sort_order) values ($1, 'expense', $2, $3, 3, $4)",
+        [userId, group.rows[0].id, nameKey, index],
+      );
+    }
+  } finally {
+    await client.end();
+  }
+}
