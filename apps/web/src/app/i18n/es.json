@@ -24,7 +24,9 @@
     "languageNotSaved": "No pudimos guardar el idioma. Inténtalo de nuevo.",
     "signOut": "Cerrar sesión",
     "signOutFailed": "No pudimos cerrar la sesión. Inténtalo de nuevo.",
-    "categories": "Categorías"
+    "categories": "Categorías",
+    "toPay": "Por pagar",
+    "recurring": "Gastos fijos"
   },
   "screens": {
     "home": {
@@ -56,8 +58,7 @@
       "description": "Total, mínimo u otro monto, desde la cuenta que elijas."
     },
     "toPay": {
-      "title": "Por pagar",
-      "description": "Los gastos fijos del período."
+      "title": "Por pagar"
     },
     "reports": {
       "title": "Reportes",
@@ -66,6 +67,9 @@
     "menu": {
       "title": "Menú",
       "description": "Por pagar, categorías, presupuestos, idioma y salir."
+    },
+    "recurring": {
+      "title": "Gastos fijos"
     }
   },
   "public": {
@@ -772,6 +776,147 @@
       "saving": "Guardando…",
       "errors": {
         "amount": "Ingresá un monto válido."
+      }
+    }
+  },
+  "home": {
+    "pending": {
+      "title": "{{count}} por pagar",
+      "today": "vence hoy",
+      "overdue": "venció {{date}}"
+    }
+  },
+  "toPay": {
+    "loading": "Cargando lo que hay por pagar…",
+    "loadFailed": "No pudimos cargar lo que hay por pagar.",
+    "retry": "Reintentar",
+    "emptyTitle": "No tenés nada pendiente",
+    "emptyDescription": "Cuando se acerque el vencimiento de un gasto fijo, aparece acá.",
+    "sections": {
+      "due": "Vencidos y hoy",
+      "upcoming": "Próximos",
+      "receivable": "Por cobrar"
+    },
+    "due": {
+      "today": "Hoy",
+      "overdue": "Venció {{date}}"
+    },
+    "variable": "variable",
+    "noAmount": "—",
+    "actions": {
+      "confirm": "Confirmar",
+      "adjust": "Ajustar",
+      "skip": "Omitir",
+      "cancel": "Cancelar"
+    },
+    "confirmFor": "Confirmar {{name}}",
+    "adjustFor": "Ajustar {{name}}",
+    "skipFor": "Omitir {{name}}",
+    "adjust": {
+      "title": "Ajustar {{name}}",
+      "amount": "Monto",
+      "account": "Cuenta",
+      "date": "Fecha",
+      "errors": {
+        "amount": "Ingresá un monto válido.",
+        "date": "Ingresá una fecha válida."
+      }
+    },
+    "failures": {
+      "account_inactive": "Esa cuenta está desactivada.",
+      "account_not_allowed": "Una persona no puede pagar un gasto.",
+      "account_not_found": "No encontramos esa cuenta.",
+      "amount_required": "Ingresá el monto de este pago.",
+      "amount_too_small": "El monto es muy chico.",
+      "card_without_schedule": "Cargá el día de cierre y de vencimiento de la tarjeta.",
+      "category_inactive": "La categoría está desactivada.",
+      "currency_not_in_account": "Esa cuenta no tiene esa moneda.",
+      "network": "No pudimos conectarnos. Probá de nuevo.",
+      "occurrence_resolved": "Este pago ya estaba resuelto.",
+      "failed": "No pudimos completar la acción. Probá de nuevo."
+    }
+  },
+  "recurring": {
+    "loading": "Cargando gastos fijos…",
+    "loadFailed": "No pudimos cargar los gastos fijos.",
+    "retry": "Reintentar",
+    "emptyTitle": "Todavía no tenés gastos fijos",
+    "emptyDescription": "Cargá el alquiler, las suscripciones o tu sueldo y te avisamos cuándo toca.",
+    "add": "Agregar",
+    "variable": "variable",
+    "day": "día {{day}}",
+    "frequencies": {
+      "monthly": "Mensual",
+      "bimonthly": "Cada dos meses",
+      "yearly": "Anual"
+    },
+    "status": {
+      "active": "Activo",
+      "paused": "Pausado",
+      "ended": "Terminado"
+    },
+    "actions": {
+      "pause": "Pausar",
+      "resume": "Reanudar",
+      "end": "Terminar",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "pauseFor": "Pausar {{name}}",
+      "resumeFor": "Reanudar {{name}}",
+      "endFor": "Terminar {{name}}"
+    },
+    "confirmEndTitle": "¿Terminar {{name}}?",
+    "confirmEndBody": "No se van a generar más pagos. Los movimientos ya cargados se conservan.",
+    "failures": {
+      "network": "No pudimos conectarnos. Probá de nuevo.",
+      "recurring_ended": "Este gasto fijo ya terminó.",
+      "failed": "No pudimos completar la acción. Probá de nuevo."
+    },
+    "form": {
+      "back": "Volver a gastos fijos",
+      "newTitle": "Nuevo gasto fijo",
+      "editTitle": "Editar gasto fijo",
+      "notFound": "No encontramos este gasto fijo.",
+      "choose": "Elegí",
+      "type": "Tipo",
+      "description": "Descripción",
+      "amountMode": "Tipo de monto",
+      "amountModes": {
+        "fixed": "Fijo",
+        "variable": "Variable"
+      },
+      "amount": "Monto",
+      "amountHint": "Si cambia cada vez, dejalo vacío o poné un valor de referencia: lo ajustás al confirmar.",
+      "currency": "Moneda",
+      "account": "Cuenta",
+      "frequency": "Frecuencia",
+      "day": "Día del mes",
+      "dayHint": "En los meses más cortos se usa el último día.",
+      "startsOn": "Empieza",
+      "endsOn": "Termina (opcional)",
+      "save": "Guardar gasto fijo",
+      "saveChanges": "Guardar cambios",
+      "saving": "Guardando…",
+      "errors": {
+        "amount": "Ingresá un monto válido.",
+        "category": "Elegí una categoría.",
+        "account": "Elegí una cuenta.",
+        "day": "Ingresá un día entre 1 y 31.",
+        "startsOn": "Ingresá una fecha válida.",
+        "endsOn": "La fecha tiene que ser válida y no anterior al inicio."
+      },
+      "failures": {
+        "account_inactive": "Esa cuenta está desactivada.",
+        "account_not_allowed": "Una persona no puede pagar un gasto.",
+        "account_not_found": "No encontramos esa cuenta.",
+        "category_inactive": "Esa categoría está desactivada.",
+        "category_not_found": "No encontramos esa categoría.",
+        "category_type_mismatch": "La categoría no corresponde al tipo.",
+        "currency_not_in_account": "Esa cuenta no tiene esa moneda.",
+        "invalid_range": "La fecha de fin no puede ser anterior al inicio.",
+        "network": "No pudimos conectarnos. Probá de nuevo.",
+        "recurring_ended": "Este gasto fijo ya terminó.",
+        "saveFailed": "No pudimos guardar el gasto fijo. Probá de nuevo."
       }
     }
   }

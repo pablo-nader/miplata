@@ -26,6 +26,7 @@ const routes = [
   ["/accounts/7/statement", "statement"],
   ["/accounts/7/statement/pay", "payStatement"],
   ["/to-pay", "toPay"],
+  ["/recurring", "recurring"],
   ["/reports", "reports"],
   ["/menu", "menu"],
 ] as const;

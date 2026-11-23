@@ -72,7 +72,7 @@ export function emptyForm(today: string, type: FormType = "expense"): FormState 
   };
 }
 
-function units(minor: number): string {
+export function units(minor: number): string {
   return minor % 100 === 0 ? String(minor / 100) : (minor / 100).toFixed(2).replace(".", ",");
 }
 

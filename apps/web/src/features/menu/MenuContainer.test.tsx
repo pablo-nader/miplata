@@ -61,6 +61,21 @@ describe("MenuContainer", () => {
     expect(link.getAttribute("href")).toBe("/categories");
   });
 
+  it("links to the to-pay and recurring screens above the categories", () => {
+    // Arrange
+    renderMenu("es");
+
+    // Act
+    const links = screen.getAllByRole("link").filter((link) => link.getAttribute("href") !== "/");
+
+    // Assert
+    expect(links.map((link) => [link.textContent, link.getAttribute("href")])).toEqual([
+      ["Por pagar", "/to-pay"],
+      ["Gastos fijos", "/recurring"],
+      ["Categorías", "/categories"],
+    ]);
+  });
+
   it("persists the chosen language through the api and translates the screen", async () => {
     // Arrange
     const fetchMock = vi.fn(async () => new Response("{}", { status: 200 }));

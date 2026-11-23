@@ -2,18 +2,25 @@ import type { Currency, MonthSummary } from "@miplata/shared";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useResource } from "../../shared/use-resource";
-import { localeForLanguage } from "../../ui/format/money";
+import { formatMoney, localeForLanguage } from "../../ui/format/money";
 import { minorToUnits } from "../accounts/account-display";
 import { fetchBalance } from "../accounts/accounts-api";
+import { allCategories, useLabel } from "../categories/catalog";
 import { fetchMonthSummary, fetchMovements } from "../movements/movements-api";
 import { localDate, monthOfDate } from "../movements/present-movement";
 import { useLookups } from "../movements/useLookups";
+import { fetchOccurrences } from "../recurring/recurring-api";
+import { dueKind, pendingExpenses, shortDate } from "../recurring/recurring-display";
 import { HomeScreen } from "./HomeScreen";
 
 const LATEST_COUNT = 5;
 
 function fetchLatest() {
   return fetchMovements({}, LATEST_COUNT, 0);
+}
+
+function fetchPendingExpenses() {
+  return fetchOccurrences("expense");
 }
 
 function monthName(month: string, language: string): string {
@@ -30,7 +37,9 @@ export function HomeContainer() {
   const balanceResource = useResource(fetchBalance);
   const summaryResource = useResource(summaryLoader);
   const latestResource = useResource(fetchLatest);
+  const pendingResource = useResource(fetchPendingExpenses);
   const lookups = useLookups();
+  const categoryLabel = useLabel();
 
   const totals =
     balanceResource.state.status === "ready" ? balanceResource.state.data.totals : null;
@@ -51,6 +60,42 @@ export function HomeContainer() {
           label: t("movements.latest"),
           locale,
           rows: latestResource.state.data.items.map((movement) => lookups.present(movement)),
+        }
+      : undefined;
+
+  const pendingList = pendingResource.state.status === "ready" ? pendingResource.state.data : null;
+  const dueItems = pendingList ? pendingExpenses(pendingList.items, pendingList.today) : [];
+  const first = dueItems[0];
+  const firstName =
+    first?.description ??
+    (first && lookups.catalog
+      ? categoryLabel(
+          allCategories(lookups.catalog).find((item) => item.id === first.categoryId) ?? {
+            name: null,
+            nameKey: null,
+          },
+        )
+      : "");
+  const pending =
+    pendingList && first
+      ? {
+          to: "/to-pay",
+          title: t("home.pending.title", { count: dueItems.length }),
+          caption: [
+            [
+              firstName,
+              dueKind(first.dueOn, pendingList.today) === "overdue"
+                ? t("home.pending.overdue", { date: shortDate(first.dueOn, locale) })
+                : t("home.pending.today"),
+            ]
+              .filter(Boolean)
+              .join(" "),
+            first.suggestedAmountMinor === null
+              ? null
+              : formatMoney(minorToUnits(first.suggestedAmountMinor), first.currency, locale),
+          ]
+            .filter(Boolean)
+            .join(" · "),
         }
       : undefined;
 
@@ -84,6 +129,7 @@ export function HomeContainer() {
             },
           }
         : {})}
+      {...(pending ? { pending } : {})}
       {...(latest ? { latest } : {})}
     />
   );

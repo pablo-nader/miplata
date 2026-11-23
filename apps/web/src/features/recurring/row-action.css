@@ -1,0 +1,27 @@
+.row-action {
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: var(--font-size-caption);
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.row-action::before {
+  content: "";
+  position: absolute;
+  inset: -12px -8px;
+}
+
+.row-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.row-action--quiet {
+  color: var(--color-muted);
+}

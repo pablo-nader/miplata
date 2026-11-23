@@ -15,6 +15,9 @@ import { PlaceholderContainer } from "../features/placeholder/PlaceholderContain
 import { LandingContainer } from "../features/public/LandingContainer";
 import { LegalContainer } from "../features/public/LegalContainer";
 import { PublicLayoutContainer } from "../features/public/PublicLayoutContainer";
+import { RecurringFormContainer } from "../features/recurring/RecurringFormContainer";
+import { RecurringListContainer } from "../features/recurring/RecurringListContainer";
+import { ToPayContainer } from "../features/recurring/ToPayContainer";
 import { ReportsContainer } from "../features/reports/ReportsContainer";
 import { FocusedLayout } from "../features/shell/FocusedLayout";
 import { ShellContainer } from "../features/shell/ShellContainer";
@@ -64,7 +67,10 @@ export function AppRoutes() {
             element={<ChargeFormContainer />}
           />
           <Route path="accounts/:accountId/statement/reconcile" element={<ReconcileContainer />} />
-          <Route path="to-pay" element={<PlaceholderContainer focused screen="toPay" />} />
+          <Route path="to-pay" element={<ToPayContainer />} />
+          <Route path="recurring" element={<RecurringListContainer />} />
+          <Route path="recurring/new" element={<RecurringFormContainer />} />
+          <Route path="recurring/:recurringId/edit" element={<RecurringFormContainer />} />
           <Route path="menu" element={<MenuContainer />} />
         </Route>
       </Route>
