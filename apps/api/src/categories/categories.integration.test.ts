@@ -267,9 +267,8 @@ describe("PATCH /api/categories/:id", () => {
 
     // Assert
     expect(response.status).toBe(200);
-    expect(
-      (await groupNamed(person, "defaults.group.health")).categories.map((c) => c.id),
-    ).toContain(target.id);
+    const moved = (await groupNamed(person, "defaults.group.health")).categories;
+    expect(moved.at(-1)?.id).toBe(target.id);
   });
 
   it("refuses a duplicate name but accepts keeping the own name", async () => {
