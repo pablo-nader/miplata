@@ -63,13 +63,20 @@ export function AccountsContainer() {
           typeRank(a.type) - typeRank(b.type) || displayName(a, t).localeCompare(displayName(b, t)),
       )
       .map((account) => rowFor(account, t, i18n.language)),
-  })).filter((section) => section.rows.length > 0);
+    ...(section === "people"
+      ? {
+          add: { to: "/accounts/new?type=person", label: t("accounts.addPerson") },
+          emptyNote: t("accounts.peopleEmpty"),
+        }
+      : {}),
+  })).filter((section) => section.key === "people" || section.rows.length > 0);
 
   return (
     <AccountsScreen
       title={t("screens.accounts.title")}
       add={{ to: "/accounts/new", label: t("accounts.add") }}
       status={state.status}
+      isEmpty={accounts.length === 0}
       sections={sections}
       messages={{
         loading: t("accounts.loading"),

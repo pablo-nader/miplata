@@ -9,6 +9,7 @@ import { EmptyState } from "../../ui/molecules/EmptyState";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { pickerSections, useLabel } from "../categories/catalog";
 import { useCategories } from "../categories/useCategories";
+import { usePickerCopy } from "../categories/usePickerCopy";
 import { BudgetFormScreen } from "./BudgetFormScreen";
 import {
   type BudgetFormErrors,
@@ -32,6 +33,7 @@ function saveFailureKey(error: string): string {
 function BudgetForm({ catalog, budget }: FormProps) {
   const { t } = useTranslation();
   const label = useLabel();
+  const pickerCopy = usePickerCopy();
   const navigate = useNavigate();
   const [form, setForm] = useState<BudgetFormState>(() =>
     budget ? formFromBudget(budget) : emptyBudgetForm(),
@@ -103,13 +105,10 @@ function BudgetForm({ catalog, budget }: FormProps) {
         onKindChange: (value) => patch({ kind: value as TargetKind }),
         error: errors?.target ? t(`budgets.form.${errors.target}`) : undefined,
         category: {
-          label: t("categories.picker.label"),
+          ...pickerCopy,
           sections: expenseSections,
           selectedId: form.categoryId,
           onSelect: (id) => patch({ categoryId: id }),
-          allLabel: t("categories.picker.all"),
-          fewerLabel: t("categories.picker.fewer"),
-          emptyLabel: t("categories.picker.none"),
         },
         groups: {
           label: t("budgets.form.group"),

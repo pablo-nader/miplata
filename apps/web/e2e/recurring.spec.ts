@@ -5,8 +5,8 @@ import { signInAsNewUser } from "./real-session";
 test.use({ locale: "es-AR", viewport: { width: 390, height: 844 } });
 
 async function pickCategory(page: Page, name: string) {
-  await page.getByRole("button", { name: "Todas" }).click();
-  await page.getByRole("button", { name }).click();
+  await page.getByRole("button", { name: "Buscar" }).click();
+  await page.getByRole("option", { name }).click();
 }
 
 test.beforeEach(async ({ context }) => {

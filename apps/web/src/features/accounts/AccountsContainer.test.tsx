@@ -171,3 +171,45 @@ describe("AccountsContainer", () => {
     expect(screen.getByText("Sin saldo")).toBeDefined();
   });
 });
+
+describe("people section", () => {
+  it("always offers its own add action, even with people listed", async () => {
+    // Arrange
+    stubApi({ "GET /api/accounts": { body: accounts }, "GET /api/people": { body: people } });
+
+    // Act
+    renderApp(<AccountsContainer />, "es");
+    const group = await screen.findByRole("region", { name: "Personas" });
+
+    // Assert
+    expect(within(group).getByRole("link", { name: "Agregar persona" }).getAttribute("href")).toBe(
+      "/accounts/new?type=person",
+    );
+  });
+
+  it("explains what people are for when there are none", async () => {
+    // Arrange
+    stubApi({ "GET /api/accounts": { body: accounts }, "GET /api/people": { body: [] } });
+
+    // Act
+    renderApp(<AccountsContainer />, "es");
+    const group = await screen.findByRole("region", { name: "Personas" });
+
+    // Assert
+    expect(within(group).getByText(/prestás plata o a quienes les pagás compras/)).toBeDefined();
+    expect(within(group).getByRole("link", { name: "Agregar persona" })).toBeDefined();
+  });
+
+  it("shows the explanation in English too", async () => {
+    // Arrange
+    stubApi({ "GET /api/accounts": { body: accounts }, "GET /api/people": { body: [] } });
+
+    // Act
+    renderApp(<AccountsContainer />, "en");
+    const group = await screen.findByRole("region", { name: "People" });
+
+    // Assert
+    expect(within(group).getByText(/lend money to, borrow from/)).toBeDefined();
+    expect(within(group).getByRole("link", { name: "Add person" })).toBeDefined();
+  });
+});

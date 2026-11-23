@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { CategoryPicker, type PickerItem, type PickerSection } from "./CategoryPicker";
@@ -31,17 +31,27 @@ function renderPicker(overrides: Partial<Parameters<typeof CategoryPicker>[0]> =
       sections={sections}
       selectedId={null}
       onSelect={onSelect}
-      allLabel="All"
-      fewerLabel="Fewer"
+      searchLabel="Search"
       emptyLabel="Nothing"
+      selector={selectorCopy}
       {...overrides}
     />,
   );
   return onSelect;
 }
 
+const selectorCopy = {
+  title: "Choose",
+  searchLabel: "Search field",
+  placeholder: "Type",
+  closeLabel: "Close",
+  noResults: "No matches",
+  selectedLabel: "Selected",
+  addLabel: "Add category",
+};
+
 describe("CategoryPicker", () => {
-  it("shows the first four categories and an All button", () => {
+  it("shows the first four categories and a search button", () => {
     // Arrange
     renderPicker();
 
@@ -49,7 +59,7 @@ describe("CategoryPicker", () => {
     const names = captions();
 
     // Assert
-    expect(names).toEqual(["Rent", "Repairs", "Groceries", "Dining out", "All"]);
+    expect(names).toEqual(["Rent", "Repairs", "Groceries", "Dining out", "Search"]);
   });
 
   it("reports the picked category and marks it as pressed", async () => {
@@ -75,10 +85,10 @@ describe("CategoryPicker", () => {
     const names = captions();
 
     // Assert
-    expect(names).toEqual(["Rent", "Repairs", "Groceries", "Gym", "All"]);
+    expect(names).toEqual(["Rent", "Repairs", "Groceries", "Gym", "Search"]);
   });
 
-  it("prefers the featured ids when given", () => {
+  it("puts the preferred ids first and fills up to four with the default order", () => {
     // Arrange
     renderPicker({ featuredIds: ["pets", "rent", "missing"] });
 
@@ -86,44 +96,135 @@ describe("CategoryPicker", () => {
     const names = captions();
 
     // Assert
-    expect(names).toEqual(["Pets", "Rent", "All"]);
+    expect(names).toEqual(["Pets", "Rent", "Repairs", "Groceries", "Search"]);
   });
 
-  it("expands to every category grouped by title and collapses again", async () => {
+  it("opens the selector, lists every category by group and picks one", async () => {
     // Arrange
     const onSelect = renderPicker();
 
     // Act
-    await userEvent.click(screen.getByRole("button", { name: "All" }));
-    const expanded = screen.getByRole("button", { name: "Fewer" }).getAttribute("aria-expanded");
-    const hasTitle = screen.queryByText("Misc") !== null;
-    const hasEmptySection = screen.queryByText("Empty") !== null;
-    await userEvent.click(screen.getByRole("button", { name: "Gym" }));
-    await userEvent.click(screen.getByRole("button", { name: "Fewer" }));
+    await userEvent.click(screen.getByRole("button", { name: "Search" }));
+    const dialog = screen.getByRole("dialog", { name: "Choose" });
+    const hasGroup = within(dialog).queryByText("Misc") !== null;
+    const hasEmptyGroup = within(dialog).queryByText("Empty") !== null;
+    await userEvent.click(within(dialog).getByRole("option", { name: "Gym" }));
 
     // Assert
-    expect(expanded).toBe("true");
-    expect(hasTitle).toBe(true);
-    expect(hasEmptySection).toBe(false);
+    expect(hasGroup).toBe(true);
+    expect(hasEmptyGroup).toBe(false);
     expect(onSelect).toHaveBeenCalledWith("gym");
-    expect(screen.getByRole("button", { name: "All" }).getAttribute("aria-expanded")).toBe("false");
+    expect(screen.queryByRole("dialog")).toBeNull();
   });
 
-  it("keeps keyboard focus on the toggle when expanding and collapsing", async () => {
+  it("focuses the search field on open and returns focus to the button on close", async () => {
     // Arrange
     renderPicker();
+    const opener = screen.getByRole("button", { name: "Search" });
 
     // Act
-    await userEvent.click(screen.getByRole("button", { name: "All" }));
-    await waitFor(() =>
-      expect(document.activeElement).toBe(screen.getByRole("button", { name: "Fewer" })),
-    );
-    await userEvent.click(screen.getByRole("button", { name: "Fewer" }));
+    await userEvent.click(opener);
+    const focusedOnOpen = document.activeElement === screen.getByRole("searchbox");
+    await userEvent.click(screen.getByRole("button", { name: "Close" }));
 
     // Assert
-    await waitFor(() =>
-      expect(document.activeElement).toBe(screen.getByRole("button", { name: "All" })),
+    expect(focusedOnOpen).toBe(true);
+    await waitFor(() => expect(document.activeElement).toBe(opener));
+  });
+
+  it("filters by category and by group name and marks the selected one", async () => {
+    // Arrange
+    renderPicker({ selectedId: "shop" });
+    await userEvent.click(screen.getByRole("button", { name: "Search" }));
+
+    // Act
+    await userEvent.type(screen.getByRole("searchbox"), "FOOD");
+    const byGroup = screen.getAllByRole("option").map((option) => option.textContent);
+    const selected = screen
+      .getAllByRole("option")
+      .filter((option) => option.getAttribute("aria-selected") === "true")
+      .map((option) => option.textContent);
+
+    // Assert
+    expect(byGroup).toEqual(["GGroceriesSelected", "DDining out"]);
+    expect(selected).toEqual(["GGroceriesSelected"]);
+  });
+
+  it("tells when nothing matches", async () => {
+    // Arrange
+    renderPicker();
+    await userEvent.click(screen.getByRole("button", { name: "Search" }));
+
+    // Act
+    await userEvent.type(screen.getByRole("searchbox"), "qqq");
+
+    // Assert
+    expect(screen.getByText("No matches")).toBeDefined();
+    expect(screen.queryAllByRole("option")).toHaveLength(0);
+  });
+
+  it("offers the add shortcut only when it can be used", async () => {
+    // Arrange
+    const onAdd = vi.fn();
+    const { unmount } = render(
+      <CategoryPicker
+        label="Category"
+        sections={sections}
+        selectedId={null}
+        onSelect={vi.fn()}
+        searchLabel="Search"
+        emptyLabel="Nothing"
+        selector={selectorCopy}
+        onAdd={onAdd}
+      />,
     );
+    await userEvent.click(screen.getByRole("button", { name: "Search" }));
+
+    // Act
+    await userEvent.click(screen.getByRole("button", { name: "Add category" }));
+    unmount();
+    renderPicker();
+    await userEvent.click(screen.getByRole("button", { name: "Search" }));
+
+    // Assert
+    expect(onAdd).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("button", { name: "Add category" })).toBeNull();
+  });
+
+  it("walks the options with the arrow keys, wraps Tab inside and closes with Escape", async () => {
+    // Arrange
+    renderPicker({ onAdd: vi.fn() });
+    await userEvent.click(screen.getByRole("button", { name: "Search" }));
+
+    // Act
+    await userEvent.keyboard("{ArrowDown}");
+    const first = document.activeElement?.textContent;
+    await userEvent.keyboard("{ArrowDown}{ArrowUp}");
+    const backToFirst = document.activeElement?.textContent;
+    await userEvent.keyboard("{ArrowDown>8/}");
+    const last = document.activeElement?.textContent;
+    await userEvent.keyboard("{Tab}");
+    const wrapped = document.activeElement?.getAttribute("aria-label");
+    await userEvent.keyboard("{Escape}");
+
+    // Assert
+    expect(first).toBe("Rent");
+    expect(backToFirst).toBe("Rent");
+    expect(last).toBe("Add category");
+    expect(wrapped).toBe("Close");
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("selects the first result when pressing Enter in the search field", async () => {
+    // Arrange
+    const onSelect = renderPicker();
+    await userEvent.click(screen.getByRole("button", { name: "Search" }));
+
+    // Act
+    await userEvent.type(screen.getByRole("searchbox"), "dining{Enter}");
+
+    // Assert
+    expect(onSelect).toHaveBeenCalledWith("out");
   });
 
   it("shows the first letter when a category has no icon", () => {

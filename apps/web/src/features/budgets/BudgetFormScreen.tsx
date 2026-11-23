@@ -2,7 +2,11 @@ import type { FormEvent } from "react";
 import { Button } from "../../ui/atoms/Button";
 import { FilterChip } from "../../ui/atoms/Chip";
 import { SectionLabel } from "../../ui/atoms/SectionLabel";
-import { CategoryPicker, type PickerSection } from "../../ui/molecules/CategoryPicker";
+import {
+  CategoryPicker,
+  type CategorySelectorCopy,
+  type PickerSection,
+} from "../../ui/molecules/CategoryPicker";
 import { ConfirmPanel } from "../../ui/molecules/ConfirmPanel";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
@@ -36,9 +40,11 @@ export type BudgetFormScreenProps = {
       sections: readonly PickerSection[];
       selectedId: string | null;
       onSelect: (id: string) => void;
-      allLabel: string;
-      fewerLabel: string;
+      searchLabel: string;
       emptyLabel: string;
+      selector: CategorySelectorCopy;
+      locale: string;
+      onAdd: () => void;
     };
     groups: { label: string; options: ChoiceOption[] };
   };
@@ -110,9 +116,11 @@ export function BudgetFormScreen({
               sections={target.category.sections}
               selectedId={target.category.selectedId}
               onSelect={target.category.onSelect}
-              allLabel={target.category.allLabel}
-              fewerLabel={target.category.fewerLabel}
+              searchLabel={target.category.searchLabel}
               emptyLabel={target.category.emptyLabel}
+              selector={target.category.selector}
+              locale={target.category.locale}
+              onAdd={target.category.onAdd}
             />
           ) : (
             <Choices label={target.groups.label} options={target.groups.options} />

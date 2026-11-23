@@ -8,8 +8,9 @@ import { formatMoney, localeForLanguage } from "../../ui/format/money";
 import { EmptyState } from "../../ui/molecules/EmptyState";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { displayName } from "../accounts/account-display";
+import { createAccount } from "../accounts/accounts-api";
 import { CategoryPickerContainer } from "../categories/CategoryPickerContainer";
-import { MovementFormScreen } from "./MovementFormScreen";
+import { MovementFormScreen, type NewPersonDraft } from "./MovementFormScreen";
 import {
   applyChange,
   buildRequest,
@@ -23,6 +24,7 @@ import {
   INSTALLMENT_CHOICES,
   installmentAmountMinor,
   isCardExpense,
+  NEW_PERSON_OPTION,
 } from "./movement-form";
 import { deleteMovement, fetchMovement, saveMovement } from "./movements-api";
 import { localDate, statementPathOf } from "./present-movement";
@@ -61,6 +63,8 @@ export function MovementFormContainer() {
   const [failure, setFailure] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const [createdPeople, setCreatedPeople] = useState<Account[]>([]);
+  const [newPerson, setNewPerson] = useState<NewPersonDraft | null>(null);
   const initialised = useRef(false);
 
   useEffect(() => {
@@ -134,7 +138,10 @@ export function MovementFormContainer() {
     );
   }
 
-  const accounts: Account[] = lookups.accounts;
+  const accounts: Account[] = [
+    ...lookups.accounts,
+    ...createdPeople.filter((person) => !lookups.accounts.some((known) => known.id === person.id)),
+  ];
   const byId = new Map(accounts.map((account) => [account.id, account]));
   const selected = (id: string | null) => (id ? byId.get(id) : undefined);
   const usable = (account: Account, keep: readonly (string | null)[]) =>
@@ -160,6 +167,7 @@ export function MovementFormContainer() {
     ...accounts
       .filter((account) => account.type === "person" && usable(account, [form.personId]))
       .map(option),
+    { value: NEW_PERSON_OPTION, label: t("movements.form.newPerson.option") },
   ];
 
   const perInstallment = installmentAmountMinor(form);
@@ -197,6 +205,32 @@ export function MovementFormContainer() {
     setForm((current) => (current ? applyChange(current, patch, accounts) : current));
     setErrors({});
     setFailure(null);
+  }
+
+  async function createPerson() {
+    if (!newPerson || newPerson.busy) {
+      return;
+    }
+    const name = newPerson.name.trim();
+    if (name === "") {
+      setNewPerson({ ...newPerson, error: t("movements.form.newPerson.errors.name") });
+      return;
+    }
+    setNewPerson({ ...newPerson, busy: true, error: undefined });
+    const result = await createAccount({
+      kind: "person",
+      body: {
+        name,
+        currencies: ALL_CURRENCIES.map((currency) => ({ currency, openingBalanceMinor: 0 })),
+      },
+    });
+    if (!result.ok) {
+      setNewPerson({ name, busy: false, error: t("movements.form.newPerson.errors.failed") });
+      return;
+    }
+    setCreatedPeople((current) => [...current, result.value]);
+    setNewPerson(null);
+    change({ personId: result.value.id });
   }
 
   async function submit() {
@@ -251,6 +285,20 @@ export function MovementFormContainer() {
       entryAccounts={entryAccounts}
       transferAccounts={transferAccounts}
       personOptions={personOptions}
+      newPerson={{
+        draft: newPerson,
+        copy: {
+          name: t("movements.form.newPerson.name"),
+          create: t("movements.form.newPerson.create"),
+          creating: t("movements.form.newPerson.creating"),
+          cancel: t("movements.form.newPerson.cancel"),
+        },
+        onOpen: () => setNewPerson({ name: "", error: undefined, busy: false }),
+        onNameChange: (name) =>
+          setNewPerson((current) => (current ? { ...current, name, error: undefined } : current)),
+        onCreate: createPerson,
+        onCancel: () => setNewPerson(null),
+      }}
       entryCurrencies={entryAccount ? currenciesOf(entryAccount) : ALL_CURRENCIES}
       fromCurrencies={
         selected(form.fromAccountId) ? currenciesOf(selected(form.fromAccountId)) : ALL_CURRENCIES

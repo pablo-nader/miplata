@@ -1,93 +1,54 @@
-import { ChevronUp, Ellipsis } from "lucide-react";
-import { CategoryBadge, type CategoryColor } from "../atoms/CategoryBadge";
-import { SectionLabel } from "../atoms/SectionLabel";
-import { BadgeChoice } from "./BadgeChoice";
-import "./category-picker.css";
+import { Search } from "lucide-react";
 import { useRef, useState } from "react";
+import { CategoryBadge } from "../atoms/CategoryBadge";
+import { BadgeChoice } from "./BadgeChoice";
+import { CategorySelector } from "./CategorySelector";
+import type { CategorySelectorCopy, PickerItem, PickerSection } from "./category-picker-types";
+import { featuredItems } from "./category-search";
+import "./category-picker.css";
 
-export type PickerItem = {
-  id: string;
-  name: string;
-  icon: string | null;
-  color: CategoryColor;
-};
-
-export type PickerSection = { id: string; title: string | null; items: PickerItem[] };
+export type { CategorySelectorCopy, PickerItem, PickerSection };
 
 type CategoryPickerProps = {
   label: string;
   sections: readonly PickerSection[];
   selectedId: string | null;
   onSelect: (id: string) => void;
-  allLabel: string;
-  fewerLabel: string;
+  searchLabel: string;
   emptyLabel: string;
-  featuredIds?: readonly string[];
+  selector: CategorySelectorCopy;
+  locale?: string | undefined;
+  onAdd?: (() => void) | undefined;
+  featuredIds?: readonly string[] | undefined;
   featuredCount?: number;
 };
 
 const defaultFeaturedCount = 4;
-
-function featuredItems(
-  all: readonly PickerItem[],
-  selectedId: string | null,
-  featuredIds: readonly string[] | undefined,
-  count: number,
-): PickerItem[] {
-  const preferred = featuredIds
-    ? featuredIds.flatMap((id) => all.filter((item) => item.id === id))
-    : all;
-  const chosen = preferred.slice(0, count);
-  const selected = all.find((item) => item.id === selectedId);
-  if (selected && !chosen.some((item) => item.id === selected.id)) {
-    return [...chosen.slice(0, Math.max(count - 1, 0)), selected];
-  }
-  return chosen;
-}
 
 export function CategoryPicker({
   label,
   sections,
   selectedId,
   onSelect,
-  allLabel,
-  fewerLabel,
+  searchLabel,
   emptyLabel,
+  selector,
+  locale,
+  onAdd,
   featuredIds,
   featuredCount = defaultFeaturedCount,
 }: CategoryPickerProps) {
-  const [expanded, setExpanded] = useState(false);
+  const [searching, setSearching] = useState(false);
   const container = useRef<HTMLFieldSetElement>(null);
 
-  function toggle(next: boolean) {
-    setExpanded(next);
+  function close() {
+    setSearching(false);
     setTimeout(() => {
-      container.current?.querySelector<HTMLElement>("[aria-expanded]")?.focus();
+      container.current?.querySelector<HTMLElement>("[aria-haspopup]")?.focus();
     }, 0);
   }
 
   const all = sections.flatMap((section) => section.items);
-
-  function choice(item: PickerItem) {
-    return (
-      <BadgeChoice
-        key={item.id}
-        label={item.name}
-        caption={item.name}
-        selected={item.id === selectedId}
-        onSelect={() => onSelect(item.id)}
-        badge={
-          <CategoryBadge
-            name={item.name}
-            icon={item.icon}
-            color={item.color}
-            size="picker"
-            selected={item.id === selectedId}
-          />
-        }
-      />
-    );
-  }
 
   if (all.length === 0) {
     return <p className="category-picker__empty">{emptyLabel}</p>;
@@ -96,48 +57,53 @@ export function CategoryPicker({
   return (
     <fieldset ref={container} className="category-picker">
       <legend className="visually-hidden">{label}</legend>
-      {expanded ? (
-        <>
-          {sections.map((section) =>
-            section.items.length === 0 ? null : (
-              <div key={section.id} className="category-picker__section">
-                {section.title ? <SectionLabel as="p">{section.title}</SectionLabel> : null}
-                <div className="category-picker__grid">{section.items.map(choice)}</div>
-              </div>
-            ),
-          )}
-          <div className="category-picker__grid">
-            <BadgeChoice
-              label={fewerLabel}
-              caption={fewerLabel}
-              selected={false}
-              expanded
-              onSelect={() => toggle(false)}
-              badge={
-                <span className="category-picker__more">
-                  <ChevronUp aria-hidden="true" strokeWidth={2} />
-                </span>
-              }
-            />
-          </div>
-        </>
-      ) : (
-        <div className="category-picker__grid">
-          {featuredItems(all, selectedId, featuredIds, featuredCount).map(choice)}
+      <div className="category-picker__grid">
+        {featuredItems(all, selectedId, featuredIds, featuredCount).map((item) => (
           <BadgeChoice
-            label={allLabel}
-            caption={allLabel}
-            selected={false}
-            expanded={false}
-            onSelect={() => toggle(true)}
+            key={item.id}
+            label={item.name}
+            caption={item.name}
+            selected={item.id === selectedId}
+            onSelect={() => onSelect(item.id)}
             badge={
-              <span className="category-picker__more">
-                <Ellipsis aria-hidden="true" strokeWidth={2} />
-              </span>
+              <CategoryBadge
+                name={item.name}
+                icon={item.icon}
+                color={item.color}
+                size="picker"
+                selected={item.id === selectedId}
+              />
             }
           />
-        </div>
-      )}
+        ))}
+        <BadgeChoice
+          label={searchLabel}
+          caption={searchLabel}
+          selected={false}
+          expanded={searching}
+          opensDialog
+          onSelect={() => setSearching(true)}
+          badge={
+            <span className="category-picker__more">
+              <Search aria-hidden="true" strokeWidth={2} />
+            </span>
+          }
+        />
+      </div>
+      {searching ? (
+        <CategorySelector
+          copy={selector}
+          sections={sections}
+          selectedId={selectedId}
+          locale={locale}
+          onAdd={onAdd}
+          onClose={close}
+          onSelect={(id) => {
+            onSelect(id);
+            close();
+          }}
+        />
+      ) : null}
     </fieldset>
   );
 }

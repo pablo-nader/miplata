@@ -10,8 +10,8 @@ const both = [
 ];
 
 async function pickCategory(page: Page, name: string) {
-  await page.getByRole("button", { name: "Todas" }).click();
-  await page.getByRole("button", { name }).click();
+  await page.getByRole("button", { name: "Buscar" }).click();
+  await page.getByRole("option", { name }).click();
 }
 
 test.beforeEach(async ({ context }) => {
@@ -155,4 +155,61 @@ test("records a dollar purchase as an exchange transfer that is not an expense",
   await expect(row).toContainText(/\$\s1\.230\.000/);
   await expect(page.locator(".signage-band")).toContainText("Salió en");
   await expect(page.locator(".signage-band")).toContainText(/Salió en \S+\s*\$\s0(?![.\d])/);
+});
+
+test("finds a category by typing without accents and without scrolling", async ({
+  page,
+  context,
+}) => {
+  // Arrange
+  const group = await context.request.post("http://localhost:4173/api/category-groups", {
+    data: { name: "Mascotas" },
+  });
+  await context.request.post("http://localhost:4173/api/categories", {
+    data: {
+      type: "expense",
+      groupId: ((await group.json()) as { id: string }).id,
+      name: "Veterinaría",
+      icon: null,
+      color: 2,
+    },
+  });
+  await page.goto("/movements/new");
+
+  // Act
+  await page.getByRole("button", { name: "Buscar" }).click();
+  await expect(page.getByRole("searchbox")).toBeFocused();
+  await page.keyboard.type("VETERINARIA");
+  await expect(page.getByRole("dialog").getByRole("option")).toHaveCount(1);
+  await page.keyboard.press("Enter");
+
+  // Assert
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Veterinaría" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+});
+
+test("creates a person from the form and records an expense for them", async ({ page }) => {
+  // Arrange
+  await page.goto("/movements/new");
+  await page.getByLabel("Cuenta", { exact: true }).selectOption({ label: "Billetera" });
+  await page.getByLabel("Monto").fill("12.000");
+  await pickCategory(page, "Supermercado");
+  await page.getByLabel("Descripción").fill("Compra para Sofi");
+
+  // Act
+  await page.getByRole("switch", { name: "Es de otra persona" }).click();
+  await page.getByLabel("Persona", { exact: true }).selectOption({ label: "+ Nueva persona" });
+  await page.getByLabel("Nombre de la persona").fill("Sofi");
+  await page.getByRole("button", { name: "Crear persona" }).click();
+  await expect(page.getByLabel("Persona", { exact: true })).toHaveValue(/.+/);
+  await page.getByRole("button", { name: "Guardar gasto" }).click();
+
+  // Assert
+  await expect(page).toHaveURL(/\/home$/);
+  await page.goto("/accounts");
+  const people = page.getByRole("region", { name: "Personas" });
+  await expect(people.getByRole("link", { name: /Sofi/ })).toContainText(/\$\s12\.000/);
 });

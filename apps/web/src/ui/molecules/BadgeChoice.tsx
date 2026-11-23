@@ -8,6 +8,7 @@ type BadgeChoiceProps = {
   badge: ReactNode;
   caption?: string;
   expanded?: boolean;
+  opensDialog?: boolean;
 };
 
 export function BadgeChoice({
@@ -17,6 +18,7 @@ export function BadgeChoice({
   badge,
   caption,
   expanded,
+  opensDialog,
 }: BadgeChoiceProps) {
   return (
     <button
@@ -24,6 +26,7 @@ export function BadgeChoice({
       className="badge-choice"
       aria-pressed={expanded === undefined ? selected : undefined}
       aria-expanded={expanded}
+      aria-haspopup={opensDialog ? "dialog" : undefined}
       aria-label={caption ? undefined : label}
       onClick={onSelect}
     >

@@ -358,8 +358,14 @@
     },
     "picker": {
       "label": "Category",
-      "all": "All",
-      "fewer": "Fewer",
+      "search": "Search",
+      "searchField": "Search category or group",
+      "placeholder": "Search by category or group",
+      "title": "Choose a category",
+      "close": "Close",
+      "noResults": "No categories match.",
+      "selected": "Selected",
+      "add": "Add category",
       "none": "There are no active categories."
     },
     "icons": {
@@ -429,6 +435,8 @@
   },
   "accounts": {
     "add": "Add",
+    "addPerson": "Add person",
+    "peopleEmpty": "People are who you lend money to, borrow from, or pay purchases for: what they owe you and what you owe them. You have not added anyone yet.",
     "addLabel": "Add account",
     "sections": {
       "money": "Money",
@@ -562,6 +570,17 @@
       "description": "Description",
       "date": "Date",
       "forOther": "Belongs to another person",
+      "newPerson": {
+        "option": "+ New person",
+        "name": "Person's name",
+        "create": "Create person",
+        "creating": "Creating…",
+        "cancel": "Cancel",
+        "errors": {
+          "name": "Enter a name.",
+          "failed": "We couldn't create the person. Try again."
+        }
+      },
       "person": "Person",
       "share": "Your share (optional)",
       "from": "Leaves from",
