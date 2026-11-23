@@ -109,7 +109,13 @@ describe("categories", () => {
     // Assert
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ categoryIds: [id] });
-    expect(categories.mostUsedCategoryIds).toHaveBeenCalledWith("u1", "income", "2026-08-25", 4);
+    expect(categories.mostUsedCategoryIds).toHaveBeenCalledWith(
+      "u1",
+      "income",
+      "2026-08-26",
+      "2026-11-23",
+      4,
+    );
   });
 
   it.each(["", "?type=other"])("rejects most used with type %s with 400", async (query) => {

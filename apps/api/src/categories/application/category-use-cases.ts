@@ -32,7 +32,8 @@ export async function mostUsedCategoryIds(
   return repository.mostUsedCategoryIds(
     userId,
     type,
-    addDays(today, -MOST_USED_WINDOW_DAYS),
+    addDays(today, 1 - MOST_USED_WINDOW_DAYS),
+    today,
     MOST_USED_CATEGORY_LIMIT,
   );
 }

@@ -1,6 +1,7 @@
 .category-selector {
   position: fixed;
   inset: 0;
+  height: 100dvh;
   z-index: 50;
   display: grid;
   background: var(--color-surface);
@@ -111,6 +112,7 @@
 .category-selector__group .section-label {
   padding-left: 0;
   padding-right: 0;
+  float: none;
 }
 
 .category-selector__option,

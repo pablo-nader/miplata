@@ -39,6 +39,7 @@ export type CategoryRepository = {
     userId: string,
     type: CategoryType,
     since: string,
+    until: string,
     limit: number,
   ): Promise<string[]>;
 };
