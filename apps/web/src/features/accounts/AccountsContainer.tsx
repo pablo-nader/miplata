@@ -30,6 +30,7 @@ function rowFor(account: Account, t: ReturnType<typeof useTranslation>["t"], lan
   const row: AccountRowData = {
     id: account.id,
     type: account.type,
+    institution: account.institution,
     title: displayName(account, t),
     caption: accountCaption(account, t),
     amount: {

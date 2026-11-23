@@ -39,6 +39,7 @@ export function BalanceContainer() {
       return {
         key: `${line.accountId}:${line.currency}`,
         type: line.type,
+        institution: line.institution,
         title: displayName(line, t),
         caption: captionFor(line, t),
         amount: {

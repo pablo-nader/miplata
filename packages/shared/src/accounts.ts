@@ -97,6 +97,7 @@ export const balanceLineSchema = z.object({
   type: accountTypeSchema,
   name: z.string().nullable(),
   nameKey: z.string().nullable(),
+  institution: institutionSchema.nullable(),
   currency: currencySchema,
   balanceMinor: z.int(),
 });

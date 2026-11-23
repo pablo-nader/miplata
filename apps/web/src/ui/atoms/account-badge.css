@@ -13,3 +13,19 @@
   width: 55%;
   height: 55%;
 }
+
+.account-badge--logo {
+  background: var(--color-field);
+}
+
+.account-badge--logo img {
+  width: 68%;
+  height: 68%;
+  object-fit: contain;
+}
+
+@media (prefers-color-scheme: dark) {
+  .account-badge--logo {
+    background: var(--color-ink);
+  }
+}

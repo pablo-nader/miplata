@@ -1,5 +1,5 @@
 import { Wallet } from "lucide-react";
-import { AccountBadge, type AccountBadgeType } from "../../ui/atoms/AccountBadge";
+import { AccountBadge, type AccountBadgeType, type AccountLogo } from "../../ui/atoms/AccountBadge";
 import { Button } from "../../ui/atoms/Button";
 import { MoneyAmount, type MoneyAmountProps } from "../../ui/atoms/MoneyAmount";
 import { SectionLabel } from "../../ui/atoms/SectionLabel";
@@ -12,6 +12,7 @@ import "../accounts/screen-note.css";
 export type BalanceRowData = {
   key: string;
   type: AccountBadgeType;
+  institution: AccountLogo | null;
   title: string;
   caption: string;
   amount: MoneyAmountProps;
@@ -66,7 +67,7 @@ export function BalanceScreen({
                 {section.rows.map((row) => (
                   <MovementRow
                     key={row.key}
-                    badge={<AccountBadge type={row.type} />}
+                    badge={<AccountBadge type={row.type} logo={row.institution} />}
                     title={row.title}
                     caption={row.caption}
                     amount={<MoneyAmount {...row.amount} />}

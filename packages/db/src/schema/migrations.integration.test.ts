@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { INSTITUTION_CATALOG } from "../seed";
 import { createTestDatabase } from "../test/test-database";
@@ -88,6 +90,26 @@ describe("migrations applied to an empty database", () => {
 
     // Assert
     expect(result.rows.map((row) => `${row.kind}:${row.name}`).sort()).toEqual(expected);
+  });
+
+  it("set the catalog logo paths and keep them when the update runs again", async () => {
+    // Arrange
+    const expected = INSTITUTION_CATALOG.map(
+      (item) => `${item.name}:${item.logoPath ?? ""}`,
+    ).sort();
+    const sql = readFileSync(
+      join(import.meta.dirname, "../../drizzle/0001_institution_logos.sql"),
+      "utf8",
+    );
+
+    // Act
+    await database.pool.query(sql);
+    const result = await database.pool.query(
+      "select name, coalesce(logo_path, '') as logo_path from institution",
+    );
+
+    // Assert
+    expect(result.rows.map((row) => `${row.name}:${row.logo_path}`).sort()).toEqual(expected);
   });
 
   it("make the user locale default to es", async () => {

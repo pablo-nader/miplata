@@ -31,6 +31,7 @@ export function balanceLines(accounts: readonly Account[]): BalanceLine[] {
         type: account.type,
         name: account.name,
         nameKey: account.nameKey,
+        institution: account.institution,
         currency: entry.currency,
         balanceMinor: entry.balanceMinor,
         sortName: displayName(account),
