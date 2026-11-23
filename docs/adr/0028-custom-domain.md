@@ -3,6 +3,7 @@
 - Status: Accepted
 - Date: 2026-11-23
 - Amends: the production origin named in [0027](0027-better-auth-integration.md)
+- Status note: the transition to the old host's redirect was completed by [0038](0038-old-domain-permanent-redirect.md)
 
 ## Context
 The owner bought `enargentina.online` in Vercel (team `ways`, Vercel DNS) to host each of their apps on a subdomain. miPlata was served from the generated domain `miplata-beta.vercel.app`.
