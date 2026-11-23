@@ -448,7 +448,7 @@ describe("editing an existing movement", () => {
       type: "expense",
       description: "Heladera",
       accountId: "visa",
-      amount: "900000,50",
+      amount: "900000.50",
       installments: 2,
       forOther: true,
       personId: "juan",

@@ -199,6 +199,7 @@ export function ToPayContainer() {
             skip: t("toPay.actions.skip"),
             cancel: t("toPay.actions.cancel"),
           }}
+          currency={occurrence.currency}
           values={active.values}
           accounts={usableAccounts(lookups.accounts, occurrence).map((item) => ({
             value: item.id,

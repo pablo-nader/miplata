@@ -2,10 +2,12 @@ import { type Currency, DESCRIPTION_MAX_LENGTH } from "@miplata/shared";
 import { type FormEvent, type ReactNode, useEffect, useId, useRef } from "react";
 import { Button } from "../../ui/atoms/Button";
 import { FilterChip } from "../../ui/atoms/Chip";
+import { MoneyInput } from "../../ui/atoms/MoneyInput";
 import { SectionLabel } from "../../ui/atoms/SectionLabel";
 import { Switch } from "../../ui/atoms/Switch";
 import { ConfirmPanel } from "../../ui/molecules/ConfirmPanel";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { MoneyField } from "../../ui/molecules/MoneyField";
 import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { SegmentedControl } from "../../ui/molecules/SegmentedControl";
@@ -116,13 +118,14 @@ function CurrencyChips({ label, currencies, value, onChange }: CurrencyChipsProp
 
 type AmountInputProps = {
   label: string;
+  currency: Currency;
   value: string;
   error: string | undefined;
   onChange: (value: string) => void;
   large?: boolean;
 };
 
-function AmountInput({ label, value, error, onChange, large = false }: AmountInputProps) {
+function AmountInput({ label, currency, value, error, onChange, large = false }: AmountInputProps) {
   const errorId = useId();
   return (
     <div
@@ -130,15 +133,14 @@ function AmountInput({ label, value, error, onChange, large = false }: AmountInp
         large ? "movement-form__amount movement-form__amount--large" : "movement-form__amount"
       }
     >
-      <input
+      <MoneyInput
         className="movement-form__amount-input"
-        inputMode="decimal"
         aria-label={label}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : undefined}
-        placeholder="0"
+        currency={currency}
         value={value}
-        onChange={(event) => onChange(event.target.value)}
+        onValueChange={onChange}
       />
       {error ? (
         <p id={errorId} className="movement-form__error" role="alert">
@@ -239,6 +241,7 @@ export function MovementFormScreen(props: MovementFormScreenProps) {
               />
               <AmountInput
                 label={copy.amountFrom}
+                currency={values.fromCurrency}
                 value={values.fromAmount}
                 error={errors.fromAmount}
                 onChange={(value) => onChange({ fromAmount: value })}
@@ -261,6 +264,7 @@ export function MovementFormScreen(props: MovementFormScreenProps) {
               />
               <AmountInput
                 label={copy.amountTo}
+                currency={values.toCurrency}
                 value={values.toAmount}
                 error={errors.toAmount}
                 onChange={(value) => onChange({ toAmount: value })}
@@ -284,6 +288,7 @@ export function MovementFormScreen(props: MovementFormScreenProps) {
               <AmountInput
                 large
                 label={copy.amount}
+                currency={values.currency}
                 value={values.amount}
                 error={errors.amount}
                 onChange={(value) => onChange({ amount: value })}
@@ -361,12 +366,12 @@ export function MovementFormScreen(props: MovementFormScreenProps) {
                 }
               />
               <NewPersonFields panel={props.newPerson} />
-              <Field
-                inputMode="decimal"
+              <MoneyField
                 label={copy.share}
+                currency={values.currency}
                 value={values.ownShare}
                 error={errors.share}
-                onChange={(event) => onChange({ ownShare: event.target.value })}
+                onValueChange={(ownShare) => onChange({ ownShare })}
               />
             </>
           ) : null}

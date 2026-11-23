@@ -123,7 +123,7 @@ describe("ToPayContainer", () => {
     await userEvent.click(within(panel).getByRole("button", { name: "Confirmar" }));
 
     // Assert
-    expect(prefilled).toBe("41500");
+    expect(prefilled).toBe("41.500");
     await waitFor(() => expect(screen.queryByText("Luz")).toBeNull());
     expect(calls.find((call) => call.key.endsWith("occ-power/confirm"))?.body).toEqual({
       amountMinor: 4_320_050,

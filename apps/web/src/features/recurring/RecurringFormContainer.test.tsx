@@ -226,7 +226,7 @@ describe("editing a recurring item", () => {
     await userEvent.click(screen.getByRole("button", { name: "Guardar cambios" }));
 
     // Assert
-    expect(loaded).toBe("575000");
+    expect(loaded).toBe("575.000");
     await screen.findByText("recurring list");
     expect(bodyOf(calls, "PUT /api/recurring/rec-rent")).toMatchObject({
       amountMinor: 60_000_000,

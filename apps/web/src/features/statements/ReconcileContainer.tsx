@@ -113,6 +113,7 @@ export function ReconcileContainer() {
         },
       ),
       value: form[key],
+      currency,
       error: errors[key] ? t("statements.reconcile.errors.amount") : undefined,
       onChange: (value: string) => change(key, value),
     };

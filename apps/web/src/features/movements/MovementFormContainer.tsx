@@ -5,7 +5,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useOnline } from "../../shared/use-online";
 import { useResource } from "../../shared/use-resource";
 import { Button } from "../../ui/atoms/Button";
-import { formatMoney, localeForLanguage } from "../../ui/format/money";
+import { formatMoney, formatRate, localeForLanguage } from "../../ui/format/money";
 import { EmptyState } from "../../ui/molecules/EmptyState";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { displayName } from "../accounts/account-display";
@@ -199,7 +199,7 @@ export function MovementFormContainer() {
     rate === null
       ? null
       : t("movements.form.rate", {
-          rate: new Intl.NumberFormat(locale, { maximumFractionDigits: 4 }).format(rate),
+          rate: formatRate(rate, locale),
         });
 
   const errorText: Record<string, string> = Object.fromEntries(

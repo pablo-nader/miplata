@@ -1,9 +1,11 @@
+import type { Currency } from "@miplata/shared";
 import { type FormEvent, useEffect, useId, useRef } from "react";
 import { Button } from "../../ui/atoms/Button";
 import { FilterChip } from "../../ui/atoms/Chip";
 import { SectionLabel } from "../../ui/atoms/SectionLabel";
 import { Switch } from "../../ui/atoms/Switch";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { MoneyField } from "../../ui/molecules/MoneyField";
 import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
@@ -26,6 +28,7 @@ type CurrencyRow = {
   label: string;
   enabled: boolean;
   onToggle: (enabled: boolean) => void;
+  currency: Currency;
   amount: TextFieldData;
 };
 
@@ -120,13 +123,7 @@ function Choices({ group }: { group: ChoiceGroup }) {
   );
 }
 
-function TextField({
-  data,
-  inputMode,
-}: {
-  data: TextFieldData;
-  inputMode?: "decimal" | "numeric";
-}) {
+function TextField({ data, inputMode }: { data: TextFieldData; inputMode?: "numeric" }) {
   return (
     <Field
       label={data.label}
@@ -164,7 +161,16 @@ export function AccountFormScreen(props: AccountFormScreenProps) {
                   <span>{row.label}</span>
                   <Switch checked={row.enabled} onChange={row.onToggle} label={row.label} />
                 </div>
-                {row.enabled ? <TextField data={row.amount} /> : null}
+                {row.enabled ? (
+                  <MoneyField
+                    label={row.amount.label}
+                    value={row.amount.value}
+                    currency={row.currency}
+                    allowNegative
+                    onValueChange={row.amount.onChange}
+                    {...(row.amount.error ? { error: row.amount.error } : {})}
+                  />
+                ) : null}
               </div>
             ))}
             {currencies.error ? (

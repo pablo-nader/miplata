@@ -1,8 +1,11 @@
+import type { Currency } from "@miplata/shared";
 import { ArrowLeftRight } from "lucide-react";
 import type { FormEvent } from "react";
 import { Button } from "../../ui/atoms/Button";
+import { MoneyInput } from "../../ui/atoms/MoneyInput";
 import { Switch } from "../../ui/atoms/Switch";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { MoneyField } from "../../ui/molecules/MoneyField";
 import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { SegmentedControl } from "../../ui/molecules/SegmentedControl";
@@ -15,6 +18,7 @@ export type PayLeg = {
   caption: string;
   amount: string;
   editLabel: string;
+  currency: Currency;
   value: string;
   editable: boolean;
   error?: string | undefined;
@@ -76,14 +80,13 @@ export function PayStatementScreen(props: PayStatementScreenProps) {
             <div key={leg.key} className="pay-leg">
               <small>{leg.caption}</small>
               {leg.editable ? (
-                <input
+                <MoneyInput
                   className="pay-leg__input"
-                  inputMode="decimal"
                   aria-label={leg.editLabel}
                   aria-invalid={leg.error ? true : undefined}
-                  placeholder="0"
+                  currency={leg.currency}
                   value={leg.value}
-                  onChange={(event) => leg.onChange(event.target.value)}
+                  onValueChange={leg.onChange}
                 />
               ) : (
                 <b>{leg.amount}</b>
@@ -110,12 +113,12 @@ export function PayStatementScreen(props: PayStatementScreenProps) {
         ) : null}
         <FieldGroup label={props.title}>
           {props.exchange?.checked ? (
-            <Field
-              inputMode="decimal"
+            <MoneyField
               label={props.exchange.field.label}
               value={props.exchange.field.value}
+              currency="ARS"
               error={props.exchange.field.error}
-              onChange={(event) => props.exchange?.field.onChange(event.target.value)}
+              onValueChange={props.exchange.field.onChange}
             />
           ) : null}
           <SelectField

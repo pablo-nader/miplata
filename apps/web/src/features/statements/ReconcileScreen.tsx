@@ -1,6 +1,8 @@
+import type { Currency } from "@miplata/shared";
 import type { FormEvent } from "react";
 import { Button } from "../../ui/atoms/Button";
-import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { FieldGroup } from "../../ui/molecules/Field";
+import { MoneyField } from "../../ui/molecules/MoneyField";
 import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
@@ -10,6 +12,7 @@ export type ReconcileField = {
   key: string;
   label: string;
   value: string;
+  currency: Currency;
   error?: string | undefined;
   onChange: (value: string) => void;
 };
@@ -37,13 +40,13 @@ export function ReconcileScreen(props: ReconcileScreenProps) {
         {props.groups.map((group) => (
           <FieldGroup key={group.key} label={group.calculated}>
             {group.fields.map((field) => (
-              <Field
+              <MoneyField
                 key={field.key}
-                inputMode="decimal"
                 label={field.label}
                 value={field.value}
+                currency={field.currency}
                 error={field.error}
-                onChange={(event) => field.onChange(event.target.value)}
+                onValueChange={field.onChange}
               />
             ))}
             <p className="statement-form__hint">{group.calculated}</p>

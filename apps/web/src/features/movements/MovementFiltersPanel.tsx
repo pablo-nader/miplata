@@ -3,6 +3,7 @@ import { categoryLabel } from "@miplata/shared";
 import { useTranslation } from "react-i18next";
 import { Button } from "../../ui/atoms/Button";
 import { Field } from "../../ui/molecules/Field";
+import { MoneyField } from "../../ui/molecules/MoneyField";
 import { SelectField, type SelectGroup, type SelectOption } from "../../ui/molecules/SelectField";
 import { displayName } from "../accounts/account-display";
 import { amountCurrency } from "./movement-filters";
@@ -140,17 +141,17 @@ export function MovementFiltersPanel({
         onChange={(next) => set({ currency: next as UiFilters["currency"] })}
       />
       <div className="movements-filters__row">
-        <Field
-          inputMode="decimal"
+        <MoneyField
           label={t("movements.filters.min", { currency: amountCurrency(value) })}
           value={value.min}
-          onChange={(event) => set({ min: event.target.value })}
+          currency={amountCurrency(value)}
+          onValueChange={(min) => set({ min })}
         />
-        <Field
-          inputMode="decimal"
+        <MoneyField
           label={t("movements.filters.max", { currency: amountCurrency(value) })}
           value={value.max}
-          onChange={(event) => set({ max: event.target.value })}
+          currency={amountCurrency(value)}
+          onValueChange={(max) => set({ max })}
         />
       </div>
       <Button variant="ghost" onClick={onClear}>

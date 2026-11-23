@@ -37,3 +37,8 @@ export function formatMoney(
   const body = `${prefixes[currency]}${SPACE}${formatNumber(Math.abs(amount), locale)}`;
   return sign ? `${sign}${SPACE}${body}` : body;
 }
+
+export function formatRate(rate: number, locale: MoneyLocale): string {
+  const body = new Intl.NumberFormat(locale, { maximumFractionDigits: 4 }).format(rate);
+  return `${prefixes.ARS}${SPACE}${body}`;
+}

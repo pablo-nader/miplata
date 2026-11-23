@@ -568,7 +568,7 @@ describe("ChargeFormContainer", () => {
       editRoute,
     );
     const amount = await screen.findByLabelText("Monto");
-    await waitFor(() => expect((amount as HTMLInputElement).value).toBe("36600"));
+    await waitFor(() => expect((amount as HTMLInputElement).value).toBe("36.600"));
 
     // Act
     await user.clear(amount);
@@ -677,11 +677,11 @@ describe("ReconcileContainer", () => {
     const user = userEvent.setup();
     screenAt("/accounts/card-1/statement/reconcile?period=2026-11", <ReconcileContainer />, route);
     const total = await screen.findByLabelText("Total del banco · ARS");
-    await waitFor(() => expect((total as HTMLInputElement).value).toBe("504900"));
+    await waitFor(() => expect((total as HTMLInputElement).value).toBe("504.900"));
 
     // Act
     await user.clear(total);
-    await user.type(total, "abc");
+    await user.type(total, "99999999999");
     await user.click(screen.getByRole("button", { name: "Guardar" }));
 
     // Assert

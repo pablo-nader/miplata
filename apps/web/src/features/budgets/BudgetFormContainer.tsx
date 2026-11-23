@@ -134,6 +134,7 @@ function BudgetForm({ catalog, budget }: FormProps) {
       limit={{
         label: `${t("budgets.form.limit")} · ${form.currency}`,
         value: form.limit,
+        currency: form.currency,
         onChange: (value) => patch({ limit: value }),
         error: errors?.limit ? t(`budgets.form.${errors.limit}`) : undefined,
       }}

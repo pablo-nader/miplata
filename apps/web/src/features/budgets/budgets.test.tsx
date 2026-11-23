@@ -236,7 +236,7 @@ describe("BudgetFormContainer", () => {
     });
     renderScreens("/budgets/b1/edit");
     const limit = await screen.findByLabelText("Tope mensual · ARS");
-    expect((limit as HTMLInputElement).value).toBe("350000");
+    expect((limit as HTMLInputElement).value).toBe("350.000");
 
     // Act
     await userEvent.clear(limit);
