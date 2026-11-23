@@ -604,6 +604,7 @@
         "transfer_amount_mismatch": "With the same currency, both amounts must be equal.",
         "transfer_same_account": "Choose different accounts."
       }
-    }
+    },
+    "moreFailed": "We could not load more movements. Try again."
   }
 }

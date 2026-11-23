@@ -31,6 +31,7 @@ export type MovementsScreenProps = {
   groups: (DayGroup & { label: string })[];
   status: "loading" | "error" | "ready";
   hasMore: boolean;
+  moreFailed: boolean;
   messages: {
     loading: string;
     loadFailed: string;
@@ -38,6 +39,7 @@ export type MovementsScreenProps = {
     emptyTitle: string;
     emptyDescription: string;
     more: string;
+    moreFailed: string;
   };
   onRetry: () => void;
   onMore: () => void;
@@ -91,6 +93,7 @@ export function MovementsScreen({
   groups,
   status,
   hasMore,
+  moreFailed,
   messages,
   onRetry,
   onMore,
@@ -177,6 +180,11 @@ export function MovementsScreen({
           </MovementList>
         </section>
       ))}
+      {moreFailed ? (
+        <p className="screen-note" role="alert">
+          {messages.moreFailed}
+        </p>
+      ) : null}
       {hasMore ? (
         <div className="movements-screen__more">
           <Button variant="ghost" onClick={onMore}>

@@ -44,11 +44,13 @@ export function MovementsContainer() {
 
   const inverted = isInvertedRange(filters);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [moreFailed, setMoreFailed] = useState(false);
 
   const load = useCallback(() => {
     token.current += 1;
     const current = token.current;
     setLoadingMore(false);
+    setMoreFailed(false);
     if (inverted) {
       setList({ status: "ready", items: [], hasMore: false });
       return;
@@ -80,6 +82,7 @@ export function MovementsContainer() {
       return;
     }
     setLoadingMore(true);
+    setMoreFailed(false);
     const current = token.current;
     fetchMovements(query, PAGE_SIZE, list.items.length).then(
       (page) => {
@@ -95,6 +98,7 @@ export function MovementsContainer() {
       () => {
         if (token.current === current) {
           setLoadingMore(false);
+          setMoreFailed(true);
         }
       },
     );
@@ -154,7 +158,8 @@ export function MovementsContainer() {
       }
       groups={groups}
       status={lookups.status === "error" ? "error" : lookupsReady ? list.status : "loading"}
-      hasMore={list.hasMore && !loadingMore}
+      hasMore={list.hasMore && !loadingMore && list.status !== "loading"}
+      moreFailed={moreFailed}
       messages={{
         loading: t("movements.loading"),
         loadFailed: t("movements.loadFailed"),
@@ -162,8 +167,14 @@ export function MovementsContainer() {
         emptyTitle: inverted ? t("movements.filters.invalidRange") : t("movements.emptyTitle"),
         emptyDescription: t("movements.emptyDescription"),
         more: t("movements.more"),
+        moreFailed: t("movements.moreFailed"),
       }}
-      onRetry={load}
+      onRetry={() => {
+        if (lookups.status === "error") {
+          lookups.reload();
+        }
+        load();
+      }}
       onMore={loadMore}
     />
   );

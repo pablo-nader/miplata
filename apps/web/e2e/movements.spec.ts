@@ -108,6 +108,7 @@ test("searches, edits and deletes a movement", async ({ page }) => {
   await pickCategory(page, "Supermercado");
   await page.getByLabel("Descripción").fill("Plomero");
   await page.getByRole("button", { name: "Guardar gasto" }).click();
+  await expect(page).toHaveURL(/\/home$/);
   await page.goto("/movements");
 
   // Act

@@ -128,6 +128,44 @@ describe("recording an expense", () => {
     });
   });
 
+  it("sends the user's own share of a shared purchase and rejects a share equal to the total", async () => {
+    // Arrange
+    const { calls } = stubApi({ ...lookupHandlers, "POST /api/movements": created });
+    await openNew();
+    await userEvent.type(screen.getByLabelText("Monto"), "80.000");
+    await userEvent.click(screen.getByRole("button", { name: "Supermercado" }));
+    await userEvent.click(screen.getByRole("switch", { name: "Es de otra persona" }));
+    await userEvent.selectOptions(screen.getByLabelText("Persona"), "acc-juan");
+
+    // Act
+    await userEvent.type(screen.getByLabelText("Tu parte (opcional)"), "80.000");
+    await userEvent.click(screen.getByRole("button", { name: "Guardar gasto" }));
+    const rejected = await screen.findByText("Tu parte tiene que ser menor que el total.");
+    await userEvent.clear(screen.getByLabelText("Tu parte (opcional)"));
+    await userEvent.type(screen.getByLabelText("Tu parte (opcional)"), "40.000");
+    await userEvent.click(screen.getByRole("button", { name: "Guardar gasto" }));
+
+    // Assert
+    expect(rejected).toBeDefined();
+    await screen.findByText("home screen");
+    expect(calls.find((call) => call.key === "POST /api/movements")?.body).toMatchObject({
+      person: { personId: "acc-juan", ownAmountMinor: 4_000_000 },
+    });
+  });
+
+  it("asks for the person when the switch is on and none is chosen", async () => {
+    // Arrange
+    stubApi({ ...lookupHandlers });
+    await openNew();
+
+    // Act
+    await userEvent.click(screen.getByRole("switch", { name: "Es de otra persona" }));
+    await userEvent.click(screen.getByRole("button", { name: "Guardar gasto" }));
+
+    // Assert
+    expect(await screen.findByText("Elegí una persona.")).toBeDefined();
+  });
+
   it("explains what is missing instead of sending an incomplete form", async () => {
     // Arrange
     const { calls } = stubApi({ ...lookupHandlers });
