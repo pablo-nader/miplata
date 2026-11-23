@@ -1,23 +1,10 @@
 import { Target } from "lucide-react";
-import { Link } from "react-router-dom";
 import { Button } from "../../ui/atoms/Button";
-import { ProgressBar } from "../../ui/atoms/ProgressBar";
 import { EmptyState } from "../../ui/molecules/EmptyState";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
 import "../accounts/screen-note.css";
-import "./budgets-screen.css";
-
-export type BudgetRowData = {
-  id: string;
-  title: string;
-  amounts: string;
-  note: string;
-  spentMinor: number;
-  limitMinor: number;
-  progressLabel: string;
-  to: string;
-};
+import { BudgetList, type BudgetRowData } from "./BudgetList";
 
 type BudgetsScreenProps = {
   title: string;
@@ -70,26 +57,7 @@ export function BudgetsScreen({
           description={messages.emptyDescription}
         />
       ) : null}
-      {status === "ready" && rows.length > 0 ? (
-        <ul className="budgets-screen__list">
-          {rows.map((row) => (
-            <li key={row.id}>
-              <Link className="budgets-screen__item" to={row.to}>
-                <span className="budgets-screen__head">
-                  <b className="budgets-screen__title">{row.title}</b>
-                  <span className="budgets-screen__amounts">{row.amounts}</span>
-                </span>
-                <ProgressBar
-                  value={row.spentMinor}
-                  max={row.limitMinor}
-                  label={row.progressLabel}
-                />
-                <span className="budgets-screen__note">{row.note}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : null}
+      {status === "ready" && rows.length > 0 ? <BudgetList rows={rows} /> : null}
     </>
   );
 }

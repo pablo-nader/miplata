@@ -1,10 +1,12 @@
-import type { Currency, MonthSummary } from "@miplata/shared";
+import type { CategoriesResponse, Currency, MonthSummary } from "@miplata/shared";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useResource } from "../../shared/use-resource";
 import { formatMoney, localeForLanguage } from "../../ui/format/money";
 import { minorToUnits } from "../accounts/account-display";
 import { fetchBalance } from "../accounts/accounts-api";
+import { toBudgetRow } from "../budgets/budget-rows";
+import { fetchBudgets } from "../budgets/budgets-api";
 import { allCategories, useLabel } from "../categories/catalog";
 import { fetchMonthSummary, fetchMovements } from "../movements/movements-api";
 import { localDate, monthOfDate } from "../movements/present-movement";
@@ -34,6 +36,8 @@ export function HomeContainer() {
   const locale = localeForLanguage(i18n.language);
   const month = monthOfDate(localDate());
   const summaryLoader = useCallback(() => fetchMonthSummary(month), [month]);
+  const nearLimitLoader = useCallback(() => fetchBudgets(month, true), [month]);
+  const nearLimitResource = useResource(nearLimitLoader);
   const balanceResource = useResource(fetchBalance);
   const summaryResource = useResource(summaryLoader);
   const latestResource = useResource(fetchLatest);
@@ -53,6 +57,22 @@ export function HomeContainer() {
   const dollarsIn = minorToUnits(monthly("USD")?.inMinor ?? 0);
   const dollarsOut = minorToUnits(monthly("USD")?.outMinor ?? 0);
   const amountOf = (amount: number, currency: Currency) => ({ amount, currency, locale });
+
+  const nearLimit =
+    nearLimitResource.state.status === "ready" && lookups.catalog
+      ? {
+          label: t("budgets.nearLimitTitle"),
+          rows: nearLimitResource.state.data.items.map((budget) =>
+            toBudgetRow(
+              budget,
+              lookups.catalog as CategoriesResponse,
+              categoryLabel,
+              t,
+              i18n.language,
+            ),
+          ),
+        }
+      : undefined;
 
   const latest =
     latestResource.state.status === "ready" && lookups.status === "ready"
@@ -130,6 +150,7 @@ export function HomeContainer() {
           }
         : {})}
       {...(pending ? { pending } : {})}
+      {...(nearLimit ? { budgets: nearLimit } : {})}
       {...(latest ? { latest } : {})}
     />
   );
