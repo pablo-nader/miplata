@@ -21,8 +21,9 @@
       "es": "Español",
       "en": "English"
     },
-    "languageNotSaved": "No pudimos guardar el idioma. Probá de nuevo.",
-    "signOut": "Cerrar sesión"
+    "languageNotSaved": "No pudimos guardar el idioma. Inténtalo de nuevo.",
+    "signOut": "Cerrar sesión",
+    "signOutFailed": "No pudimos cerrar la sesión. Inténtalo de nuevo."
   },
   "screens": {
     "home": {

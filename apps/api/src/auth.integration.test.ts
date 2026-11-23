@@ -174,6 +174,53 @@ describe("PATCH /api/me/locale", () => {
   });
 });
 
+describe("auth handler over http", () => {
+  it("starts the Google flow without calling Google", async () => {
+    // Arrange
+    const request = new Request("http://localhost:5173/api/auth/sign-in/social", {
+      method: "POST",
+      headers: { "content-type": "application/json", origin: "http://localhost:5173" },
+      body: JSON.stringify({ provider: "google", callbackURL: "/" }),
+    });
+
+    // Act
+    const response = await harness.app.request(request);
+    const body = (await response.json()) as { url: string; redirect: boolean };
+
+    // Assert
+    expect(response.status).toBe(200);
+    expect(new URL(body.url).host).toBe("accounts.google.com");
+    expect(new URL(body.url).searchParams.get("redirect_uri")).toBe(
+      "http://localhost:5173/api/auth/callback/google",
+    );
+  });
+
+  it("returns the session user, including the locale, from get-session", async () => {
+    // Arrange
+    const userId = await harness.signUpWithGoogle("http-session@example.com");
+    const cookie = await harness.cookieFor(userId);
+
+    // Act
+    const response = await get("/api/auth/get-session", cookie);
+    const body = (await response.json()) as { user: { id: string; locale: string } };
+
+    // Assert
+    expect(body.user.id).toBe(userId);
+    expect(body.user.locale).toBe("es");
+  });
+
+  it("returns no session without a cookie", async () => {
+    // Arrange
+    const noCookie = undefined;
+
+    // Act
+    const response = await get("/api/auth/get-session", noCookie);
+
+    // Assert
+    expect(await response.json()).toBeNull();
+  });
+});
+
 describe("first sign-in", () => {
   it("creates the default groups, categories and Cash account once", async () => {
     // Arrange

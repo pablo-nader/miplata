@@ -22,7 +22,8 @@
       "en": "English"
     },
     "languageNotSaved": "We could not save the language. Try again.",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "signOutFailed": "We could not sign you out. Try again."
   },
   "screens": {
     "home": {

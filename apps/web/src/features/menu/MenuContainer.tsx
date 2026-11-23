@@ -1,5 +1,5 @@
 import { type Locale, localeSchema } from "@miplata/shared";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { syncDocumentLanguage } from "../../app/i18n";
@@ -13,23 +13,32 @@ export function MenuContainer() {
   const { user, refresh } = useSession();
   const navigate = useNavigate();
   const [failed, setFailed] = useState(false);
+  const [signOutFailed, setSignOutFailed] = useState(false);
+  const queue = useRef<Promise<void>>(Promise.resolve());
   const current = localeSchema.catch("es").parse(i18n.language);
 
-  async function changeLanguage(value: string) {
+  function changeLanguage(value: string) {
     const locale: Locale = localeSchema.catch(current).parse(value);
     setFailed(false);
-    await i18n.changeLanguage(locale);
-    syncDocumentLanguage(locale);
-    const saved = await saveLocale(locale);
-    if (saved) {
-      await refresh();
-    } else {
-      setFailed(true);
-    }
+    queue.current = queue.current.then(async () => {
+      await i18n.changeLanguage(locale);
+      syncDocumentLanguage(locale);
+      const saved = await saveLocale(locale);
+      if (saved) {
+        await refresh();
+      } else {
+        setFailed(true);
+      }
+    });
   }
 
   async function signOut() {
-    await authClient.signOut();
+    setSignOutFailed(false);
+    const result = await authClient.signOut().catch(() => ({ error: true }));
+    if (result?.error) {
+      setSignOutFailed(true);
+      return;
+    }
     navigate("/", { replace: true });
   }
 
@@ -45,9 +54,11 @@ export function MenuContainer() {
           { value: "en", label: t("menu.languageNames.en") },
         ],
         value: current,
-        onChange: (value) => void changeLanguage(value),
+        onChange: changeLanguage,
       }}
-      errorMessage={failed ? t("menu.languageNotSaved") : null}
+      errorMessage={
+        signOutFailed ? t("menu.signOutFailed") : failed ? t("menu.languageNotSaved") : null
+      }
       signOut={{ label: t("menu.signOut"), onClick: () => void signOut() }}
     />
   );
