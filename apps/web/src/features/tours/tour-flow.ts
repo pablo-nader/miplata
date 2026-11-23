@@ -1,6 +1,8 @@
 import type { TourDefinition, TourStep } from "./tour-types";
 
 export const MIN_STEPS_TO_SHOW = 2;
+export const GIVE_UP_MS = 4000;
+export const MAX_WAIT_MS = 10000;
 
 export function resolveSteps(
   tour: TourDefinition,

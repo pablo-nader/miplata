@@ -90,7 +90,15 @@ function renderAt(
               />
             }
           />
-          <Route path="/elsewhere" element={<p>elsewhere</p>} />
+          <Route
+            path="/elsewhere"
+            element={
+              <>
+                <p>elsewhere</p>
+                <Link to="/home">back</Link>
+              </>
+            }
+          />
         </Routes>
         <TourHost />
       </MemoryRouter>
@@ -316,6 +324,21 @@ describe("closing and replaying", () => {
 
     // Assert
     expect(drivers).toHaveLength(0);
+  });
+
+  it("shows the tour again in the same session after the guides are reset", async () => {
+    // Arrange
+    renderAt("/home");
+    await waitFor(() => expect(drivers).toHaveLength(1), STARTED);
+    act(() => drivers[0]?.config.onDestroyed());
+    await userEvent.click(screen.getByRole("link", { name: "leave" }));
+
+    // Act
+    window.localStorage.clear();
+    await userEvent.click(screen.getByRole("link", { name: "back" }));
+
+    // Assert
+    await waitFor(() => expect(drivers).toHaveLength(2), STARTED);
   });
 
   it("starts again on a later visit when the storage is blocked", async () => {
