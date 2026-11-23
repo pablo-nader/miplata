@@ -39,3 +39,4 @@ What becomes easier, harder, or constrained.
 | [0010](0010-online-only-pwa.md) | Online-only PWA | Accepted |
 | [0011](0011-design-system-source-of-truth.md) | Design system source of truth | Accepted |
 | [0012](0012-category-icons-with-lucide.md) | Category icons with Lucide | Accepted |
+| [0013](0013-internationalization.md) | Internationalization | Accepted |

@@ -76,7 +76,7 @@ Rules:
 
 - All digits use `font-variant-numeric: tabular-nums` so amounts align.
 - Both faces are open source (OFL) and are self-hosted with the app; no runtime request to Google Fonts.
-- Money format follows `es-AR`: `$ 1.250.000`, `− $ 48.300`, `+ $ 1.250.000`. The minus sign is U+2212. Dollars use the `US$` prefix: `US$ 1.000`.
+- Money format follows the user's language (see [ADR 0013](docs/adr/0013-internationalization.md)). In Spanish (`es-AR`, the default): `$ 1.250.000`, `− $ 48.300`, `+ $ 1.250.000`, and dollars as `US$ 1.000`. The minus sign is U+2212.
 
 ## Spacing, radius and size
 

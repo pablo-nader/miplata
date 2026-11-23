@@ -45,3 +45,6 @@ Impact on users, cost, and technical design.
 | [BD-0016](BD-0016-recurring-movements.md) | Recurring movements | Accepted |
 | [BD-0017](BD-0017-loans-and-purchases-for-others.md) | Loans and purchases for others | Accepted |
 | [BD-0018](BD-0018-initial-reports.md) | Initial reports | Accepted |
+| [BD-0019](BD-0019-spanish-and-english.md) | Spanish and English | Accepted |
+| [BD-0020](BD-0020-search-and-filters.md) | Search and filters | Accepted |
+| [BD-0021](BD-0021-budgets.md) | Budgets | Accepted |
