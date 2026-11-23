@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  canonicalToMinor,
   caretAfter,
   formatCanonical,
   interpretTyping,
@@ -54,6 +53,11 @@ describe("interpretTyping", () => {
     expect(interpretTyping("1,234", 5, "es-AR").canonical).toBe("1.23");
   });
 
+  it("keeps the caret after a leading decimal separator", () => {
+    expect(interpretTyping(",", 1, "es-AR")).toEqual({ canonical: "0.", significantBefore: 2 });
+    expect(caretAfter("0,", 2, "es-AR")).toBe(2);
+  });
+
   it("allows clearing and zero", () => {
     expect(interpretTyping("", 0, "es-AR").canonical).toBe("");
     expect(interpretTyping("0", 1, "en-US").canonical).toBe("0");
@@ -61,7 +65,7 @@ describe("interpretTyping", () => {
   });
 
   it("limits the integer digits", () => {
-    expect(interpretTyping("1".repeat(15), 15, "en-US").canonical).toBe("1".repeat(11));
+    expect(interpretTyping("1".repeat(15), 15, "en-US").canonical).toBe("1".repeat(10));
   });
 
   it("accepts a minus sign only when negatives are allowed", () => {
@@ -94,6 +98,9 @@ describe("parseLocalized", () => {
     ["US$ 1,000", "1000"],
     ["$ 2.500,00", "2500.00"],
     ["abc", ""],
+    ["0.500", "0.50"],
+    ["0,125", "0.12"],
+    ["12345678901", ""],
   ] as const)("reads %s as %s", (text, expected) => {
     expect(parseLocalized(text)).toBe(expected);
   });
@@ -113,12 +120,5 @@ describe("minor units", () => {
     [-1_250, "-12.50"],
   ])("writes %i minor units as %s", (minor, canonical) => {
     expect(minorToCanonical(minor)).toBe(canonical);
-    expect(canonicalToMinor(canonical)).toBe(minor);
-  });
-
-  it("rejects text that is not a plain amount", () => {
-    expect(canonicalToMinor("")).toBeNull();
-    expect(canonicalToMinor("-")).toBeNull();
-    expect(canonicalToMinor("1,5")).toBeNull();
   });
 });

@@ -1,6 +1,6 @@
 import type { Currency, MoneyLocale } from "./money";
 
-export const MAX_INTEGER_DIGITS = 11;
+export const MAX_INTEGER_DIGITS = 10;
 export const MAX_FRACTION_DIGITS = 2;
 
 const SYMBOLS: Record<Currency, string> = { ARS: "$", USD: "US$" };
@@ -36,6 +36,10 @@ function isDigit(char: string): boolean {
 function normalizeInteger(digits: string): string {
   const trimmed = digits.replace(/^0+(?=\d)/, "");
   return trimmed.slice(0, MAX_INTEGER_DIGITS);
+}
+
+function tooLong(integer: string): boolean {
+  return integer.replace(/^0+/, "").length > MAX_INTEGER_DIGITS;
 }
 
 export function toCanonical(parts: AmountParts): string {
@@ -109,9 +113,10 @@ export function interpretTyping(
       significantBefore += 1;
     }
   }
+  const leadingZeroAdded = hasDecimal && integer === "" && significantBefore > 0;
   return {
     canonical: toCanonical({ integer, fraction, hasDecimal, negative }),
-    significantBefore,
+    significantBefore: significantBefore + (leadingZeroAdded ? 1 : 0),
   };
 }
 
@@ -127,9 +132,14 @@ export function parseLocalized(text: string, allowNegative = false): string {
     const only = lastDot !== -1 ? "." : ",";
     const occurrences = body.split(only).length - 1;
     const tail = body.slice(body.lastIndexOf(only) + 1);
-    decimalChar = occurrences > 1 || tail.length === 3 ? null : only;
+    const head = body.slice(0, body.lastIndexOf(only));
+    const grouped = tail.length === 3 && /^[1-9]\d{0,2}$/.test(head);
+    decimalChar = occurrences > 1 || grouped ? null : only;
   }
   if (decimalChar === null) {
+    if (tooLong(body.replace(/[.,]/g, ""))) {
+      return "";
+    }
     return toCanonical({
       integer: body.replace(/[.,]/g, ""),
       fraction: "",
@@ -138,6 +148,9 @@ export function parseLocalized(text: string, allowNegative = false): string {
     });
   }
   const index = body.lastIndexOf(decimalChar);
+  if (tooLong(body.slice(0, index).replace(/[.,]/g, ""))) {
+    return "";
+  }
   return toCanonical({
     integer: body.slice(0, index).replace(/[.,]/g, ""),
     fraction: body.slice(index + 1).replace(/[.,]/g, ""),
@@ -162,16 +175,6 @@ export function caretAfter(formatted: string, significant: number, locale: Money
     }
   }
   return formatted.length;
-}
-
-export function canonicalToMinor(canonical: string): number | null {
-  if (!/^-?\d+(\.\d{0,2})?$/.test(canonical)) {
-    return null;
-  }
-  const parts = fromCanonical(canonical);
-  const magnitude = Number(parts.integer) * 100 + Number(parts.fraction.padEnd(2, "0") || "0");
-  const minor = parts.negative ? -magnitude : magnitude;
-  return Number.isSafeInteger(minor) ? minor + 0 : null;
 }
 
 export function minorToCanonical(minor: number): string {

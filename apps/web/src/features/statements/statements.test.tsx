@@ -671,22 +671,19 @@ describe("ReconcileContainer", () => {
     );
   });
 
-  it("starts from the figures already saved and flags unreadable amounts", async () => {
+  it("starts from the figures already saved and ignores anything that is not a digit", async () => {
     // Arrange
-    const { calls } = stubApi(lookups);
+    stubApi(lookups);
     const user = userEvent.setup();
     screenAt("/accounts/card-1/statement/reconcile?period=2026-11", <ReconcileContainer />, route);
-    const total = await screen.findByLabelText("Total del banco · ARS");
-    await waitFor(() => expect((total as HTMLInputElement).value).toBe("504.900"));
+    const total = (await screen.findByLabelText("Total del banco · ARS")) as HTMLInputElement;
+    await waitFor(() => expect(total.value).toBe("504.900"));
 
     // Act
-    await user.clear(total);
-    await user.type(total, "99999999999");
-    await user.click(screen.getByRole("button", { name: "Guardar" }));
+    await user.type(total, "abc");
 
     // Assert
-    expect(await screen.findByText("Ingresá un monto válido.")).toBeDefined();
-    expect(calls.some((call) => call.key.startsWith("PUT"))).toBe(false);
+    expect(total.value).toBe("504.900");
   });
 
   it("shows the app's calculation and explains a failed save", async () => {
