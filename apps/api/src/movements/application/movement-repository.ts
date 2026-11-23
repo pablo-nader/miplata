@@ -23,6 +23,11 @@ export type MovementRepository = {
     plan: MovementPlan,
     alsoRemove?: string[],
   ): Promise<Movement | null>;
+  createForOccurrence(
+    userId: string,
+    occurrenceId: string,
+    plan: MovementPlan,
+  ): Promise<Movement | "not_pending">;
   find(userId: string, movementId: string): Promise<Movement | null>;
   list(userId: string, query: MovementQuery): Promise<MovementPage>;
   remove(userId: string, movementId: string): Promise<RemoveOutcome>;

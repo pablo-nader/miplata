@@ -35,7 +35,9 @@ function toMovement(id: string, plan: MovementPlan): Movement {
   };
 }
 
-export function inMemoryMovements() {
+export type OccurrenceClaim = (userId: string, occurrenceId: string) => boolean;
+
+export function inMemoryMovements(claimOccurrence: OccurrenceClaim = () => false) {
   const rows: Stored[] = [];
   const plans: MovementPlan[] = [];
   const bound = new Set<string>();
@@ -58,6 +60,12 @@ export function inMemoryMovements() {
     },
     async isStatementBound(userId, movementId) {
       return bound.has(`${userId}:${movementId}`);
+    },
+    async createForOccurrence(userId, occurrenceId, plan) {
+      if (!claimOccurrence(userId, occurrenceId)) {
+        return "not_pending";
+      }
+      return repository.create(userId, plan);
     },
     async replace(userId, movementId, plan, alsoRemove = []) {
       const row = rows.find((item) => item.userId === userId && item.movement.id === movementId);

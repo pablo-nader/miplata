@@ -6,6 +6,7 @@ import { createApp } from "../app";
 import { drizzleCategoryRepository } from "../categories/infrastructure/drizzle-category-repository";
 import { drizzleUserProfileRepository } from "../me/infrastructure/drizzle-user-profile-repository";
 import { drizzleMovementRepository } from "../movements/infrastructure/drizzle-movement-repository";
+import { drizzleRecurringRepository } from "../recurring/infrastructure/drizzle-recurring-repository";
 import { drizzleReportRepository } from "../reports/infrastructure/drizzle-report-repository";
 import { drizzleStatementRepository } from "../statements/infrastructure/drizzle-statement-repository";
 import { readVersion } from "../version";
@@ -28,6 +29,7 @@ export function composeApp(env: Env = parseEnv(process.env)) {
     reports: drizzleReportRepository(db),
     statements: drizzleStatementRepository(db),
     today: todayInArgentina,
+    recurring: drizzleRecurringRepository(db),
   });
 }
 

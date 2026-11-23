@@ -5,6 +5,7 @@ import { createApp } from "../app";
 import { drizzleCategoryRepository } from "../categories/infrastructure/drizzle-category-repository";
 import { drizzleUserProfileRepository } from "../me/infrastructure/drizzle-user-profile-repository";
 import { drizzleMovementRepository } from "../movements/infrastructure/drizzle-movement-repository";
+import { drizzleRecurringRepository } from "../recurring/infrastructure/drizzle-recurring-repository";
 import { drizzleReportRepository } from "../reports/infrastructure/drizzle-report-repository";
 import { createAuth, type SeedDefaults } from "../shared/auth/create-auth";
 import { sessionResolverFor } from "../shared/auth/session-resolver";
@@ -30,6 +31,7 @@ function signCookie(value: string) {
 export async function createAuthHarness(seedDefaults?: SeedDefaults) {
   const database = await createTestDatabase();
   const db = database.db as Database;
+  const clock = { today: "2026-11-23" };
   const auth = createAuth({ db, env: testEnv, ...(seedDefaults ? { seedDefaults } : {}) });
   const app = createApp({
     readVersion: () => "test",
@@ -41,7 +43,8 @@ export async function createAuthHarness(seedDefaults?: SeedDefaults) {
     movements: drizzleMovementRepository(db),
     reports: drizzleReportRepository(db),
     statements: drizzleStatementRepository(db),
-    today: () => "2026-11-23",
+    recurring: drizzleRecurringRepository(db),
+    today: () => clock.today,
   });
 
   async function signUpWithGoogle(email: string, name = "Test Person") {
@@ -59,5 +62,5 @@ export async function createAuthHarness(seedDefaults?: SeedDefaults) {
     return `${sessionCookieName}=${signCookie(created.token)}`;
   }
 
-  return { ...database, db, auth, app, signUpWithGoogle, cookieFor };
+  return { ...database, db, auth, app, clock, signUpWithGoogle, cookieFor };
 }

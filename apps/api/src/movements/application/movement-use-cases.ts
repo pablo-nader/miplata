@@ -34,7 +34,8 @@ export type MovementError =
   | MovementViolation
   | "not_found"
   | "movement_in_use"
-  | "statement_movement";
+  | "statement_movement"
+  | "occurrence_resolved";
 
 export type MovementResult<T> = { ok: true; value: T } | { ok: false; error: MovementError };
 
@@ -145,6 +146,30 @@ export async function createMovement(
     return planned;
   }
   return { ok: true, value: await deps.movements.create(userId, planned.value) };
+}
+
+export async function checkEntry(
+  deps: MovementDependencies,
+  userId: string,
+  request: EntryRequest,
+  keepInactive: Set<string>,
+): Promise<MovementError | null> {
+  const planned = await planFromEntry(deps, userId, request, keepInactive);
+  return planned.ok ? null : planned.error;
+}
+
+export async function createMovementForOccurrence(
+  deps: MovementDependencies,
+  userId: string,
+  occurrenceId: string,
+  request: EntryRequest,
+): Promise<MovementResult<Movement>> {
+  const planned = await planFromEntry(deps, userId, request, new Set());
+  if (!planned.ok) {
+    return planned;
+  }
+  const created = await deps.movements.createForOccurrence(userId, occurrenceId, planned.value);
+  return created === "not_pending" ? failure("occurrence_resolved") : { ok: true, value: created };
 }
 
 export async function updateMovement(
