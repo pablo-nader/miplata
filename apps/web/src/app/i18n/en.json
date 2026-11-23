@@ -2,6 +2,9 @@
   "app": {
     "name": "miPlata"
   },
+  "pwa": {
+    "description": "Track your expenses, income, accounts and budgets, on your phone or your computer."
+  },
   "nav": {
     "primary": "Main navigation",
     "home": "Home",
@@ -12,9 +15,6 @@
     "backMenu": "Back to menu",
     "newMovement": "New movement",
     "menu": "Menu"
-  },
-  "placeholder": {
-    "comingSoon": "This screen arrives in a later stage."
   },
   "menu": {
     "language": "Language",
@@ -56,10 +56,6 @@
     "statement": {
       "title": "Card statement",
       "description": "The period statement, its charges and reconciliation."
-    },
-    "payStatement": {
-      "title": "Pay statement",
-      "description": "Total, minimum or another amount, from the account you choose."
     },
     "toPay": {
       "title": "To pay"
@@ -176,7 +172,7 @@
         {
           "heading": "Deleting your account and data",
           "body": [
-            "You can ask at any time for your account and all your records to be deleted by writing to the contact below from the email address you sign in with.",
+            "You can ask at any time for your account and all your records to be deleted by writing to the contact below from the email address you sign in with. We do it within 30 days and confirm by email once it is done.",
             "You can also remove miPlata's access from your Google account settings. That stops you from signing in again, but does not by itself delete the stored data."
           ]
         },
@@ -447,7 +443,6 @@
     "add": "Add",
     "addPerson": "Add person",
     "peopleEmpty": "People are who you lend money to, borrow from, or pay purchases for: what they owe you and what you owe them. You have not added anyone yet.",
-    "addLabel": "Add account",
     "sections": {
       "money": "Money",
       "cards": "Cards",

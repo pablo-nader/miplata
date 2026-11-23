@@ -2,6 +2,9 @@
   "app": {
     "name": "miPlata"
   },
+  "pwa": {
+    "description": "Controlá tus gastos, ingresos, cuentas y presupuestos, desde el celular o la compu."
+  },
   "nav": {
     "primary": "Navegación principal",
     "home": "Inicio",
@@ -12,9 +15,6 @@
     "backMenu": "Volver al menú",
     "newMovement": "Nuevo movimiento",
     "menu": "Menú"
-  },
-  "placeholder": {
-    "comingSoon": "Esta pantalla llega en una etapa próxima."
   },
   "menu": {
     "language": "Idioma",
@@ -56,10 +56,6 @@
     "statement": {
       "title": "Resumen de tarjeta",
       "description": "El resumen del período, sus cargos y el cuadre."
-    },
-    "payStatement": {
-      "title": "Pagar resumen",
-      "description": "Total, mínimo u otro monto, desde la cuenta que elijas."
     },
     "toPay": {
       "title": "Por pagar"
@@ -176,7 +172,7 @@
         {
           "heading": "Eliminar tu cuenta y tus datos",
           "body": [
-            "Podés pedir en cualquier momento que eliminemos tu cuenta y todos tus registros escribiendo al contacto de abajo desde la dirección de email con la que entrás.",
+            "Podés pedir en cualquier momento que eliminemos tu cuenta y todos tus registros escribiendo al contacto de abajo desde la dirección de email con la que entrás. Lo hacemos dentro de los 30 días y te confirmamos por email cuando esté hecho.",
             "También podés quitar el acceso de miPlata desde la configuración de tu cuenta de Google. Eso impide que vuelvas a entrar, pero no borra por sí solo los datos guardados."
           ]
         },
@@ -449,7 +445,6 @@
     "add": "Agregar",
     "addPerson": "Agregar persona",
     "peopleEmpty": "Acá van las personas con las que te prestás plata o a quienes les pagás compras: lo que te deben y lo que les debés. Todavía no agregaste ninguna.",
-    "addLabel": "Agregar cuenta",
     "sections": {
       "money": "Dinero",
       "cards": "Tarjetas",
