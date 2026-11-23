@@ -545,3 +545,38 @@ describe("confirmation dialog accessibility", () => {
     expect(alert.textContent).toContain("no se puede eliminar");
   });
 });
+
+describe("opening the form for a person", () => {
+  it("starts as a person when the link asks for it", async () => {
+    // Arrange
+    const { calls } = stubApi({
+      ...listOf([]),
+      "POST /api/people": { status: 201, body: makeAccount({ type: "person" }) },
+    });
+
+    // Act
+    renderForm("/accounts/new?type=person");
+    await screen.findByRole("button", { name: "Guardar cuenta" });
+    const selected = screen.getByRole("button", { name: "Persona" }).getAttribute("aria-pressed");
+    await userEvent.type(screen.getByLabelText("Nombre"), "Juan");
+    await userEvent.click(screen.getByRole("button", { name: "Guardar cuenta" }));
+
+    // Assert
+    expect(selected).toBe("true");
+    await screen.findByText("accounts list");
+    expect(calls.some((call) => call.key === "POST /api/people")).toBe(true);
+  });
+
+  it("starts as a bank account without the parameter", async () => {
+    // Arrange
+    stubApi({ ...listOf([]) });
+
+    // Act
+    await openNewForm();
+
+    // Assert
+    expect(screen.getByRole("button", { name: "Persona" }).getAttribute("aria-pressed")).toBe(
+      "false",
+    );
+  });
+});

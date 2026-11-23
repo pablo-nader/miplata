@@ -13,6 +13,7 @@ export type FakeCategoriesBackend = {
   markUsed: (categoryId: string) => void;
   groups: CategoryGroupDto[];
   categories: CategoryDto[];
+  mostUsedIds: string[];
 };
 
 function sameName(left: string | null, right: string): boolean {
@@ -56,6 +57,8 @@ export function createFakeCategoriesBackend(): FakeCategoriesBackend {
     seeded("defaults.income.salary", "briefcase", 5, 0, null),
   ];
 
+  const mostUsedIds: string[] = [];
+
   function categoryNameTaken(type: string, name: string, exceptId?: string) {
     return categories.some(
       (item) => item.type === type && item.id !== exceptId && sameName(item.name, name),
@@ -63,10 +66,17 @@ export function createFakeCategoriesBackend(): FakeCategoriesBackend {
   }
 
   function handle(method: string, path: string, body?: unknown): FakeResponse {
-    const parts = path.replace(/^\/api\//, "").split("/");
+    const parts =
+      path
+        .replace(/^\/api\//, "")
+        .split("?")[0]
+        ?.split("/") ?? [];
     const [resource, id, action] = parts;
 
     if (resource === "categories") {
+      if (method === "GET" && id === "most-used") {
+        return { status: 200, body: { categoryIds: mostUsedIds } };
+      }
       if (method === "GET" && !id) {
         return {
           status: 200,
@@ -171,7 +181,13 @@ export function createFakeCategoriesBackend(): FakeCategoriesBackend {
     return { status: 404, body: { error: "not_found" } };
   }
 
-  return { handle, markUsed: (categoryId) => used.add(categoryId), groups, categories };
+  return {
+    handle,
+    markUsed: (categoryId) => used.add(categoryId),
+    groups,
+    categories,
+    mostUsedIds,
+  };
 }
 
 export function stubFetchWith(backend: FakeCategoriesBackend) {

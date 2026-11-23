@@ -598,11 +598,13 @@ describe("category picker container", () => {
     renderAt("/picker");
 
     // Act
-    await userEvent.click(await screen.findByRole("button", { name: "Todas" }));
-    await userEvent.click(screen.getByRole("button", { name: "Supermercado" }));
+    await userEvent.click(await screen.findByRole("button", { name: "Buscar" }));
+    const dialog = screen.getByRole("dialog", { name: "Elegir categoría" });
+    await userEvent.click(within(dialog).getByRole("option", { name: "Supermercado" }));
 
     // Assert
-    expect(screen.queryByRole("button", { name: "Alquiler" })).toBeNull();
+    expect(screen.queryByRole("option", { name: "Alquiler" })).toBeNull();
+    expect(screen.queryByRole("dialog")).toBeNull();
     expect(screen.getByTestId("picked").textContent).toBe(
       backend.categories.find((item) => item.nameKey === "defaults.category.groceries")?.id,
     );
@@ -647,10 +649,10 @@ describe("category picker container", () => {
     renderAt("/picker");
 
     // Act
-    await userEvent.click(await screen.findByRole("button", { name: "Todas" }));
+    await userEvent.click(await screen.findByRole("button", { name: "Buscar" }));
 
     // Assert
-    expect(screen.getByRole("button", { name: "Jardinería" })).toBeDefined();
+    expect(screen.getByRole("option", { name: "Jardinería" })).toBeDefined();
   });
 
   it("offers to retry when the categories cannot be loaded", async () => {
@@ -662,6 +664,94 @@ describe("category picker container", () => {
     await userEvent.click(await screen.findByRole("button", { name: "Reintentar" }));
 
     // Assert
-    expect(await screen.findByRole("button", { name: "Todas" })).toBeDefined();
+    expect(await screen.findByRole("button", { name: "Buscar" })).toBeDefined();
+  });
+
+  it("puts the most used categories first, then fills with the default order", async () => {
+    // Arrange
+    const groceries = backend.categories.find(
+      (item) => item.nameKey === "defaults.category.groceries",
+    );
+    backend.mostUsedIds.push(groceries?.id ?? "");
+    renderAt("/picker");
+
+    // Act
+    await screen.findByRole("button", { name: "Buscar" });
+    await waitFor(() => expect(screen.getAllByRole("button")[0]?.textContent).toBe("Supermercado"));
+
+    // Assert
+    expect(screen.getAllByRole("button").map((button) => button.textContent)).toEqual([
+      "Supermercado",
+      "Alquiler",
+      "Mantenimiento",
+      "Buscar",
+    ]);
+  });
+
+  it("finds a category by typing without accents and groups the results", async () => {
+    // Arrange
+    renderAt("/picker");
+    await userEvent.click(await screen.findByRole("button", { name: "Buscar" }));
+
+    // Act
+    await userEvent.keyboard("MANTENIMI");
+
+    // Assert
+    const dialog = screen.getByRole("dialog");
+    expect(
+      within(dialog)
+        .getAllByRole("option")
+        .map((option) => option.textContent),
+    ).toEqual(["Mantenimiento"]);
+    expect(within(dialog).getByText("Vivienda")).toBeDefined();
+  });
+
+  it("opens with the search field focused, moves with the arrows and closes with Escape", async () => {
+    // Arrange
+    renderAt("/picker");
+    const opener = await screen.findByRole("button", { name: "Buscar" });
+
+    // Act
+    await userEvent.click(opener);
+    const focusedOnOpen = document.activeElement === screen.getByRole("searchbox");
+    await userEvent.keyboard("{ArrowDown}");
+    const firstOption = document.activeElement?.textContent;
+    await userEvent.keyboard("{Escape}");
+
+    // Assert
+    expect(focusedOnOpen).toBe(true);
+    expect(firstOption).toBe("Alquiler");
+    expect(screen.queryByRole("dialog")).toBeNull();
+    await waitFor(() => expect(document.activeElement).toBe(opener));
+  });
+
+  it("picks the first result with Enter and marks the selected category", async () => {
+    // Arrange
+    renderAt("/picker");
+    await userEvent.click(await screen.findByRole("button", { name: "Buscar" }));
+    await userEvent.keyboard("super{Enter}");
+    await userEvent.click(screen.getByRole("button", { name: "Buscar" }));
+
+    // Act
+    const selected = screen.getByRole("option", { name: /Supermercado/ });
+
+    // Assert
+    expect(selected.getAttribute("aria-selected")).toBe("true");
+    expect(screen.getByTestId("picked").textContent).not.toBe("none");
+  });
+
+  it("says when nothing matches and offers to add a category", async () => {
+    // Arrange
+    renderAt("/picker");
+    await userEvent.click(await screen.findByRole("button", { name: "Buscar" }));
+
+    // Act
+    await userEvent.keyboard("zzzz");
+    const none = screen.getByText("No hay categorías que coincidan.");
+    await userEvent.click(screen.getByRole("button", { name: "Agregar categoría" }));
+
+    // Assert
+    expect(none).toBeDefined();
+    expect(await screen.findByLabelText("Nombre")).toBeDefined();
   });
 });

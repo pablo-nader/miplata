@@ -2,10 +2,13 @@ import {
   type CategoriesResponse,
   type CategoryDto,
   type CategoryGroupDto,
+  type CategoryType,
   type CreateCategoryRequest,
   categoriesResponseSchema,
   categoryGroupSchema,
   categorySchema,
+  type MostUsedCategoriesResponse,
+  mostUsedCategoriesResponseSchema,
   type UpdateCategoryRequest,
 } from "@miplata/shared";
 
@@ -74,6 +77,8 @@ async function sendForNothing(method: string, path: string): Promise<ApiResult<n
 export const categoriesApi = {
   list: (): Promise<ApiResult<CategoriesResponse>> =>
     send("GET", "/api/categories", categoriesResponseSchema),
+  mostUsed: (type: CategoryType): Promise<ApiResult<MostUsedCategoriesResponse>> =>
+    send("GET", `/api/categories/most-used?type=${type}`, mostUsedCategoriesResponseSchema),
   create: (request: CreateCategoryRequest): Promise<ApiResult<CategoryDto>> =>
     send("POST", "/api/categories", categorySchema, request),
   update: (id: string, patch: UpdateCategoryRequest): Promise<ApiResult<CategoryDto>> =>

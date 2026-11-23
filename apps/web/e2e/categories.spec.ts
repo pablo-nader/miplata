@@ -46,12 +46,15 @@ test.describe("categories", () => {
     // Assert
     await expect(page.getByRole("link", { name: "Jardinería" })).toBeVisible();
     await page.goto("/movements/new");
-    await page.getByRole("button", { name: "Todas" }).click();
-    const picked = page.getByRole("button", { name: "Jardinería" });
-    await expect(picked).toBeVisible();
-    await expect(picked.locator("svg.lucide-droplet")).toBeVisible();
-    await picked.click();
-    await expect(picked).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: "Buscar" }).click();
+    const option = page.getByRole("option", { name: "Jardinería" });
+    await expect(option).toBeVisible();
+    await expect(option.locator("svg.lucide-droplet")).toBeVisible();
+    await option.click();
+    await expect(page.getByRole("button", { name: "Jardinería" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
   });
 
   test("deactivated categories are not offered in the picker", async ({ page }) => {
@@ -69,8 +72,8 @@ test.describe("categories", () => {
     // Assert
     await expect(page.getByRole("link", { name: /Alquiler/ })).toContainText("Inactiva");
     await page.goto("/movements/new");
-    await page.getByRole("button", { name: "Todas" }).click();
-    await expect(page.getByRole("button", { name: "Mantenimiento" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Alquiler" })).toHaveCount(0);
+    await page.getByRole("button", { name: "Buscar" }).click();
+    await expect(page.getByRole("option", { name: "Mantenimiento" })).toBeVisible();
+    await expect(page.getByRole("option", { name: "Alquiler" })).toHaveCount(0);
   });
 });

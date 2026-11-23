@@ -2,7 +2,7 @@ import type { Account, AccountType, Currency, Institution } from "@miplata/share
 import { Wallet } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useResource } from "../../shared/use-resource";
 import { Button } from "../../ui/atoms/Button";
 import { EmptyState } from "../../ui/molecules/EmptyState";
@@ -93,9 +93,12 @@ function errorKey(error: string): string {
 function AccountForm({ institutions, account }: AccountFormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
   const original = account ? { account, displayName: displayName(account, t) } : null;
   const [form, setForm] = useState<FormState>(() =>
-    account ? formFromAccount(account, displayName(account, t)) : emptyForm(),
+    account
+      ? formFromAccount(account, displayName(account, t))
+      : emptyForm(params.get("type") === "person" ? "person" : "bank"),
   );
   const [errors, setErrors] = useState<FormErrors | null>(null);
   const [busy, setBusy] = useState(false);

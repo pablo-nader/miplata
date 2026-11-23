@@ -55,3 +55,4 @@ Impact on users, cost, and technical design.
 | [BD-0026](BD-0026-movement-recording-rules.md) | Movement recording rules | Accepted |
 | [BD-0027](BD-0027-statement-rules.md) | Statement rules | Accepted |
 | [BD-0028](BD-0028-recurring-movement-lifecycle.md) | Recurring movement lifecycle | Accepted |
+| [BD-0029](BD-0029-category-picker-and-creating-people.md) | Category picker and where people are created | Accepted |

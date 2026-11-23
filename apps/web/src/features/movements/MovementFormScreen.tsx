@@ -10,7 +10,12 @@ import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { SegmentedControl } from "../../ui/molecules/SegmentedControl";
 import { SelectField, type SelectOption } from "../../ui/molecules/SelectField";
 import type { NavAction } from "../../ui/organisms/nav";
-import type { FormErrorKey, FormState, FormType } from "./movement-form";
+import {
+  type FormErrorKey,
+  type FormState,
+  type FormType,
+  NEW_PERSON_OPTION,
+} from "./movement-form";
 import "./movement-form-screen.css";
 
 export type FormCopy = {
@@ -37,6 +42,17 @@ export type FormCopy = {
   remove?: string;
 };
 
+export type NewPersonDraft = { name: string; error: string | undefined; busy: boolean };
+
+export type NewPersonPanel = {
+  draft: NewPersonDraft | null;
+  copy: { name: string; create: string; creating: string; cancel: string };
+  onOpen: () => void;
+  onNameChange: (name: string) => void;
+  onCreate: () => void;
+  onCancel: () => void;
+};
+
 export type ConfirmCopy = {
   title: string;
   body: string;
@@ -54,6 +70,7 @@ export type MovementFormScreenProps = {
   entryAccounts: SelectOption[];
   transferAccounts: SelectOption[];
   personOptions: SelectOption[];
+  newPerson: NewPersonPanel;
   entryCurrencies: Currency[];
   fromCurrencies: Currency[];
   toCurrencies: Currency[];
@@ -125,6 +142,42 @@ function AmountInput({ label, value, error, onChange, large = false }: AmountInp
           {error}
         </p>
       ) : null}
+    </div>
+  );
+}
+
+function NewPersonFields({ panel }: { panel: NewPersonPanel }) {
+  const container = useRef<HTMLDivElement>(null);
+  const { draft, copy } = panel;
+  useEffect(() => {
+    container.current?.querySelector<HTMLElement>("input")?.focus();
+  }, []);
+  if (!draft) {
+    return null;
+  }
+  return (
+    <div className="movement-form__new-person" ref={container}>
+      <Field
+        label={copy.name}
+        value={draft.name}
+        maxLength={60}
+        error={draft.error}
+        onChange={(event) => panel.onNameChange(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            panel.onCreate();
+          }
+        }}
+      />
+      <div className="movement-form__new-person-actions">
+        <Button type="button" onClick={panel.onCreate} disabled={draft.busy}>
+          {draft.busy ? copy.creating : copy.create}
+        </Button>
+        <Button type="button" variant="ghost" onClick={panel.onCancel} disabled={draft.busy}>
+          {copy.cancel}
+        </Button>
+      </div>
     </div>
   );
 }
@@ -290,8 +343,13 @@ export function MovementFormScreen(props: MovementFormScreenProps) {
                 value={values.personId ?? ""}
                 options={props.personOptions}
                 error={errors.person}
-                onChange={(value) => onChange({ personId: value || null })}
+                onChange={(value) =>
+                  value === NEW_PERSON_OPTION
+                    ? props.newPerson.onOpen()
+                    : onChange({ personId: value || null })
+                }
               />
+              <NewPersonFields panel={props.newPerson} />
               <Field
                 inputMode="decimal"
                 label={copy.share}

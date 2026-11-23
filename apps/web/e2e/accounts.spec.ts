@@ -13,7 +13,7 @@ test("creates accounts and shows them in Cuentas and in the balance detail", asy
   await expect(page.getByText("Todavía no hay cuentas")).toBeVisible();
 
   // Act
-  await page.getByRole("link", { name: "Agregar" }).click();
+  await page.getByRole("link", { name: "Agregar", exact: true }).click();
   await page.getByRole("button", { name: "Galicia" }).click();
   await page.getByLabel("Saldo inicial · ARS").fill("1.500.000");
   await page.getByRole("switch", { name: "Dólares" }).click();
@@ -21,7 +21,7 @@ test("creates accounts and shows them in Cuentas and in the balance detail", asy
   await page.getByRole("button", { name: "Guardar cuenta" }).click();
 
   await expect(page).toHaveURL(/\/accounts$/);
-  await page.getByRole("link", { name: "Agregar" }).click();
+  await page.getByRole("link", { name: "Agregar", exact: true }).click();
   await page.getByRole("button", { name: "Persona" }).click();
   await page.getByLabel("Nombre").fill("Juan");
   await page.getByLabel("Saldo inicial · ARS").fill("50000");

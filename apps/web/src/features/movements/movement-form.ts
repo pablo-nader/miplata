@@ -10,6 +10,8 @@ import {
   type TransferRequest,
 } from "@miplata/shared";
 
+export const NEW_PERSON_OPTION = "__new_person__";
+
 export type FormType = "expense" | "income" | "transfer";
 
 export type FormState = {

@@ -102,3 +102,13 @@
   gap: var(--space-2);
   padding: 0 var(--space-4) var(--space-4);
 }
+
+.movement-form__new-person {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.movement-form__new-person-actions {
+  display: grid;
+  gap: var(--space-2);
+}

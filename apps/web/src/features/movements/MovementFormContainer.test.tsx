@@ -4,7 +4,7 @@ import { I18nextProvider } from "react-i18next";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createI18n } from "../../app/i18n";
-import { stubApi } from "../../test/fake-api";
+import { makeAccount, stubApi } from "../../test/fake-api";
 import { lookupHandlers, makeMovement } from "../../test/fake-movements";
 import { MovementFormContainer } from "./MovementFormContainer";
 
@@ -412,5 +412,106 @@ describe("editing and deleting", () => {
 
     // Assert
     expect(await screen.findByRole("button", { name: "Reintentar" })).toBeDefined();
+  });
+});
+
+describe("creating a person from the form", () => {
+  const sofi = makeAccount({ id: "acc-sofi", type: "person", name: "Sofi" });
+
+  async function startForOther() {
+    await openNew();
+    await userEvent.type(screen.getByLabelText("Monto"), "50.000");
+    await userEvent.click(screen.getByRole("button", { name: "Supermercado" }));
+    await userEvent.click(screen.getByRole("switch", { name: "Es de otra persona" }));
+  }
+
+  it("creates the person with just a name, selects it and saves the expense for them", async () => {
+    // Arrange
+    const { calls } = stubApi({
+      ...lookupHandlers,
+      "POST /api/people": { status: 201, body: sofi },
+      "POST /api/movements": created,
+    });
+    await startForOther();
+
+    // Act
+    await userEvent.selectOptions(screen.getByLabelText("Persona"), "+ Nueva persona");
+    await userEvent.type(screen.getByLabelText("Nombre de la persona"), "  Sofi ");
+    await userEvent.click(screen.getByRole("button", { name: "Crear persona" }));
+    await screen.findByDisplayValue("Sofi");
+    await userEvent.click(screen.getByRole("button", { name: "Guardar gasto" }));
+
+    // Assert
+    await screen.findByText("home screen");
+    expect(calls.find((call) => call.key === "POST /api/people")?.body).toEqual({
+      name: "Sofi",
+      currencies: [
+        { currency: "ARS", openingBalanceMinor: 0 },
+        { currency: "USD", openingBalanceMinor: 0 },
+      ],
+    });
+    expect(calls.find((call) => call.key === "POST /api/movements")?.body).toMatchObject({
+      person: { personId: "acc-sofi", ownAmountMinor: 0 },
+    });
+  });
+
+  it("creates the person with Enter without saving the movement", async () => {
+    // Arrange
+    const { calls } = stubApi({
+      ...lookupHandlers,
+      "POST /api/people": { status: 201, body: sofi },
+    });
+    await startForOther();
+
+    // Act
+    await userEvent.selectOptions(screen.getByLabelText("Persona"), "+ Nueva persona");
+    await userEvent.type(screen.getByLabelText("Nombre de la persona"), "Sofi{Enter}");
+
+    // Assert
+    await screen.findByDisplayValue("Sofi");
+    expect(screen.queryByLabelText("Nombre de la persona")).toBeNull();
+    expect(calls.some((call) => call.key === "POST /api/movements")).toBe(false);
+  });
+
+  it("asks for a name and does not call the API with an empty one", async () => {
+    // Arrange
+    const { calls } = stubApi({ ...lookupHandlers });
+    await startForOther();
+    await userEvent.selectOptions(screen.getByLabelText("Persona"), "+ Nueva persona");
+
+    // Act
+    await userEvent.click(screen.getByRole("button", { name: "Crear persona" }));
+
+    // Assert
+    expect(await screen.findByText("Ingresá un nombre.")).toBeDefined();
+    expect(calls.some((call) => call.key === "POST /api/people")).toBe(false);
+  });
+
+  it("keeps the typed name and explains when the person cannot be created", async () => {
+    // Arrange
+    stubApi({ ...lookupHandlers, "POST /api/people": { status: 500, body: { error: "boom" } } });
+    await startForOther();
+    await userEvent.selectOptions(screen.getByLabelText("Persona"), "+ Nueva persona");
+
+    // Act
+    await userEvent.type(screen.getByLabelText("Nombre de la persona"), "Sofi");
+    await userEvent.click(screen.getByRole("button", { name: "Crear persona" }));
+
+    // Assert
+    expect(await screen.findByText("No pudimos crear la persona. Probá de nuevo.")).toBeDefined();
+    expect((screen.getByLabelText("Nombre de la persona") as HTMLInputElement).value).toBe("Sofi");
+  });
+
+  it("closes the inline form on cancel", async () => {
+    // Arrange
+    stubApi({ ...lookupHandlers });
+    await startForOther();
+    await userEvent.selectOptions(screen.getByLabelText("Persona"), "+ Nueva persona");
+
+    // Act
+    await userEvent.click(screen.getByRole("button", { name: "Cancelar" }));
+
+    // Assert
+    expect(screen.queryByLabelText("Nombre de la persona")).toBeNull();
   });
 });

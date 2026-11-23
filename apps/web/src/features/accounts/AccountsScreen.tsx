@@ -1,4 +1,5 @@
-import { Wallet } from "lucide-react";
+import { Plus, Wallet } from "lucide-react";
+import { Link } from "react-router-dom";
 import { AccountBadge, type AccountBadgeType, type AccountLogo } from "../../ui/atoms/AccountBadge";
 import { Button } from "../../ui/atoms/Button";
 import { MoneyAmount, type MoneyAmountProps } from "../../ui/atoms/MoneyAmount";
@@ -7,6 +8,7 @@ import { EmptyState } from "../../ui/molecules/EmptyState";
 import { MovementList, MovementRow } from "../../ui/molecules/MovementRow";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
+import "./accounts-screen.css";
 import "./screen-note.css";
 
 export type AccountRowData = {
@@ -20,12 +22,19 @@ export type AccountRowData = {
   to: string;
 };
 
-export type AccountSectionData = { key: string; label: string; rows: AccountRowData[] };
+export type AccountSectionData = {
+  key: string;
+  label: string;
+  rows: AccountRowData[];
+  add?: NavAction;
+  emptyNote?: string;
+};
 
 type AccountsScreenProps = {
   title: string;
   add: NavAction;
   status: "loading" | "error" | "ready";
+  isEmpty: boolean;
   sections: AccountSectionData[];
   messages: {
     loading: string;
@@ -41,6 +50,7 @@ export function AccountsScreen({
   title,
   add,
   status,
+  isEmpty,
   sections,
   messages,
   onRetry,
@@ -64,7 +74,7 @@ export function AccountsScreen({
           }
         />
       ) : null}
-      {status === "ready" && sections.length === 0 ? (
+      {status === "ready" && isEmpty ? (
         <EmptyState
           icon={<Wallet />}
           title={messages.emptyTitle}
@@ -74,7 +84,20 @@ export function AccountsScreen({
       {status === "ready"
         ? sections.map((section) => (
             <section key={section.key} aria-label={section.label}>
-              <SectionLabel as="h2">{section.label}</SectionLabel>
+              {section.add ? (
+                <div className="accounts-screen__heading">
+                  <SectionLabel as="h2">{section.label}</SectionLabel>
+                  <Link className="accounts-screen__add" to={section.add.to}>
+                    <Plus aria-hidden="true" />
+                    {section.add.label}
+                  </Link>
+                </div>
+              ) : (
+                <SectionLabel as="h2">{section.label}</SectionLabel>
+              )}
+              {section.rows.length === 0 && section.emptyNote ? (
+                <p className="accounts-screen__note">{section.emptyNote}</p>
+              ) : null}
               <MovementList>
                 {section.rows.map((row) => (
                   <MovementRow
