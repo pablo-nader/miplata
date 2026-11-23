@@ -13,6 +13,8 @@ import type { VersionSource } from "./health/application/get-health";
 import { healthRoutes } from "./health/http/health-routes";
 import type { UserProfileRepository } from "./me/application/user-profile";
 import { meRoutes } from "./me/http/me-routes";
+import type { MovementRepository } from "./movements/application/movement-repository";
+import { movementRoutes } from "./movements/http/movement-routes";
 import { peopleRoutes } from "./people/http/people-routes";
 import type { SessionResolver } from "./shared/auth/auth-middleware";
 
@@ -24,6 +26,7 @@ export type AppDependencies = {
   categories: CategoryRepository;
   accounts: AccountRoutesDependencies;
   people: AccountRepository;
+  movements: MovementRepository;
 };
 
 export function createApp({
@@ -34,6 +37,7 @@ export function createApp({
   categories,
   accounts,
   people,
+  movements,
 }: AppDependencies) {
   return new Hono()
     .basePath("/api")
@@ -45,7 +49,15 @@ export function createApp({
     .route("/accounts", accountRoutes(resolveSession, accounts))
     .route("/institutions", institutionRoutes(resolveSession, accounts.institutions))
     .route("/balance", balanceRoutes(resolveSession, accounts.everyAccount))
-    .route("/people", peopleRoutes(resolveSession, people));
+    .route("/people", peopleRoutes(resolveSession, people))
+    .route(
+      "/movements",
+      movementRoutes(resolveSession, {
+        movements,
+        accounts: accounts.everyAccount,
+        categories,
+      }),
+    );
 }
 
 export type AppType = ReturnType<typeof createApp>;

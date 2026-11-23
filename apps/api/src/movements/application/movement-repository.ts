@@ -1,0 +1,23 @@
+import type { Movement, MovementQuery, YearMonth } from "@miplata/shared";
+import type { StatementOverrides } from "../../statements/domain/statement-assignment";
+import type { MonthTotalRow } from "../domain/month-summary";
+import type { MovementPlan } from "../domain/movement-plan";
+
+export type MovementPage = { items: Movement[]; hasMore: boolean };
+
+export type RemoveOutcome = "deleted" | "not_found" | "in_use";
+
+export type MovementRepository = {
+  statementOverrides(
+    userId: string,
+    accountId: string,
+    fromMonth: YearMonth,
+    toMonth: YearMonth,
+  ): Promise<StatementOverrides>;
+  create(userId: string, plan: MovementPlan): Promise<Movement>;
+  replace(userId: string, movementId: string, plan: MovementPlan): Promise<Movement | null>;
+  find(userId: string, movementId: string): Promise<Movement | null>;
+  list(userId: string, query: MovementQuery): Promise<MovementPage>;
+  remove(userId: string, movementId: string): Promise<RemoveOutcome>;
+  monthRows(userId: string, month: YearMonth): Promise<MonthTotalRow[]>;
+};
