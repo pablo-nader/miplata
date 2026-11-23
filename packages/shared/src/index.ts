@@ -108,6 +108,7 @@ export {
   type EntryRequest,
   entryRequestSchema,
   type LegRequest,
+  MAX_AMOUNT_MINOR,
   MAX_INSTALLMENTS,
   MOVEMENT_TYPES,
   type MonthSummary,

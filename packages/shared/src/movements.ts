@@ -6,11 +6,12 @@ export const MOVEMENT_TYPES = ["income", "expense", "transfer"] as const;
 export const ENTRY_TYPES = ["income", "expense"] as const;
 export const MAX_INSTALLMENTS = 60;
 export const DESCRIPTION_MAX_LENGTH = 200;
+export const MAX_AMOUNT_MINOR = 1_000_000_000_000;
 
 export const movementTypeSchema = z.enum(MOVEMENT_TYPES);
 export type MovementType = z.infer<typeof movementTypeSchema>;
 
-const positiveMinorSchema = z.int().min(1);
+const positiveMinorSchema = z.int().min(1).max(MAX_AMOUNT_MINOR);
 
 const descriptionSchema = z
   .string()
@@ -92,21 +93,29 @@ export type Movement = z.infer<typeof movementSchema>;
 
 const optionalInt = (minimum: number) => z.coerce.number().int().min(minimum).optional();
 
-export const movementQuerySchema = z.object({
-  q: z.string().trim().max(DESCRIPTION_MAX_LENGTH).optional(),
-  from: isoDateSchema.optional(),
-  to: isoDateSchema.optional(),
-  type: movementTypeSchema.optional(),
-  accountId: z.uuid().optional(),
-  personId: z.uuid().optional(),
-  groupId: z.uuid().optional(),
-  categoryId: z.uuid().optional(),
-  currency: currencySchema.optional(),
-  minAmountMinor: optionalInt(0),
-  maxAmountMinor: optionalInt(0),
-  limit: z.coerce.number().int().min(1).max(100).default(50),
-  offset: z.coerce.number().int().min(0).default(0),
-});
+export const movementQuerySchema = z
+  .object({
+    q: z.string().trim().max(DESCRIPTION_MAX_LENGTH).optional(),
+    from: isoDateSchema.optional(),
+    to: isoDateSchema.optional(),
+    type: movementTypeSchema.optional(),
+    accountId: z.uuid().optional(),
+    personId: z.uuid().optional(),
+    groupId: z.uuid().optional(),
+    categoryId: z.uuid().optional(),
+    currency: currencySchema.optional(),
+    minAmountMinor: optionalInt(0),
+    maxAmountMinor: optionalInt(0),
+    limit: z.coerce.number().int().min(1).max(100).default(50),
+    offset: z.coerce.number().int().min(0).default(0),
+  })
+  .refine((query) => !query.from || !query.to || query.from <= query.to)
+  .refine(
+    (query) =>
+      query.minAmountMinor === undefined ||
+      query.maxAmountMinor === undefined ||
+      query.minAmountMinor <= query.maxAmountMinor,
+  );
 export type MovementQuery = z.infer<typeof movementQuerySchema>;
 
 export const movementListSchema = z.object({

@@ -226,7 +226,7 @@ export function planTransfer(request: TransferRequest, refs: TransferReferences)
     return violation("currency_not_in_account");
   }
   const sameCurrency = request.from.currency === request.to.currency;
-  if (sameCurrency && from.id === to.id) {
+  if (from.id === to.id && (sameCurrency || from.type === "person")) {
     return violation("transfer_same_account");
   }
   if (sameCurrency && request.from.amountMinor !== request.to.amountMinor) {
