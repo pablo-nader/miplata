@@ -36,6 +36,13 @@ export function daysInMonth(month: YearMonth): number {
   return MONTH_LENGTHS[parsed.month - 1] as number;
 }
 
+const MS_PER_DAY = 86_400_000;
+
+export function addDays(date: IsoDate, days: number): IsoDate {
+  const shifted = new Date(Date.parse(`${date}T00:00:00Z`) + days * MS_PER_DAY);
+  return shifted.toISOString().slice(0, 10);
+}
+
 export function monthOf(date: IsoDate): YearMonth {
   return date.slice(0, 7);
 }

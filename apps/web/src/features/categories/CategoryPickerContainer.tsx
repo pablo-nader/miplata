@@ -26,7 +26,7 @@ export function CategoryPickerContainer({
   const { state, reload } = useCategories();
   const mostUsed = useMostUsedCategories(type);
 
-  if (state.status === "loading") {
+  if (state.status === "loading" || (!featuredIds && mostUsed === undefined)) {
     return <p role="status">{t("categories.loading")}</p>;
   }
   if (state.status === "error") {

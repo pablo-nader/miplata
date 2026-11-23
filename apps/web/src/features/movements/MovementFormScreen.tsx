@@ -149,9 +149,12 @@ function AmountInput({ label, value, error, onChange, large = false }: AmountInp
 function NewPersonFields({ panel }: { panel: NewPersonPanel }) {
   const container = useRef<HTMLDivElement>(null);
   const { draft, copy } = panel;
+  const open = draft !== null;
   useEffect(() => {
-    container.current?.querySelector<HTMLElement>("input")?.focus();
-  }, []);
+    if (open) {
+      container.current?.querySelector<HTMLElement>("input")?.focus();
+    }
+  }, [open]);
   if (!draft) {
     return null;
   }

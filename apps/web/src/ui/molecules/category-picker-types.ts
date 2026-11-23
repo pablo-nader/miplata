@@ -15,6 +15,5 @@ export type CategorySelectorCopy = {
   placeholder: string;
   closeLabel: string;
   noResults: string;
-  selectedLabel: string;
   addLabel: string;
 };

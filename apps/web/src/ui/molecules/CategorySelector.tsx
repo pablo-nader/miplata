@@ -43,20 +43,26 @@ export function CategorySelector({
     if (!element) {
       return;
     }
+    const container: HTMLElement = element;
     function handle(event: globalThis.KeyboardEvent) {
       if (event.key === "Escape") {
         event.preventDefault();
         onClose();
         return;
       }
-      const focusable = Array.from(element?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []);
+      const focusable = Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE));
       if (event.key === "Tab") {
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
-        if (event.shiftKey && document.activeElement === first) {
+        const active = document.activeElement;
+        const inside = active instanceof Node && container.contains(active);
+        if (!inside) {
+          event.preventDefault();
+          (event.shiftKey ? last : first)?.focus();
+        } else if (event.shiftKey && active === first) {
           event.preventDefault();
           last?.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
+        } else if (!event.shiftKey && active === last) {
           event.preventDefault();
           first?.focus();
         }
@@ -73,15 +79,15 @@ export function CategorySelector({
         target.focus();
       }
     }
-    element.addEventListener("keydown", handle);
-    return () => element.removeEventListener("keydown", handle);
+    document.addEventListener("keydown", handle);
+    return () => document.removeEventListener("keydown", handle);
   }, [onClose]);
 
   function handleSearchKey(event: KeyboardEvent<HTMLInputElement>) {
     const first = results[0]?.items[0];
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !event.nativeEvent.isComposing) {
       event.preventDefault();
-      if (first) {
+      if (first && query.trim() !== "") {
         onSelect(first.id);
       }
     }
@@ -90,25 +96,19 @@ export function CategorySelector({
   function option(item: PickerItem) {
     const selected = item.id === selectedId;
     return (
-      <li key={item.id}>
-        <button
-          type="button"
-          role="option"
-          data-stop=""
-          aria-selected={selected}
-          className="category-selector__option"
-          onClick={() => onSelect(item.id)}
-        >
-          <CategoryBadge name={item.name} icon={item.icon} color={item.color} selected={selected} />
-          <span className="category-selector__name">{item.name}</span>
-          {selected ? (
-            <>
-              <Check aria-hidden="true" strokeWidth={2.5} />
-              <span className="visually-hidden">{copy.selectedLabel}</span>
-            </>
-          ) : null}
-        </button>
-      </li>
+      <button
+        key={item.id}
+        type="button"
+        role="option"
+        data-stop=""
+        aria-selected={selected}
+        className="category-selector__option"
+        onClick={() => onSelect(item.id)}
+      >
+        <CategoryBadge name={item.name} icon={item.icon} color={item.color} selected={selected} />
+        <span className="category-selector__name">{item.name}</span>
+        {selected ? <Check aria-hidden="true" strokeWidth={2.5} /> : null}
+      </button>
     );
   }
 
@@ -157,10 +157,11 @@ export function CategorySelector({
           ) : (
             <div role="listbox" aria-label={copy.title}>
               {results.map((section) => (
-                <section key={section.id} className="category-selector__group">
+                <fieldset key={section.id} className="category-selector__group">
+                  <legend className="visually-hidden">{section.title ?? copy.title}</legend>
                   {section.title ? <SectionLabel as="p">{section.title}</SectionLabel> : null}
-                  <ul>{section.items.map(option)}</ul>
-                </section>
+                  {section.items.map(option)}
+                </fieldset>
               ))}
             </div>
           )}

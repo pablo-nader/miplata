@@ -364,7 +364,6 @@
       "title": "Choose a category",
       "close": "Close",
       "noResults": "No categories match.",
-      "selected": "Selected",
       "add": "Add category",
       "none": "There are no active categories."
     },

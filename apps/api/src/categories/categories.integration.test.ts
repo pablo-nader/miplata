@@ -126,6 +126,27 @@ describe("GET /api/categories/most-used", () => {
     expect(income.ids).toEqual([salary.id]);
   });
 
+  it("includes the first day of the window and breaks ties by the default order", async () => {
+    // Arrange
+    const person = await newPerson();
+    const [first, second, third] = (await catalogOf(person)).expenseGroups.flatMap(
+      (group) => group.categories,
+    ) as CategoryDto[];
+    await insertMovementOn(person.id, (third as CategoryDto).id, "2026-08-25");
+    await insertMovementOn(person.id, (second as CategoryDto).id, "2026-11-23");
+    await insertMovementOn(person.id, (first as CategoryDto).id, "2026-11-23");
+
+    // Act
+    const { ids } = await mostUsed(person);
+
+    // Assert
+    expect(ids).toEqual([
+      (first as CategoryDto).id,
+      (second as CategoryDto).id,
+      (third as CategoryDto).id,
+    ]);
+  });
+
   it("returns an empty list for a user without movements", async () => {
     // Arrange
     const person = await newPerson();
@@ -145,12 +166,15 @@ describe("GET /api/categories/most-used", () => {
     await insertMovementOn(owner.id, (mine as CategoryDto).id, "2026-11-10");
 
     // Act
+    const theirs = (await catalogOf(stranger)).expenseGroups.flatMap((group) => group.categories);
+    await insertMovementOn(stranger.id, (theirs[1] as CategoryDto).id, "2026-11-10");
+    await insertMovementOn(stranger.id, (theirs[1] as CategoryDto).id, "2026-11-11");
     const asOwner = await mostUsed(owner);
     const asStranger = await mostUsed(stranger);
 
     // Assert
     expect(asOwner.ids).toEqual([(mine as CategoryDto).id]);
-    expect(asStranger.ids).toEqual([]);
+    expect(asStranger.ids).toEqual([(theirs[1] as CategoryDto).id]);
   });
 
   it("answers 401 without a session and 400 for an unknown type", async () => {

@@ -26,7 +26,6 @@ export function usePickerCopy(): PickerCopy {
       placeholder: t("categories.picker.placeholder"),
       closeLabel: t("categories.picker.close"),
       noResults: t("categories.picker.noResults"),
-      selectedLabel: t("categories.picker.selected"),
       addLabel: t("categories.picker.add"),
     },
   };

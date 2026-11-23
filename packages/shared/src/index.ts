@@ -45,6 +45,7 @@ export {
   budgetsResponseSchema,
 } from "./budgets";
 export {
+  addDays,
   addMonths,
   compareMonths,
   dateInMonth,
