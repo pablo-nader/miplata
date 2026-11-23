@@ -49,6 +49,8 @@ export function MenuContainer() {
       title={t("screens.menu.title")}
       back={{ to: "/", label: t("nav.backHome") }}
       identity={user?.email ?? ""}
+      toPay={{ to: "/to-pay", label: t("menu.toPay") }}
+      recurring={{ to: "/recurring", label: t("menu.recurring") }}
       categories={{ to: "/categories", label: t("menu.categories") }}
       language={{
         label: t("menu.language"),

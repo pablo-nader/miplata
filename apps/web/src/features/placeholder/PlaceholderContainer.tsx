@@ -8,7 +8,6 @@ export type ScreenKey =
   | "accounts"
   | "statement"
   | "payStatement"
-  | "toPay"
   | "reports"
   | "menu";
 

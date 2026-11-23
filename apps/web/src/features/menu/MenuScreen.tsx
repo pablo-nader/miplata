@@ -1,4 +1,4 @@
-import { ArrowLeft, ChevronRight, Languages, LogOut, Tags } from "lucide-react";
+import { ArrowLeft, ChevronRight, Clock, Languages, LogOut, Repeat, Tags } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../../ui/atoms/Button";
 import { SegmentedControl, type SegmentOption } from "../../ui/molecules/SegmentedControl";
@@ -10,6 +10,8 @@ type MenuScreenProps = {
   title: string;
   back: NavAction;
   identity: string;
+  toPay: NavAction;
+  recurring: NavAction;
   categories: NavAction;
   language: {
     label: string;
@@ -25,6 +27,8 @@ export function MenuScreen({
   title,
   back,
   identity,
+  toPay,
+  recurring,
   categories,
   language,
   errorMessage,
@@ -40,13 +44,21 @@ export function MenuScreen({
       </header>
       <p className="menu-screen__identity">{identity}</p>
       <ul className="menu-screen__list">
-        <li className="menu-screen__row">
-          <Link className="menu-screen__link" to={categories.to}>
-            <Tags aria-hidden="true" />
-            <span className="menu-screen__link-label">{categories.label}</span>
-            <ChevronRight aria-hidden="true" />
-          </Link>
-        </li>
+        {(
+          [
+            [toPay, Clock],
+            [recurring, Repeat],
+            [categories, Tags],
+          ] as const
+        ).map(([action, Icon]) => (
+          <li key={action.to} className="menu-screen__row">
+            <Link className="menu-screen__link" to={action.to}>
+              <Icon aria-hidden="true" />
+              <span className="menu-screen__link-label">{action.label}</span>
+              <ChevronRight aria-hidden="true" />
+            </Link>
+          </li>
+        ))}
         <li className="menu-screen__row">
           <Languages aria-hidden="true" />
           <SegmentedControl

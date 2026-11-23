@@ -29,7 +29,10 @@ function queryString(filters: MovementFilters, limit: number, offset: number): s
   return params.toString();
 }
 
-async function readJson<T>(response: Response, schema: { parse(value: unknown): T }): Promise<T> {
+export async function readJson<T>(
+  response: Response,
+  schema: { parse(value: unknown): T },
+): Promise<T> {
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
@@ -56,7 +59,7 @@ export function fetchMonthSummary(month: string): Promise<MonthSummary> {
   );
 }
 
-async function failureOf(response: Response): Promise<string> {
+export async function failureOf(response: Response): Promise<string> {
   const payload = (await response.json().catch(() => null)) as {
     error?: string;
     reason?: string;

@@ -1,0 +1,22 @@
+.to-pay__none {
+  color: var(--color-muted);
+}
+
+.to-pay__failure {
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.adjust-panel {
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3) 0 var(--space-2);
+}
+
+.adjust-panel__actions {
+  display: grid;
+  gap: var(--space-2);
+}

@@ -24,7 +24,9 @@
     "languageNotSaved": "We could not save the language. Try again.",
     "signOut": "Sign out",
     "signOutFailed": "We could not sign you out. Try again.",
-    "categories": "Categories"
+    "categories": "Categories",
+    "toPay": "To pay",
+    "recurring": "Recurring"
   },
   "screens": {
     "home": {
@@ -56,8 +58,7 @@
       "description": "Total, minimum or another amount, from the account you choose."
     },
     "toPay": {
-      "title": "To pay",
-      "description": "The fixed expenses of the period."
+      "title": "To pay"
     },
     "reports": {
       "title": "Reports",
@@ -66,6 +67,9 @@
     "menu": {
       "title": "Menu",
       "description": "To pay, categories, budgets, language and sign out."
+    },
+    "recurring": {
+      "title": "Recurring"
     }
   },
   "public": {
@@ -770,6 +774,147 @@
       "saving": "Saving…",
       "errors": {
         "amount": "Enter a valid amount."
+      }
+    }
+  },
+  "home": {
+    "pending": {
+      "title": "{{count}} to pay",
+      "today": "due today",
+      "overdue": "was due {{date}}"
+    }
+  },
+  "toPay": {
+    "loading": "Loading what is due…",
+    "loadFailed": "We could not load what is due.",
+    "retry": "Retry",
+    "emptyTitle": "Nothing is pending",
+    "emptyDescription": "When a recurring item is about to fall due, it shows up here.",
+    "sections": {
+      "due": "Overdue and today",
+      "upcoming": "Upcoming",
+      "receivable": "To receive"
+    },
+    "due": {
+      "today": "Today",
+      "overdue": "Was due {{date}}"
+    },
+    "variable": "variable",
+    "noAmount": "—",
+    "actions": {
+      "confirm": "Confirm",
+      "adjust": "Adjust",
+      "skip": "Skip",
+      "cancel": "Cancel"
+    },
+    "confirmFor": "Confirm {{name}}",
+    "adjustFor": "Adjust {{name}}",
+    "skipFor": "Skip {{name}}",
+    "adjust": {
+      "title": "Adjust {{name}}",
+      "amount": "Amount",
+      "account": "Account",
+      "date": "Date",
+      "errors": {
+        "amount": "Enter a valid amount.",
+        "date": "Enter a valid date."
+      }
+    },
+    "failures": {
+      "account_inactive": "That account is deactivated.",
+      "account_not_allowed": "A person cannot pay an expense.",
+      "account_not_found": "We could not find that account.",
+      "amount_required": "Enter the amount for this payment.",
+      "amount_too_small": "The amount is too small.",
+      "card_without_schedule": "Set the card closing and due days first.",
+      "category_inactive": "The category is deactivated.",
+      "currency_not_in_account": "That account does not hold that currency.",
+      "network": "We could not connect. Try again.",
+      "occurrence_resolved": "This payment was already resolved.",
+      "failed": "We could not complete the action. Try again."
+    }
+  },
+  "recurring": {
+    "loading": "Loading recurring items…",
+    "loadFailed": "We could not load your recurring items.",
+    "retry": "Retry",
+    "emptyTitle": "No recurring items yet",
+    "emptyDescription": "Add your rent, subscriptions or salary and we will tell you when they are due.",
+    "add": "Add",
+    "variable": "variable",
+    "day": "day {{day}}",
+    "frequencies": {
+      "monthly": "Monthly",
+      "bimonthly": "Every two months",
+      "yearly": "Yearly"
+    },
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "ended": "Ended"
+    },
+    "actions": {
+      "pause": "Pause",
+      "resume": "Resume",
+      "end": "End",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "pauseFor": "Pause {{name}}",
+      "resumeFor": "Resume {{name}}",
+      "endFor": "End {{name}}"
+    },
+    "confirmEndTitle": "End {{name}}?",
+    "confirmEndBody": "No more payments will be generated. Movements already recorded are kept.",
+    "failures": {
+      "network": "We could not connect. Try again.",
+      "recurring_ended": "This recurring item has already ended.",
+      "failed": "We could not complete the action. Try again."
+    },
+    "form": {
+      "back": "Back to recurring",
+      "newTitle": "New recurring item",
+      "editTitle": "Edit recurring item",
+      "notFound": "We could not find this recurring item.",
+      "choose": "Choose",
+      "type": "Type",
+      "description": "Description",
+      "amountMode": "Amount type",
+      "amountModes": {
+        "fixed": "Fixed",
+        "variable": "Variable"
+      },
+      "amount": "Amount",
+      "amountHint": "If it changes every time, leave it empty or enter a reference value: you adjust it when confirming.",
+      "currency": "Currency",
+      "account": "Account",
+      "frequency": "Frequency",
+      "day": "Day of month",
+      "dayHint": "In shorter months the last day is used.",
+      "startsOn": "Starts",
+      "endsOn": "Ends (optional)",
+      "save": "Save recurring item",
+      "saveChanges": "Save changes",
+      "saving": "Saving…",
+      "errors": {
+        "amount": "Enter a valid amount.",
+        "category": "Choose a category.",
+        "account": "Choose an account.",
+        "day": "Enter a day between 1 and 31.",
+        "startsOn": "Enter a valid date.",
+        "endsOn": "The date must be valid and not before the start."
+      },
+      "failures": {
+        "account_inactive": "That account is deactivated.",
+        "account_not_allowed": "A person cannot pay an expense.",
+        "account_not_found": "We could not find that account.",
+        "category_inactive": "That category is deactivated.",
+        "category_not_found": "We could not find that category.",
+        "category_type_mismatch": "The category does not match the type.",
+        "currency_not_in_account": "That account does not hold that currency.",
+        "invalid_range": "The end date cannot be before the start.",
+        "network": "We could not connect. Try again.",
+        "recurring_ended": "This recurring item has already ended.",
+        "saveFailed": "We could not save the recurring item. Try again."
       }
     }
   }

@@ -14,9 +14,10 @@ type MovementRowProps = {
   title: string;
   caption: string;
   amount: ReactNode;
-  amountNote?: string;
+  amountNote?: ReactNode;
   tag?: string;
   to?: string;
+  footer?: ReactNode;
 };
 
 export function MovementRow({
@@ -27,6 +28,7 @@ export function MovementRow({
   amountNote,
   tag,
   to,
+  footer,
 }: MovementRowProps) {
   const content = (
     <>
@@ -44,14 +46,21 @@ export function MovementRow({
       </span>
     </>
   );
+  const extra = footer ? <div className="movement-row__footer">{footer}</div> : null;
   if (to) {
     return (
       <li className="movement-row movement-row--link">
         <Link className="movement-row__link" to={to}>
           {content}
         </Link>
+        {extra}
       </li>
     );
   }
-  return <li className="movement-row">{content}</li>;
+  return (
+    <li className="movement-row">
+      {content}
+      {extra}
+    </li>
+  );
 }
