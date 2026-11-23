@@ -38,7 +38,7 @@ describe("HomeContainer", () => {
     const status = await screen.findByText("Connected");
 
     // Assert
-    expect(status).toBeDefined();
+    expect(status.textContent).toBe("Connected");
   });
 
   it("shows the checking state before the answer arrives", () => {
