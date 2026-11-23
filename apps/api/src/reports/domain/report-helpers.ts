@@ -1,4 +1,10 @@
-import { type Currency, monthsBetween, type YearMonth } from "@miplata/shared";
+import {
+  type Currency,
+  divideRounded,
+  monthsBetween,
+  sumMinorUnits,
+  type YearMonth,
+} from "@miplata/shared";
 
 export type ReportInstallment = {
   kind: "income" | "expense";
@@ -34,12 +40,19 @@ export function percentChangeVsPreviousThree(
       throw new RangeError(`Amount must be an integer of minor units: ${value}`);
     }
   }
-  const sum = previousMinor.reduce((total, value) => total + value, 0);
+  const sum = sumMinorUnits(previousMinor);
   if (sum === 0) {
     return null;
   }
-  const percent = ((PREVIOUS_MONTHS * currentMinor - sum) / sum) * 100;
-  return Math.round(percent * 10) / 10 + 0;
+  const numerator = BigInt(PREVIOUS_MONTHS) * BigInt(currentMinor) - BigInt(sum);
+  const denominator = BigInt(sum);
+  const negative = numerator < 0n !== denominator < 0n;
+  const magnitude = divideRounded(
+    (numerator < 0n ? -numerator : numerator) * 1000n,
+    denominator < 0n ? -denominator : denominator,
+    "half-up",
+  );
+  return (negative ? -Number(magnitude) : Number(magnitude)) / 10 + 0;
 }
 
 export function monthlyInOut(
@@ -51,7 +64,7 @@ export function monthlyInOut(
       (item) => item.periodMonth === month && item.currency === range.currency,
     );
     const total = (kind: ReportInstallment["kind"]) =>
-      rows.filter((item) => item.kind === kind).reduce((sum, item) => sum + item.ownAmountMinor, 0);
+      sumMinorUnits(rows.filter((item) => item.kind === kind).map((item) => item.ownAmountMinor));
     const inMinor = total("income");
     const outMinor = total("expense");
     return { month, inMinor, outMinor, resultMinor: inMinor - outMinor };

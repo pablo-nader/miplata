@@ -1,4 +1,11 @@
-import { addMonths, dateInMonth, type IsoDate, monthOf, type YearMonth } from "@miplata/shared";
+import {
+  addMonths,
+  dateInMonth,
+  type IsoDate,
+  monthOf,
+  sumMinorUnits,
+  type YearMonth,
+} from "@miplata/shared";
 
 export type StatementSchedule = {
   closingDay: number;
@@ -52,12 +59,13 @@ export function statementForPeriod(
     assertOverride(periodMonth, override);
     return { periodMonth, closingDate: override.closingDate, dueDate: override.dueDate };
   }
-  const dueMonth = schedule.dueDay > schedule.closingDay ? periodMonth : addMonths(periodMonth, 1);
-  return {
-    periodMonth,
-    closingDate: dateInMonth(periodMonth, schedule.closingDay),
-    dueDate: dateInMonth(dueMonth, schedule.dueDay),
-  };
+  const closingDate = dateInMonth(periodMonth, schedule.closingDay);
+  const sameMonthDue = dateInMonth(periodMonth, schedule.dueDay);
+  const dueDate =
+    sameMonthDue > closingDate
+      ? sameMonthDue
+      : dateInMonth(addMonths(periodMonth, 1), schedule.dueDay);
+  return { periodMonth, closingDate, dueDate };
 }
 
 export function statementForPurchase(
@@ -90,20 +98,11 @@ export function assignInstallmentStatements(
   );
 }
 
-function sumIntegers(values: readonly number[]): number {
-  return values.reduce((sum, value) => {
-    if (!Number.isSafeInteger(value)) {
-      throw new RangeError(`Amount must be an integer of minor units: ${value}`);
-    }
-    return sum + value;
-  }, 0);
-}
-
 export function statementTotal(parts: StatementTotalParts): number {
-  return (
-    sumIntegers([parts.previousBalanceMinor]) +
-    sumIntegers(parts.installmentsMinor) +
-    sumIntegers(parts.chargesMinor) -
-    sumIntegers(parts.paymentsMinor)
-  );
+  return sumMinorUnits([
+    parts.previousBalanceMinor,
+    ...parts.installmentsMinor,
+    ...parts.chargesMinor,
+    ...parts.paymentsMinor.map((payment) => -payment),
+  ]);
 }

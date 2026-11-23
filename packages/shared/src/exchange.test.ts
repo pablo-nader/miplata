@@ -288,6 +288,8 @@ describe("parseExchangeRate", () => {
     ["1230.5", 12305000],
     ["1.230,5", 12305000],
     ["1230,5025", 12305025],
+    ["1,230.5", 12305000],
+    ["950,123", 9501230],
     ["0,5", 5000],
   ])("parses %s", (input, expected) => {
     // Arrange
@@ -300,7 +302,7 @@ describe("parseExchangeRate", () => {
     expect(result).toBe(expected);
   });
 
-  it.each(["1230.12345", "0", "abc", "-5", ""])("rejects %s", (input) => {
+  it.each(["1.230", "950.123", "1230.12345", "0", "abc", "-5", ""])("rejects %s", (input) => {
     // Arrange
     const text = input;
 

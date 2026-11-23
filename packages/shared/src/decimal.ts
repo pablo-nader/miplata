@@ -64,12 +64,21 @@ function stripThousands(integer: string): string | null {
 
 export type ScaledDecimal = { negative: boolean; scaled: bigint };
 
-export function parseScaledDecimal(input: string, decimals: number): ScaledDecimal {
+export type AmbiguousSeparator = "thousands" | "reject";
+
+export function parseScaledDecimal(
+  input: string,
+  decimals: number,
+  ambiguous: AmbiguousSeparator = "thousands",
+): ScaledDecimal {
   const cleaned = input.replace(/[\s$]/g, "");
   const negative = cleaned.startsWith("-");
   const body = negative || cleaned.startsWith("+") ? cleaned.slice(1) : cleaned;
   if (!/^[\d.,]+$/.test(body) || !/\d/.test(body)) {
     throw new SyntaxError(`Invalid amount: ${input}`);
+  }
+  if (ambiguous === "reject" && /^[1-9]\d{0,2}\.\d{3}$/.test(body)) {
+    throw new SyntaxError(`Ambiguous separator: ${input}`);
   }
   const parts = splitParts(body);
   const integer = parts ? stripThousands(parts.integer) : null;
