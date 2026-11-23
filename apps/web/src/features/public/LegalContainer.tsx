@@ -13,7 +13,7 @@ export function LegalContainer({ document }: LegalContainerProps) {
   const sections = t(`legal.${document}.sections`, { returnObjects: true }) as LegalSection[];
   return (
     <LegalScreen
-      home={{ to: "/", label: t("public.backHome") }}
+      homeTo="/"
       brandName={t("app.name")}
       title={t(`legal.${document}.title`)}
       updated={t("legal.updated", { date })}

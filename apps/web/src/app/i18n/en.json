@@ -62,7 +62,6 @@
     }
   },
   "public": {
-    "backHome": "Go to the home page",
     "languages": {
       "es": "Español",
       "en": "English"
@@ -150,7 +149,7 @@
         {
           "heading": "Deleting your account and data",
           "body": [
-            "You can ask at any time for your account and all your records to be deleted by writing to the contact below from the email address you sign in with. We delete them and confirm by email.",
+            "You can ask at any time for your account and all your records to be deleted by writing to the contact below from the email address you sign in with.",
             "You can also remove miPlata's access from your Google account settings. That stops you from signing in again, but does not by itself delete the stored data."
           ]
         },
@@ -209,9 +208,7 @@
         },
         {
           "heading": "Suspension and shutdown",
-          "body": [
-            "We may suspend an account that breaks these terms or shut the service down. If we decide to shut it down, we will delete the stored data."
-          ]
+          "body": ["We may suspend an account that breaks these terms or shut the service down."]
         },
         {
           "heading": "Changes to the terms",

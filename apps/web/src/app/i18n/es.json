@@ -62,7 +62,6 @@
     }
   },
   "public": {
-    "backHome": "Ir al inicio",
     "languages": {
       "es": "Español",
       "en": "English"
@@ -150,7 +149,7 @@
         {
           "heading": "Eliminar tu cuenta y tus datos",
           "body": [
-            "Podés pedir en cualquier momento que eliminemos tu cuenta y todos tus registros escribiendo al contacto de abajo desde la dirección de email con la que entrás. Los eliminamos y te confirmamos por email.",
+            "Podés pedir en cualquier momento que eliminemos tu cuenta y todos tus registros escribiendo al contacto de abajo desde la dirección de email con la que entrás.",
             "También podés quitar el acceso de miPlata desde la configuración de tu cuenta de Google. Eso impide que vuelvas a entrar, pero no borra por sí solo los datos guardados."
           ]
         },
@@ -211,9 +210,7 @@
         },
         {
           "heading": "Suspensión y cierre",
-          "body": [
-            "Podemos suspender una cuenta que incumpla estos términos o cerrar el servicio. Si decidimos cerrarlo, eliminaremos los datos guardados."
-          ]
+          "body": ["Podemos suspender una cuenta que incumpla estos términos o cerrar el servicio."]
         },
         {
           "heading": "Cambios en los términos",
