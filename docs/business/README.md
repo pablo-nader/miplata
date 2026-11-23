@@ -44,3 +44,4 @@ Impact on users, cost, and technical design.
 | [BD-0015](BD-0015-statement-payment-charges-and-reconciliation.md) | Statement payment, charges and reconciliation | Accepted |
 | [BD-0016](BD-0016-recurring-movements.md) | Recurring movements | Accepted |
 | [BD-0017](BD-0017-loans-and-purchases-for-others.md) | Loans and purchases for others | Accepted |
+| [BD-0018](BD-0018-initial-reports.md) | Initial reports | Accepted |
