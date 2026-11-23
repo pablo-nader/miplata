@@ -6,14 +6,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { findAnchor } from "../../ui/tour/anchors";
 import { useSession } from "../auth/useSession";
 import { isSeen, markSeen } from "./seen-store";
-import { isBlocked, MIN_STEPS_TO_SHOW, resolveSteps } from "./tour-flow";
+import { GIVE_UP_MS, isBlocked, MAX_WAIT_MS, MIN_STEPS_TO_SHOW, resolveSteps } from "./tour-flow";
 import { tourForPath } from "./tour-registry";
 import "./tour.css";
 
 const POLL_MS = 150;
 const QUICK_POLLS = 1;
 const PATIENT_POLLS = 8;
-const GIVE_UP_MS = 4000;
 
 export function replayRequest(state: unknown): string | null {
   if (typeof state === "object" && state !== null && "replayTour" in state) {
@@ -59,11 +58,11 @@ export function TourHost() {
 
     function begin() {
       const steps = resolveSteps(tour as NonNullable<typeof tour>, (anchor) => findAnchor(anchor));
-      if (steps.length < MIN_STEPS_TO_SHOW) {
-        return;
-      }
       if (replay) {
         navigate(`${pathname}${current.current.search}`, { replace: true, state: null });
+      }
+      if (steps.length < MIN_STEPS_TO_SHOW) {
+        return;
       }
       const text = translate.current;
       running = driver({
@@ -92,8 +91,11 @@ export function TourHost() {
           if (stopped) {
             return;
           }
-          endedThisSession.current.add((tour as NonNullable<typeof tour>).id);
-          markSeen(userId as string, tour as NonNullable<typeof tour>);
+          const ended = tour as NonNullable<typeof tour>;
+          markSeen(userId as string, ended);
+          if (!isSeen(userId as string, ended)) {
+            endedThisSession.current.add(ended.id);
+          }
         },
       });
       running.drive();
@@ -106,7 +108,12 @@ export function TourHost() {
       last = anchored;
       const complete = anchored === anchoredTotal && stable >= QUICK_POLLS;
       const patient = stable >= PATIENT_POLLS;
-      const expired = Date.now() - startedAt > GIVE_UP_MS;
+      const waited = Date.now() - startedAt;
+      const expired = waited > GIVE_UP_MS;
+      if (waited > MAX_WAIT_MS) {
+        window.clearInterval(timer);
+        return;
+      }
       if (!(complete || patient || expired) || isBlocked(document)) {
         return;
       }

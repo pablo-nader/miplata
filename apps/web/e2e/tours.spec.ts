@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { GIVE_UP_MS } from "../src/features/tours/tour-flow";
 import { signInAsNewUser } from "./real-session";
 
 test.use({ locale: "es-AR", viewport: { width: 390, height: 844 } });
@@ -24,7 +25,7 @@ async function stepCount(page: Page) {
 }
 
 async function expectNoGuide(page: Page) {
-  await page.waitForTimeout(4500);
+  await page.waitForTimeout(GIVE_UP_MS + 500);
   await expect(popover(page)).toHaveCount(0);
 }
 

@@ -18,7 +18,7 @@ Each feature exports a `TourDefinition` next to its screens (`home/home-tour.ts`
 Screens mark the elements a tour explains with `data-tour="name"`, set through `tourAnchor("name")` or the `anchor` prop of a shared component (`ui/tour/anchors.ts`). Anchors are attributes, never CSS classes or text, so restyling or translating cannot break a tour. When the same element exists twice (the new-movement button in the tab bar and in the sidebar), the first rendered one is used. A step whose anchor is not on screen (an empty list) is dropped. A unit test checks that every anchor named by a tour is rendered by a screen and that every key exists in both languages.
 
 ### When a tour starts
-`TourHost`, mounted once inside the authenticated routes, reads the route, finds its tour and starts it only if the tour is not seen for the signed-in user (or a replay was requested), at least two steps resolve, and the user is not typing in a field. Screens load data after the first render, so it waits until the anchors stop changing: it starts about 0.3 seconds after the last anchor appears, or after about 1.4 seconds of no change, or after four seconds. Leaving the screen stops a running tour without marking it seen, so it does not survive navigation.
+`TourHost`, mounted once inside the authenticated routes, reads the route, finds its tour and starts it only if the tour is not seen for the signed-in user (or a replay was requested), at least two steps resolve, and the user is not typing in a field. Screens load data after the first render, so it waits until the anchors stop changing: it starts about 0.3 seconds after the last anchor appears, or after about 1.4 seconds of no change, or after four seconds. If the user is typing or a dialog is open it keeps waiting, and gives up for that visit after ten seconds. Leaving the screen stops a running tour without marking it seen, so it does not survive navigation.
 
 ### Seen state: `localStorage`, per user and per version
 - Key `miplata.tour.<userId>.<tourId>.v<version>` with the value `1`. The user id comes from the session. Bumping a tour's `version` shows it again.
@@ -27,7 +27,7 @@ Screens mark the elements a tour explains with `data-tour="name"`, set through `
 - There is no table and no endpoint: nothing about tours is sent to the server.
 
 ### Replay
-The menu links to `/guides`, which lists every tour with a replay link. The link navigates to the screen with `state: { replayTour: id }`; the host starts that tour even if it was seen, and clears the state when it ends. The card statement guide needs a credit card, so its link points to the first one and is replaced by a note when there is none. "Show all again" removes the seen keys of the signed-in user.
+The menu links to `/guides`, which lists every tour with a replay link. The link navigates to the screen with `state: { replayTour: id }`; the host starts that tour even if it was seen, and clears the state as soon as the tour starts or is skipped for lack of steps, so going back to the entry does not replay it. The card statement guide needs a credit card, so its link points to the first one and is replaced by a note when there is none. "Show all again" removes the seen keys of the signed-in user.
 
 ### Accessibility, theme and motion
 - The popover is a dialog labelled by its title; the close button has the label "Cerrar guía" or "Close guide". Escape closes and the arrow keys move between steps.
