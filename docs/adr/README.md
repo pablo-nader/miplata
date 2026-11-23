@@ -48,3 +48,4 @@ What becomes easier, harder, or constrained.
 | [0019](0019-hosting-region.md) | Hosting region: São Paulo | Accepted |
 | [0020](0020-brand-name-is-not-translated.md) | The brand name is not translated | Accepted |
 | [0021](0021-serverless-packaging-and-quality-gates.md) | Serverless packaging and quality gates | Accepted |
+| [0022](0022-domain-may-use-the-shared-package.md) | The domain may use the shared package | Accepted |
