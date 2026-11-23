@@ -31,7 +31,7 @@ export function CategoryPickerContainer({
   return (
     <CategoryPicker
       label={t("categories.picker.label")}
-      sections={pickerSections(state.catalog, type, label)}
+      sections={pickerSections(state.catalog, type, label, value)}
       selectedId={value}
       onSelect={onChange}
       allLabel={t("categories.picker.all")}

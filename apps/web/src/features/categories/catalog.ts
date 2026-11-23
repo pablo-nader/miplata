@@ -26,7 +26,9 @@ export function pickerSections(
   catalog: CategoriesResponse,
   type: "expense" | "income",
   label: (item: { name: string | null; nameKey: string | null }) => string,
+  selectedId: string | null = null,
 ): PickerSection[] {
+  const offered = (item: CategoryDto) => item.isActive || item.id === selectedId;
   const toItem = (item: CategoryDto) => ({
     id: item.id,
     name: label(item),
@@ -34,13 +36,11 @@ export function pickerSections(
     color: colorOf(item),
   });
   if (type === "income") {
-    return [
-      { id: "income", title: null, items: catalog.income.filter((i) => i.isActive).map(toItem) },
-    ];
+    return [{ id: "income", title: null, items: catalog.income.filter(offered).map(toItem) }];
   }
   return catalog.expenseGroups.map((group) => ({
     id: group.id,
     title: label(group),
-    items: group.categories.filter((item) => item.isActive).map(toItem),
+    items: group.categories.filter(offered).map(toItem),
   }));
 }

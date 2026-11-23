@@ -345,13 +345,15 @@ describe("editing a category", () => {
     renderAt("/categories");
     await userEvent.click(await screen.findByRole("link", { name: "Alquiler" }));
     await userEvent.click(await screen.findByRole("button", { name: "Eliminar" }));
-    const hidden = screen.getByLabelText("Nombre").closest("form")?.hidden;
+    const formWhileOpen = screen.queryByLabelText("Nombre");
 
     // Act
     await userEvent.click(screen.getByRole("button", { name: "Cancelar" }));
 
     // Assert
-    expect(hidden).toBe(true);
+    expect(formWhileOpen).toBeNull();
+    expect(screen.queryByLabelText("Nombre")).not.toBeNull();
+    expect(screen.queryByRole("alertdialog")).toBeNull();
     expect(document.activeElement).toBe(screen.getByRole("heading", { name: "Editar categoría" }));
   });
 
@@ -603,6 +605,33 @@ describe("category picker container", () => {
     expect(screen.queryByRole("button", { name: "Alquiler" })).toBeNull();
     expect(screen.getByTestId("picked").textContent).toBe(
       backend.categories.find((item) => item.nameKey === "defaults.category.groceries")?.id,
+    );
+  });
+
+  it("keeps the selected category in the grid even if it became inactive", async () => {
+    // Arrange
+    const rent = backend.categories.find((item) => item.nameKey === "defaults.category.rent");
+    if (rent) rent.isActive = false;
+    const { pickerSections } = await import("./catalog");
+    const catalog = (backend.handle("GET", "/api/categories").body ?? {}) as Parameters<
+      typeof pickerSections
+    >[0];
+
+    // Act
+    const withSelection = pickerSections(
+      catalog,
+      "expense",
+      (item) => item.nameKey ?? "",
+      rent?.id ?? null,
+    );
+    const without = pickerSections(catalog, "expense", (item) => item.nameKey ?? "", null);
+
+    // Assert
+    expect(withSelection.flatMap((section) => section.items).map((item) => item.name)).toContain(
+      "defaults.category.rent",
+    );
+    expect(without.flatMap((section) => section.items).map((item) => item.name)).not.toContain(
+      "defaults.category.rent",
     );
   });
 

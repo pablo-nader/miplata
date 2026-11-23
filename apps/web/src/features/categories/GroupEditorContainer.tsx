@@ -121,7 +121,7 @@ export function GroupEditorContainer({ mode }: { mode: "new" | "edit" }) {
     return (
       <PlaceholderScreen
         title={t("categories.groupEditor.editTitle")}
-        description={t("categories.errors.notFound")}
+        description={t("categories.back")}
         note={t("categories.errors.notFound")}
         back={{ to: "/categories", label: t("categories.back") }}
       />

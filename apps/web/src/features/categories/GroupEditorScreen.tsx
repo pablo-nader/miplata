@@ -51,27 +51,29 @@ export function GroupEditorScreen({
           {title}
         </h1>
       </header>
-      <form className="category-editor" onSubmit={submit} noValidate hidden={confirm !== null}>
-        <div className="category-editor__actions">
-          <Field
-            label={name.label}
-            value={name.value}
-            autoComplete="off"
-            {...(name.error ? { error: name.error } : {})}
-            onChange={(event) => name.onChange(event.target.value)}
-          />
-        </div>
-        {errorMessage ? (
-          <p role="alert" className="category-editor__error">
-            {errorMessage}
-          </p>
-        ) : null}
-        <div className="category-editor__actions">
-          <Button type="submit" disabled={save.busy}>
-            {save.label}
-          </Button>
-        </div>
-      </form>
+      {confirm ? null : (
+        <form className="category-editor" onSubmit={submit} noValidate>
+          <div className="category-editor__actions">
+            <Field
+              label={name.label}
+              value={name.value}
+              autoComplete="off"
+              {...(name.error ? { error: name.error } : {})}
+              onChange={(event) => name.onChange(event.target.value)}
+            />
+          </div>
+          {errorMessage ? (
+            <p role="alert" className="category-editor__error">
+              {errorMessage}
+            </p>
+          ) : null}
+          <div className="category-editor__actions">
+            <Button type="submit" disabled={save.busy}>
+              {save.label}
+            </Button>
+          </div>
+        </form>
+      )}
       {confirm ? <ConfirmPanel {...confirm} /> : null}
       {remove && !confirm ? (
         <div className="category-editor__secondary">
