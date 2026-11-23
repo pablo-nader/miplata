@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
 import { Chip } from "../atoms/Chip";
 import "./movement-row.css";
 
@@ -15,11 +16,20 @@ type MovementRowProps = {
   amount: ReactNode;
   amountNote?: string;
   tag?: string;
+  to?: string;
 };
 
-export function MovementRow({ badge, title, caption, amount, amountNote, tag }: MovementRowProps) {
-  return (
-    <li className="movement-row">
+export function MovementRow({
+  badge,
+  title,
+  caption,
+  amount,
+  amountNote,
+  tag,
+  to,
+}: MovementRowProps) {
+  const content = (
+    <>
       {badge}
       <span className="movement-row__text">
         <span className="movement-row__title">
@@ -32,6 +42,16 @@ export function MovementRow({ badge, title, caption, amount, amountNote, tag }: 
         {amount}
         {amountNote ? <span className="movement-row__note">{amountNote}</span> : null}
       </span>
-    </li>
+    </>
   );
+  if (to) {
+    return (
+      <li className="movement-row movement-row--link">
+        <Link className="movement-row__link" to={to}>
+          {content}
+        </Link>
+      </li>
+    );
+  }
+  return <li className="movement-row">{content}</li>;
 }

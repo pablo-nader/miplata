@@ -8,6 +8,8 @@ const unusedCategories = new Proxy({} as CategoryRepository, {
   },
 });
 
+import { unusedAccountDependencies } from "./test/account-fakes";
+
 function buildApp(overrides: Partial<AppDependencies> = {}) {
   return createApp({
     readVersion: () => "1.2.3",
@@ -15,6 +17,7 @@ function buildApp(overrides: Partial<AppDependencies> = {}) {
     resolveSession: async () => null,
     users: { findById: async () => null, updateLocale: async () => null },
     categories: unusedCategories,
+    ...unusedAccountDependencies(),
     ...overrides,
   });
 }

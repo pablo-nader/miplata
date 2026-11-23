@@ -1,0 +1,15 @@
+.account-badge {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--size-badge);
+  height: var(--size-badge);
+  border-radius: var(--radius-round);
+  background: var(--color-field);
+  color: var(--color-ink);
+}
+
+.account-badge svg {
+  width: 55%;
+  height: 55%;
+}

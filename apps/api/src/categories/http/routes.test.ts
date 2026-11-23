@@ -1,6 +1,7 @@
 import type { CategoryDto, CategoryGroupDto } from "@miplata/shared";
 import { describe, expect, it, vi } from "vitest";
 import { createApp } from "../../app";
+import { unusedAccountDependencies } from "../../test/account-fakes";
 import type { CategoryRepository } from "../application/category-repository";
 
 const id = "6f1c1b1e-0000-4000-8000-000000000001";
@@ -38,6 +39,7 @@ function appWith(overrides: Partial<CategoryRepository> = {}, userId: string | n
     resolveSession: async () => userId,
     users: { findById: async () => null, updateLocale: async () => null },
     categories,
+    ...unusedAccountDependencies(),
   });
   return { app, categories };
 }

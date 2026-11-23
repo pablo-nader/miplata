@@ -286,6 +286,9 @@
       "investments": "Rendimientos de inversiones",
       "refunds": "Reintegros",
       "other": "Otros"
+    },
+    "account": {
+      "cash": "Efectivo"
     }
   },
   "categories": {
@@ -416,5 +419,86 @@
       "wallet": "Billetera",
       "trophy": "Trofeo"
     }
+  },
+  "accounts": {
+    "add": "Agregar",
+    "addLabel": "Agregar cuenta",
+    "sections": {
+      "money": "Dinero",
+      "cards": "Tarjetas",
+      "people": "Personas",
+      "inactive": "Inactivas"
+    },
+    "types": {
+      "cash": "Efectivo",
+      "bank": "Banco",
+      "wallet": "Billetera",
+      "credit_card": "Tarjeta",
+      "person": "Persona"
+    },
+    "currencyNames": {
+      "ARS": "Pesos",
+      "USD": "Dólares"
+    },
+    "bothCurrencies": "ARS y USD",
+    "cardDays": "Cierra el {{closing}} · vence el {{due}}",
+    "debtNote": "deuda total",
+    "owesYou": "Te debe",
+    "youOwe": "Le debés",
+    "bothWays": "Saldos en ambos sentidos",
+    "settled": "Sin saldo",
+    "loading": "Cargando…",
+    "loadFailed": "No pudimos cargar tus cuentas.",
+    "retry": "Reintentar",
+    "emptyTitle": "Todavía no hay cuentas",
+    "emptyDescription": "Agregá efectivo, un banco, una billetera, una tarjeta o una persona.",
+    "form": {
+      "newTitle": "Nueva cuenta",
+      "editTitle": "Editar cuenta",
+      "back": "Volver a cuentas",
+      "type": "Tipo",
+      "institution": "Banco o billetera",
+      "otherInstitution": "Otro",
+      "name": "Nombre",
+      "nameOptional": "Nombre (opcional)",
+      "currencies": "Monedas",
+      "openingBalance": "Saldo inicial",
+      "openingDebt": "Deuda actual",
+      "openingPerson": "Saldo inicial",
+      "closingDay": "Día de cierre",
+      "dueDay": "Día de vencimiento",
+      "save": "Guardar cuenta",
+      "saveChanges": "Guardar cambios",
+      "saving": "Guardando…",
+      "nameRequired": "Poné un nombre o elegí una institución.",
+      "currencyRequired": "Elegí al menos una moneda.",
+      "amountInvalid": "Ingresá un monto válido.",
+      "dayInvalid": "Ingresá un día entre 1 y 31.",
+      "saveFailed": "No pudimos guardar la cuenta. Probá de nuevo.",
+      "currencyInUse": "No podés sacar una moneda que ya tiene movimientos.",
+      "notFound": "No encontramos esa cuenta.",
+      "personHint": "Positivo: te debe. Negativo: le debés.",
+      "nameTooLong": "El nombre admite hasta 60 caracteres."
+    },
+    "actions": {
+      "deactivate": "Desactivar",
+      "reactivate": "Reactivar",
+      "delete": "Eliminar",
+      "confirmDeactivateTitle": "¿Desactivar {{name}}?",
+      "confirmDeactivateBody": "Deja de aparecer en el saldo y al elegir cuenta. Sus movimientos se conservan y podés reactivarla cuando quieras.",
+      "confirmDeleteTitle": "¿Eliminar {{name}}?",
+      "confirmDeleteBody": "Se elimina para siempre. No se puede deshacer.",
+      "hasMovements": "Esta cuenta tiene movimientos, así que solo se puede desactivar.",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "failed": "No pudimos completar la acción. Probá de nuevo.",
+      "inUse": "Esta cuenta ya tiene movimientos: no se puede eliminar, solo desactivar."
+    }
+  },
+  "balance": {
+    "loadFailed": "No pudimos cargar el saldo.",
+    "currencyHeading": "{{name}} · {{amount}}",
+    "debt": "Tarjeta · deuda",
+    "empty": "Todavía no hay cuentas con saldo."
   }
 }

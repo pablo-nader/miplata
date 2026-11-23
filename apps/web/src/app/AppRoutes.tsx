@@ -1,6 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { AccountFormContainer } from "../features/accounts/AccountFormContainer";
+import { AccountsContainer } from "../features/accounts/AccountsContainer";
 import { RedirectIfSignedIn } from "../features/auth/RedirectIfSignedIn";
 import { RequireAuth } from "../features/auth/RequireAuth";
+import { BalanceContainer } from "../features/balance/BalanceContainer";
 import { CategoriesContainer } from "../features/categories/CategoriesContainer";
 import { CategoryEditorContainer } from "../features/categories/CategoryEditorContainer";
 import { GroupEditorContainer } from "../features/categories/GroupEditorContainer";
@@ -33,11 +36,13 @@ export function AppRoutes() {
         <Route element={<ShellContainer />}>
           <Route path="home" element={<HomeContainer />} />
           <Route path="movements" element={<PlaceholderContainer screen="movements" />} />
-          <Route path="accounts" element={<PlaceholderContainer screen="accounts" />} />
+          <Route path="accounts" element={<AccountsContainer />} />
           <Route path="reports" element={<PlaceholderContainer screen="reports" />} />
         </Route>
         <Route element={<FocusedLayout />}>
-          <Route path="balance" element={<PlaceholderContainer focused screen="balance" />} />
+          <Route path="balance" element={<BalanceContainer />} />
+          <Route path="accounts/new" element={<AccountFormContainer />} />
+          <Route path="accounts/:accountId/edit" element={<AccountFormContainer />} />
           <Route path="movements/new" element={<NewMovementContainer />} />
           <Route path="categories" element={<CategoriesContainer />} />
           <Route path="categories/new" element={<CategoryEditorContainer mode="new" />} />

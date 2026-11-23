@@ -56,3 +56,4 @@ What becomes easier, harder, or constrained.
 | [0027](0027-better-auth-integration.md) | Better Auth integration | Accepted |
 | [0028](0028-custom-domain.md) | Custom domain: miplata.enargentina.online | Accepted |
 | [0029](0029-categories-api-and-screen.md) | Categories API and screen | Accepted |
+| [0030](0030-accounts-and-people-api.md) | Accounts and people API | Accepted |
