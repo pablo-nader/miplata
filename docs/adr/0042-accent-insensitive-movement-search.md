@@ -11,7 +11,7 @@
 - The index `movement_description_search_idx` replaces `movement_description_trgm_idx`: a GIN index with `gin_trgm_ops` on `immutable_unaccent(lower(description))`.
 - The list query compares `immutable_unaccent(lower(description)) like immutable_unaccent(lower('%text%'))`, with `%`, `_` and `\` in the text escaped. The expression is the same as the index, so the planner can use it.
 - The amount-range filter now also requires the main posting to be in the selected currency, so a range in USD never matches pesos. Without a currency the web sends ARS together with the range.
-- `drizzle-kit` drops the column inside the nested expression when it generates the index SQL, so the migration SQL is written by hand and the snapshot is the one the tool produced.
+- `drizzle-kit` drops the column inside the nested expression when it generates the index SQL, so the schema declares the expression with `sql.raw`, the migration SQL is written by hand, and the snapshot keeps the string the tool produces for it (editing the snapshot makes the tool generate a spurious drop and create).
 
 ## Alternatives considered
 - Normalizing in the application and storing a second column: duplicates data and needs backfills and write-path changes.
