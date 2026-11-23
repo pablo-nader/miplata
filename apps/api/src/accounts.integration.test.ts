@@ -426,6 +426,36 @@ describe("data isolation between users", () => {
     expect(balance.lines).toHaveLength(3);
   });
 
+  it("keeps another user's accounts out of my list and my balance", async () => {
+    // Arrange
+    const before = await json(await call("GET", "/balance", cookieA));
+    await createCash(cookieB, "Hidden from A");
+
+    // Act
+    const list = (await (await call("GET", "/accounts", cookieA)).json()) as { name: string }[];
+    const after = await json(await call("GET", "/balance", cookieA));
+
+    // Assert
+    expect(list.map((item) => item.name)).not.toContain("Hidden from A");
+    expect(after.totals).toEqual(before.totals);
+    expect(after.lines).toEqual(before.lines);
+  });
+
+  it("keeps my accounts out of another user's balance", async () => {
+    // Arrange
+    const before = await json(await call("GET", "/balance", cookieB));
+    await createCash(cookieA, "Hidden from B");
+
+    // Act
+    const list = (await (await call("GET", "/accounts", cookieB)).json()) as { name: string }[];
+    const after = await json(await call("GET", "/balance", cookieB));
+
+    // Assert
+    expect(list.map((item) => item.name)).not.toContain("Hidden from B");
+    expect(after.totals).toEqual(before.totals);
+    expect(after.lines).toEqual(before.lines);
+  });
+
   it("rejects an update that points to an institution that does not exist", async () => {
     // Arrange
     const bank = await json(
