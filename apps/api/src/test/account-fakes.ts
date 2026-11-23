@@ -5,6 +5,7 @@ import type {
   InstitutionRepository,
   NewAccount,
 } from "../accounts/application/accounts";
+import { inMemoryBudgets } from "./budget-fakes";
 import { inMemoryMovements } from "./movement-fakes";
 import { unusedRecurring } from "./recurring-fakes";
 import { emptyReports } from "./report-fakes";
@@ -130,5 +131,6 @@ export function unusedAccountDependencies() {
     statements: inertStatements,
     today: () => "2026-11-23",
     recurring: unusedRecurring,
+    budgets: inMemoryBudgets().repository,
   };
 }

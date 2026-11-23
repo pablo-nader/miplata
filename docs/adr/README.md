@@ -63,3 +63,4 @@ What becomes easier, harder, or constrained.
 | [0034](0034-recurring-movements-api.md) | Recurring movements API | Accepted |
 | [0035](0035-no-ui-previews.md) | No UI previews: every pull request merges on green CI | Accepted |
 | [0036](0036-committed-report-includes-recurring.md) | Committed report includes recurring movements | Accepted |
+| [0037](0037-budgets-api-and-screen.md) | Budgets API and screen | Accepted |

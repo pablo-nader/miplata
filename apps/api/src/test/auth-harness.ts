@@ -2,6 +2,7 @@ import { createHmac } from "node:crypto";
 import type { Database } from "@miplata/db";
 import { createTestDatabase } from "@miplata/db/testing";
 import { createApp } from "../app";
+import { drizzleBudgetRepository } from "../budgets/infrastructure/drizzle-budget-repository";
 import { drizzleCategoryRepository } from "../categories/infrastructure/drizzle-category-repository";
 import { drizzleUserProfileRepository } from "../me/infrastructure/drizzle-user-profile-repository";
 import { drizzleMovementRepository } from "../movements/infrastructure/drizzle-movement-repository";
@@ -45,6 +46,7 @@ export async function createAuthHarness(seedDefaults?: SeedDefaults) {
     statements: drizzleStatementRepository(db),
     recurring: drizzleRecurringRepository(db),
     today: () => clock.today,
+    budgets: drizzleBudgetRepository(db),
   });
 
   async function signUpWithGoogle(email: string, name = "Test Person") {

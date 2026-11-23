@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { createApp } from "../../app";
 import type { CategoryRepository } from "../../categories/application/category-repository";
 import { inMemoryAccounts, inMemoryInstitutions } from "../../test/account-fakes";
+import { inMemoryBudgets } from "../../test/budget-fakes";
 import { inMemoryMovements } from "../../test/movement-fakes";
 import { inMemoryRecurring } from "../../test/recurring-fakes";
 import { emptyReports } from "../../test/report-fakes";
@@ -101,6 +102,7 @@ beforeEach(async () => {
     movements: inMemoryMovements(recurring.claim).repository,
     recurring: recurring.repository,
     reports: emptyReports(),
+    budgets: inMemoryBudgets().repository,
     statements: inertStatements,
     today: () => today,
   });

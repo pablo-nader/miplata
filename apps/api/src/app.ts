@@ -7,6 +7,8 @@ import {
   balanceRoutes,
   institutionRoutes,
 } from "./accounts/http/account-routes";
+import type { BudgetRepository } from "./budgets/application/budget-repository";
+import { budgetRoutes } from "./budgets/http/budget-routes";
 import type { CategoryRepository } from "./categories/application/category-repository";
 import { categoriesRoutes } from "./categories/http/categories-routes";
 import { categoryGroupsRoutes } from "./categories/http/category-groups-routes";
@@ -41,6 +43,7 @@ export type AppDependencies = {
   statements: StatementRepository;
   today: () => IsoDate;
   recurring: RecurringRepository;
+  budgets: BudgetRepository;
 };
 
 export function createApp({
@@ -57,6 +60,7 @@ export function createApp({
   statements,
   today,
   recurring,
+  budgets,
 }: AppDependencies) {
   return new Hono()
     .basePath("/api")
@@ -103,7 +107,8 @@ export function createApp({
         categories,
         today,
       }),
-    );
+    )
+    .route("/budgets", budgetRoutes(resolveSession, { budgets, categories }));
 }
 
 export type AppType = ReturnType<typeof createApp>;
