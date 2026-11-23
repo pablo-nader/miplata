@@ -13,8 +13,8 @@ async function post(context: BrowserContext, path: string, data: unknown) {
 }
 
 async function pickCategory(page: Page, name: string) {
-  await page.getByRole("button", { name: "Todas" }).click();
-  await page.getByRole("button", { name }).click();
+  await page.getByRole("button", { name: "Buscar" }).click();
+  await page.getByRole("option", { name }).click();
 }
 
 test.beforeEach(async ({ context }) => {
