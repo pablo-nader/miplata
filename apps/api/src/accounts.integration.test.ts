@@ -141,6 +141,22 @@ describe("institutions", () => {
     expect(list.map((item) => item.name)).toContain("Mercado Pago");
     expect(new Set(list.map((item) => item.kind))).toEqual(new Set(["bank", "wallet"]));
   });
+
+  it("returns the logo path of institutions that have one and null for the rest", async () => {
+    // Arrange
+    const path = "/institutions";
+
+    // Act
+    const response = await call("GET", path, cookieA);
+    const list = (await response.json()) as { name: string; logoPath: string | null }[];
+    const logoOf = (name: string) => list.find((item) => item.name === name)?.logoPath;
+
+    // Assert
+    expect(logoOf("Galicia")).toBe("/institutions/galicia.svg");
+    expect(logoOf("Mercado Pago")).toBe("/institutions/mercado-pago.svg");
+    expect(logoOf("Brubank")).toBeNull();
+    expect(list.filter((item) => item.logoPath !== null)).toHaveLength(12);
+  });
 });
 
 describe("creating accounts", () => {

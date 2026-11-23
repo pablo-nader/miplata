@@ -52,6 +52,26 @@ describe("accountBalance", () => {
   });
 });
 
+describe("balanceLines institution", () => {
+  it("carries the institution of each account so clients can show its logo", () => {
+    // Arrange
+    const galicia = {
+      id: "i1",
+      kind: "bank" as const,
+      name: "Galicia",
+      logoPath: "/institutions/galicia.svg",
+    };
+    const bank = { ...account("bank", "bank", "Galicia", { ARS: 1 }), institution: galicia };
+    const cash = account("cash", "cash", "Cash", { ARS: 1 });
+
+    // Act
+    const lines = balanceLines([bank, cash]);
+
+    // Assert
+    expect(lines.map((line) => line.institution)).toEqual([galicia, null]);
+  });
+});
+
 describe("balanceTotals", () => {
   it("counts card debt against the total and adds what people owe", () => {
     // Arrange

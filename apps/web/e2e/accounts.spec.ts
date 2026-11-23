@@ -91,3 +91,26 @@ test("deactivates an account and keeps it out of the balance", async ({ page }) 
   await page.goto("/balance");
   await expect(page.getByText("Caja vieja")).toHaveCount(0);
 });
+
+test("shows the institution logo on a bank account and the type icon without one", async ({
+  page,
+}) => {
+  // Arrange
+  await page.goto("/accounts/new");
+  await page.getByRole("button", { name: "Galicia" }).click();
+  await page.getByRole("button", { name: "Guardar cuenta" }).click();
+  await expect(page).toHaveURL(/\/accounts$/);
+
+  // Act
+  const money = page.getByRole("region", { name: "Dinero" });
+  const galicia = money.getByRole("link", { name: /Galicia/ });
+  const logo = galicia.locator("img");
+
+  // Assert
+  await expect(logo).toHaveAttribute("src", "/institutions/galicia.svg");
+  await expect
+    .poll(() => logo.evaluate((image: HTMLImageElement) => image.naturalWidth))
+    .toBeGreaterThan(0);
+  const cash = money.getByRole("link", { name: /Efectivo/ });
+  await expect(cash.locator("img")).toHaveCount(0);
+});

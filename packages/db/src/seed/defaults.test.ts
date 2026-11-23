@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { icons } from "lucide";
 import { describe, expect, it } from "vitest";
 import { DEFAULT_EXPENSE_GROUPS, DEFAULT_INCOME_CATEGORIES, INSTITUTION_CATALOG } from "./defaults";
@@ -79,5 +81,22 @@ describe("institution catalog", () => {
     expect(banks).toBe(12);
     expect(INSTITUTION_CATALOG.length - banks).toBe(7);
     expect(new Set(names).size).toBe(names.length);
+  });
+
+  it("points every logo at an existing local svg file", () => {
+    // Arrange
+    const logos = INSTITUTION_CATALOG.flatMap((item) => (item.logoPath ? [item.logoPath] : []));
+
+    // Act
+    const missing = logos.filter(
+      (path) =>
+        !/^\/institutions\/[a-z0-9-]+\.svg$/.test(path) ||
+        !existsSync(join(import.meta.dirname, "../../../../apps/web/public", path)),
+    );
+
+    // Assert
+    expect(logos.length).toBeGreaterThan(0);
+    expect(missing).toEqual([]);
+    expect(new Set(logos).size).toBe(logos.length);
   });
 });

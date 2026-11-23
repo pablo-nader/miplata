@@ -12,6 +12,7 @@
       "!pnpm-lock.yaml",
       "!packages/db/drizzle",
       "!design",
+      "!apps/web/public/institutions",
       "!docs",
       "!**/*.md"
     ]
