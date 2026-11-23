@@ -7,6 +7,10 @@ export const SPACE = " ";
 
 const prefixes: Record<Currency, string> = { ARS: "$", USD: "US$" };
 
+export function currencySymbol(currency: Currency): string {
+  return prefixes[currency];
+}
+
 export function localeForLanguage(language: string): MoneyLocale {
   return language.toLowerCase().startsWith("en") ? "en-US" : "es-AR";
 }

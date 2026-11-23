@@ -54,7 +54,10 @@ describe("interpretTyping", () => {
   });
 
   it("keeps the caret after a leading decimal separator", () => {
-    expect(interpretTyping(",", 1, "es-AR")).toEqual({ canonical: "0.", significantBefore: 2 });
+    expect(interpretTyping(",", 1, "es-AR")).toMatchObject({
+      canonical: "0.",
+      significantBefore: 2,
+    });
     expect(caretAfter("0,", 2, "es-AR")).toBe(2);
   });
 

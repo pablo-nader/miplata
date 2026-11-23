@@ -1,9 +1,7 @@
-import type { Currency, MoneyLocale } from "./money";
+import type { MoneyLocale } from "./money";
 
 export const MAX_INTEGER_DIGITS = 10;
 export const MAX_FRACTION_DIGITS = 2;
-
-const SYMBOLS: Record<Currency, string> = { ARS: "$", USD: "US$" };
 
 type Separators = { decimal: string; group: string };
 
@@ -19,11 +17,7 @@ export type AmountParts = {
   negative?: boolean;
 };
 
-export type Interpreted = { canonical: string; significantBefore: number };
-
-export function currencySymbol(currency: Currency): string {
-  return SYMBOLS[currency];
-}
+export type Interpreted = { canonical: string; significantBefore: number; truncated: boolean };
 
 export function decimalSeparator(locale: MoneyLocale): string {
   return SEPARATORS[locale].decimal;
@@ -117,6 +111,7 @@ export function interpretTyping(
   return {
     canonical: toCanonical({ integer, fraction, hasDecimal, negative }),
     significantBefore: significantBefore + (leadingZeroAdded ? 1 : 0),
+    truncated: tooLong(integer),
   };
 }
 

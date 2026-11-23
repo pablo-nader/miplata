@@ -6,12 +6,23 @@ import { describe, expect, it, vi } from "vitest";
 import { createI18n } from "../../app/i18n";
 import { MoneyInput } from "./MoneyInput";
 
-function Harness({ initial = "", onChange }: { initial?: string; onChange?: (v: string) => void }) {
+function Harness({
+  initial = "",
+  onChange,
+  allowNegative = false,
+  currency = "ARS",
+}: {
+  initial?: string;
+  onChange?: ((v: string) => void) | undefined;
+  allowNegative?: boolean;
+  currency?: "ARS" | "USD";
+}) {
   const [value, setValue] = useState(initial);
   return (
     <MoneyInput
       aria-label="Amount"
-      currency="ARS"
+      currency={currency}
+      allowNegative={allowNegative}
       value={value}
       onValueChange={(next) => {
         setValue(next);
@@ -21,11 +32,22 @@ function Harness({ initial = "", onChange }: { initial?: string; onChange?: (v: 
   );
 }
 
-async function renderIn(language: "es" | "en", initial = "", onChange?: (v: string) => void) {
+async function renderIn(
+  language: "es" | "en",
+  initial = "",
+  onChange?: (v: string) => void,
+  allowNegative = false,
+  currency: "ARS" | "USD" = "ARS",
+) {
   const i18n = await createI18n(language);
   render(
     <I18nextProvider i18n={i18n}>
-      <Harness initial={initial} {...(onChange ? { onChange } : {})} />
+      <Harness
+        initial={initial}
+        onChange={onChange}
+        allowNegative={allowNegative}
+        currency={currency}
+      />
     </I18nextProvider>,
   );
   return screen.getByLabelText("Amount") as HTMLInputElement;
@@ -91,11 +113,50 @@ describe("MoneyInput", () => {
     expect(input.selectionStart).toBe(2);
   });
 
-  it("reads a pasted Spanish amount in English and a pasted English one in Spanish", async () => {
+  it("reads a pasted amount in the other format", async () => {
     const english = await renderIn("en");
     await userEvent.click(english);
     await userEvent.paste("2.500,75");
     expect(english.value).toBe("2,500.75");
+  });
+
+  it("reads a pasted English amount in Spanish", async () => {
+    const spanish = await renderIn("es");
+    await userEvent.click(spanish);
+    await userEvent.paste("2,500.75");
+    expect(spanish.value).toBe("2.500,75");
+  });
+
+  it("ignores a typed group separator", async () => {
+    const input = await renderIn("es");
+
+    await userEvent.type(input, "1.5");
+
+    expect(input.value).toBe("15");
+  });
+
+  it("ignores a paste that would pass the digit limit", async () => {
+    const input = await renderIn("en", "1234567890");
+
+    input.focus();
+    input.setSelectionRange(10, 10);
+    await userEvent.paste("99");
+
+    expect(input.value).toBe("1,234,567,890");
+  });
+
+  it("accepts a minus sign only when negatives are allowed", async () => {
+    const signed = await renderIn("es", "", undefined, true);
+
+    await userEvent.type(signed, "-1500,5");
+
+    expect(signed.value).toBe("-1.500,5");
+  });
+
+  it("shows the dollar symbol for USD", async () => {
+    await renderIn("en", "", undefined, false, "USD");
+
+    expect(screen.getByText("US$")).toBeDefined();
   });
 
   it("ignores a paste that is not an amount", async () => {
