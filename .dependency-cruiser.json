@@ -12,7 +12,17 @@
       "name": "domain-has-no-frameworks",
       "severity": "error",
       "from": { "path": "^apps/api/src/[^/]+/domain/" },
-      "to": { "dependencyTypes": ["npm", "npm-dev", "npm-peer", "npm-optional", "npm-unknown"] }
+      "to": {
+        "dependencyTypes": [
+          "core",
+          "unknown",
+          "npm",
+          "npm-dev",
+          "npm-peer",
+          "npm-optional",
+          "npm-unknown"
+        ]
+      }
     },
     {
       "name": "application-depends-only-inwards",
@@ -24,7 +34,16 @@
       "name": "application-has-no-frameworks",
       "severity": "error",
       "from": { "path": "^apps/api/src/[^/]+/application/" },
-      "to": { "path": "^packages/db/|node_modules/(hono|drizzle-orm|pg|@hono)(/|$)" }
+      "to": {
+        "dependencyTypes": ["core", "npm", "npm-dev", "npm-peer", "npm-optional", "npm-unknown"],
+        "pathNot": "node_modules/zod/"
+      }
+    },
+    {
+      "name": "application-does-not-see-the-database-package",
+      "severity": "error",
+      "from": { "path": "^apps/api/src/[^/]+/application/" },
+      "to": { "path": "^packages/db/|^@miplata/db" }
     },
     {
       "name": "infrastructure-does-not-see-http",
