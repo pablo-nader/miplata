@@ -1,0 +1,43 @@
+{
+  "forbidden": [
+    {
+      "name": "domain-is-pure",
+      "comment": "",
+      "severity": "error",
+      "from": { "path": "^apps/api/src/[^/]+/domain/" },
+      "to": {
+        "path": "^apps/api/src/[^/]+/(application|infrastructure|http)/|^apps/api/src/shared/"
+      }
+    },
+    {
+      "name": "domain-has-no-frameworks",
+      "severity": "error",
+      "from": { "path": "^apps/api/src/[^/]+/domain/" },
+      "to": { "dependencyTypes": ["npm", "npm-dev", "npm-peer", "npm-optional", "npm-unknown"] }
+    },
+    {
+      "name": "application-depends-only-inwards",
+      "severity": "error",
+      "from": { "path": "^apps/api/src/[^/]+/application/" },
+      "to": { "path": "^apps/api/src/[^/]+/(infrastructure|http)/" }
+    },
+    {
+      "name": "application-has-no-frameworks",
+      "severity": "error",
+      "from": { "path": "^apps/api/src/[^/]+/application/" },
+      "to": { "path": "node_modules/(hono|drizzle-orm|pg|@hono)" }
+    },
+    {
+      "name": "infrastructure-does-not-see-http",
+      "severity": "error",
+      "from": { "path": "^apps/api/src/[^/]+/infrastructure/" },
+      "to": { "path": "^apps/api/src/[^/]+/http/" }
+    }
+  ],
+  "options": {
+    "parser": "swc",
+    "tsConfig": { "fileName": "apps/api/tsconfig.json" },
+    "doNotFollow": { "path": "node_modules" },
+    "exclude": { "path": "[.]test[.]ts$" }
+  }
+}
