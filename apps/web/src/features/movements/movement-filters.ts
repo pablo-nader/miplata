@@ -28,6 +28,13 @@ export function emptyFilters(): UiFilters {
   return { ...defaultFilters("2000-01"), from: "", to: "" };
 }
 
+export function isInvertedRange(ui: UiFilters): boolean {
+  const min = ui.min.trim() ? parseAmountMinor(ui.min, "ARS") : null;
+  const max = ui.max.trim() ? parseAmountMinor(ui.max, "ARS") : null;
+  const dates = ui.from !== "" && ui.to !== "" && ui.from > ui.to;
+  return dates || (min !== null && max !== null && min > max);
+}
+
 export function toQuery(ui: UiFilters, q: string): MovementFilters {
   const min = ui.min.trim() ? parseAmountMinor(ui.min, "ARS") : null;
   const max = ui.max.trim() ? parseAmountMinor(ui.max, "ARS") : null;
@@ -110,14 +117,14 @@ export function activeChips(ui: UiFilters, ctx: ChipContext): ActiveChip[] {
   if (ui.currency) {
     chips.push({ key: "currency", label: ui.currency, clear: { currency: "" } });
   }
-  if (ui.min.trim()) {
+  if (ui.min.trim() && parseAmountMinor(ui.min, "ARS") !== null) {
     chips.push({
       key: "min",
       label: t("movements.filters.minChip", { amount: ui.min.trim() }),
       clear: { min: "" },
     });
   }
-  if (ui.max.trim()) {
+  if (ui.max.trim() && parseAmountMinor(ui.max, "ARS") !== null) {
     chips.push({
       key: "max",
       label: t("movements.filters.maxChip", { amount: ui.max.trim() }),

@@ -81,11 +81,12 @@ export function MovementFormContainer() {
   const title = isEdit ? t("movements.form.editTitle") : t("screens.newMovement.title");
 
   if (existing.state.status === "error" || lookups.status === "error") {
+    const missing = existing.state.status === "error" && isEdit;
     return (
       <>
         <ScreenHeader title={title} back={back} />
         <EmptyState
-          title={t(isEdit ? "movements.form.notFound" : "movements.loadFailed")}
+          title={t(missing ? "movements.form.notFound" : "movements.loadFailed")}
           action={
             <Button
               variant="ghost"
@@ -143,10 +144,12 @@ export function MovementFormContainer() {
   const perInstallment = installmentAmountMinor(form);
   const installments = isCardExpense(form, entryAccount)
     ? {
-        options: INSTALLMENT_CHOICES.map((count) => ({
-          value: String(count),
-          label: t("movements.form.installmentsOption", { count }),
-        })),
+        options: [...new Set([...INSTALLMENT_CHOICES, form.installments])]
+          .sort((a, b) => a - b)
+          .map((count) => ({
+            value: String(count),
+            label: t("movements.form.installmentsOption", { count }),
+          })),
         hint:
           form.installments > 1 && perInstallment !== null
             ? t("movements.form.installmentsHint", {

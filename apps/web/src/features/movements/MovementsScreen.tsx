@@ -19,6 +19,7 @@ export type ChipData = {
   selected: boolean;
   onClick: () => void;
   kind: "active" | "toggle";
+  ariaLabel?: string;
 };
 
 export type MovementsScreenProps = {
@@ -115,6 +116,8 @@ export function MovementsScreen({
             label={chip.label}
             selected={chip.selected}
             onClick={chip.onClick}
+            {...(chip.ariaLabel ? { ariaLabel: chip.ariaLabel } : {})}
+            {...(chip.kind === "toggle" ? { expanded: chip.selected } : {})}
             icon={
               chip.kind === "toggle" ? (
                 <SlidersHorizontal aria-hidden="true" />
@@ -126,7 +129,7 @@ export function MovementsScreen({
         ))}
       </div>
       {filters}
-      {status === "loading" && groups.length === 0 ? (
+      {status === "loading" ? (
         <p className="screen-note" role="status">
           {messages.loading}
         </p>

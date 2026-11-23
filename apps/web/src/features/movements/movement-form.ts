@@ -268,7 +268,10 @@ export function applyChange(
       next.categoryId = null;
     }
     if (form.type === "transfer" && patch.type !== "transfer") {
-      next.accountId = form.fromAccountId ?? form.accountId;
+      const source = form.fromAccountId ? byId.get(form.fromAccountId) : undefined;
+      if (source && source.type !== "person") {
+        next.accountId = source.id;
+      }
       next.currency = form.fromCurrency;
       next.amount = form.fromAmount;
     }

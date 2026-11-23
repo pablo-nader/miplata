@@ -100,9 +100,7 @@ describe("MovementsContainer", () => {
     expect(within(yesterday).getByText("Coto")).toBeDefined();
     expect(within(yesterday).getByText("Juan")).toBeDefined();
     expect(within(yesterday).getByText("no es gasto")).toBeDefined();
-    expect(
-      within(yesterday).getByText("Galicia → Galicia US$".replace(/Galicia/g, "Efectivo")),
-    ).toBeDefined();
+    expect(within(yesterday).getByText("Efectivo → Efectivo US$")).toBeDefined();
     expect(text(yesterday)).toContain("US$ 1.000");
     const link = within(today).getByRole("link", { name: /Heladera/ });
     expect(link.getAttribute("href")).toBe("/movements/m-heladera/edit");
@@ -141,18 +139,18 @@ describe("MovementsContainer", () => {
     await screen.findByText("Coto");
 
     // Act
-    await userEvent.click(screen.getByRole("button", { name: "Noviembre" }));
+    await userEvent.click(screen.getByRole("button", { name: "Quitar filtro Noviembre" }));
     await screen.findByText("Compra de dólares");
     await userEvent.click(screen.getByRole("button", { name: "Filtros" }));
     await userEvent.selectOptions(screen.getByLabelText("Tipo"), "expense");
 
     // Assert
-    expect(await screen.findByRole("button", { name: "Gasto" })).toBeDefined();
+    expect(await screen.findByRole("button", { name: "Quitar filtro Gasto" })).toBeDefined();
     expect(calls.map((call) => call.key)).toContain(
       "GET /api/movements?type=expense&limit=30&offset=0",
     );
     await userEvent.click(screen.getByRole("button", { name: "Limpiar filtros" }));
-    expect(screen.queryByRole("button", { name: "Gasto" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Quitar filtro Gasto" })).toBeNull();
   });
 
   it("loads the next page", async () => {
