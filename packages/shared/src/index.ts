@@ -35,4 +35,4 @@ export {
   subtractMoney,
   sumMoney,
 } from "./money";
-export type { RoundingMode } from "./rounding";
+export { divideRounded, type RoundingMode, sumMinorUnits } from "./rounding";

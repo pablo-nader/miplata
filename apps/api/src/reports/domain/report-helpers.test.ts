@@ -46,6 +46,30 @@ describe("percentChangeVsPreviousThree", () => {
     expect(result).toBe(9.6);
   });
 
+  it("rounds exact halves away from zero for both signs", () => {
+    // Arrange
+    const previous = [4000, 4000, 4000];
+
+    // Act
+    const rise = percentChangeVsPreviousThree(4010, previous);
+    const drop = percentChangeVsPreviousThree(3990, previous);
+
+    // Assert
+    expect(rise).toBe(0.3);
+    expect(drop).toBe(-0.3);
+  });
+
+  it("keeps the sign convention when the baseline is negative", () => {
+    // Arrange
+    const previous = [-100, -100, -100];
+
+    // Act
+    const result = percentChangeVsPreviousThree(-50, previous);
+
+    // Assert
+    expect(result).toBe(-50);
+  });
+
   it("counts a month without spending as zero in the average", () => {
     // Arrange
     const previous = [0, 0, 30000];

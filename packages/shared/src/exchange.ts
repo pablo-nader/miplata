@@ -61,7 +61,7 @@ export function usdFromArs(ars: Money, rate: ExchangeRate, rounding: RoundingMod
 }
 
 export function parseExchangeRate(input: string): ExchangeRate {
-  const { negative, scaled } = parseScaledDecimal(input, 4);
+  const { negative, scaled } = parseScaledDecimal(input, 4, "reject");
   if (negative) {
     throw new SyntaxError(`Exchange rate must be positive: ${input}`);
   }

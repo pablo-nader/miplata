@@ -81,6 +81,21 @@ describe("statementForPeriod", () => {
     expect(result.dueDate).toBe("2026-02-28");
   });
 
+  it("moves the due date to the next month when clamping would make it equal the closing date", () => {
+    // Arrange
+    const card = { closingDay: 28, dueDay: 31 };
+
+    // Act
+    const result = statementForPeriod(card, "2026-02");
+
+    // Assert
+    expect(result).toEqual({
+      periodMonth: "2026-02",
+      closingDate: "2026-02-28",
+      dueDate: "2026-03-31",
+    });
+  });
+
   it("uses the override of a single statement", () => {
     // Arrange
     const overrides = { "2026-11": { closingDate: "2026-11-25", dueDate: "2026-12-10" } };
@@ -329,6 +344,22 @@ describe("statementTotal", () => {
 
     // Assert
     expect(result).toBe(-5000);
+  });
+
+  it("rejects a total outside the safe integer range", () => {
+    // Arrange
+    const parts = {
+      previousBalanceMinor: Number.MAX_SAFE_INTEGER,
+      installmentsMinor: [1],
+      chargesMinor: [],
+      paymentsMinor: [],
+    };
+
+    // Act
+    const act = () => statementTotal(parts);
+
+    // Assert
+    expect(act).toThrow(RangeError);
   });
 
   it("rejects non-integer amounts", () => {

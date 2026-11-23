@@ -1,4 +1,4 @@
-import type { Currency, YearMonth } from "@miplata/shared";
+import { type Currency, sumMinorUnits, type YearMonth } from "@miplata/shared";
 
 export type BudgetState = "below" | "warning" | "reached";
 
@@ -55,7 +55,7 @@ export function budgetSpent(
   filter: BudgetFilter,
 ): number {
   const categories = new Set(filter.categoryIds);
-  return installments
+  const amounts = installments
     .filter(
       (item) =>
         item.kind === "expense" &&
@@ -63,5 +63,6 @@ export function budgetSpent(
         item.currency === filter.currency &&
         categories.has(item.categoryId),
     )
-    .reduce((sum, item) => sum + item.ownAmountMinor, 0);
+    .map((item) => item.ownAmountMinor);
+  return sumMinorUnits(amounts);
 }
