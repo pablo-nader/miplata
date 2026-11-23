@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createApp } from "../../app";
 import type { CategoryRepository } from "../../categories/application/category-repository";
 import { inMemoryAccounts, inMemoryInstitutions } from "../../test/account-fakes";
+import { inMemoryBudgets } from "../../test/budget-fakes";
 import { inMemoryMovements } from "../../test/movement-fakes";
 import { unusedRecurring } from "../../test/recurring-fakes";
 import { emptyReports } from "../../test/report-fakes";
@@ -165,6 +166,7 @@ beforeEach(async () => {
     statements: scripted.repository,
     recurring: unusedRecurring,
     reports: emptyReports(),
+    budgets: inMemoryBudgets().repository,
     today: () => "2026-11-23",
   });
 });
