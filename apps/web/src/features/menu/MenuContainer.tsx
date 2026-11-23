@@ -20,16 +20,18 @@ export function MenuContainer() {
   function changeLanguage(value: string) {
     const locale: Locale = localeSchema.catch(current).parse(value);
     setFailed(false);
-    queue.current = queue.current.then(async () => {
-      await i18n.changeLanguage(locale);
-      syncDocumentLanguage(locale);
-      const saved = await saveLocale(locale);
-      if (saved) {
-        await refresh();
-      } else {
-        setFailed(true);
-      }
-    });
+    queue.current = queue.current
+      .then(async () => {
+        await i18n.changeLanguage(locale);
+        syncDocumentLanguage(locale);
+        const saved = await saveLocale(locale);
+        if (saved) {
+          await refresh();
+        } else {
+          setFailed(true);
+        }
+      })
+      .catch(() => setFailed(true));
   }
 
   async function signOut() {
