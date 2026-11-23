@@ -9,6 +9,9 @@ import { type DesignTokens, designTokens, themeColor } from "./build-plugins/tok
 const root = join(import.meta.dirname, "../..");
 const tokens: DesignTokens = JSON.parse(readFileSync(join(root, "design/tokens.json"), "utf8"));
 const apiTarget = `http://localhost:${process.env.API_PORT ?? 8787}`;
+const pwaCopy: { pwa: { description: string } } = JSON.parse(
+  readFileSync(join(import.meta.dirname, "src/app/i18n/es.json"), "utf8"),
+);
 
 export default defineConfig({
   plugins: [
@@ -18,8 +21,10 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
+        id: "/",
         name: "miPlata",
         short_name: "miPlata",
+        description: pwaCopy.pwa.description,
         lang: "es",
         start_url: "/",
         scope: "/",
