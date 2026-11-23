@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /$
+Allow: /privacy
+Allow: /terms
+Disallow: /api/
+Disallow: /home
+Disallow: /movements
+Disallow: /accounts
+Disallow: /reports
+Disallow: /balance
+Disallow: /budgets
+Disallow: /categories
+Disallow: /to-pay
+Disallow: /recurring
+Disallow: /menu
