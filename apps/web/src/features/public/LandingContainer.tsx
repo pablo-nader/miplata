@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { authClient } from "../auth/auth-client";
 import { LandingScreen } from "./LandingScreen";
 
 export function LandingContainer() {
@@ -9,7 +10,7 @@ export function LandingContainer() {
       brandName={t("app.name")}
       tagline={t("public.landing.tagline")}
       signInLabel={t("public.landing.signIn")}
-      signInTo="/sign-in"
+      onSignIn={() => void authClient.signIn.social({ provider: "google", callbackURL: "/home" })}
       aboutLabel={t("public.landing.about")}
       description={t("public.landing.description")}
       points={points}

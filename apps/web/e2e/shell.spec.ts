@@ -1,4 +1,9 @@
 import { expect, type Page, test } from "@playwright/test";
+import { mockSignedIn } from "./session";
+
+test.beforeEach(async ({ page }) => {
+  await mockSignedIn(page);
+});
 
 const viewports = {
   phone: { width: 390, height: 844 },
@@ -10,7 +15,6 @@ const schemes = ["light", "dark"] as const;
 
 const mainPaths = ["/home", "/movements", "/accounts", "/reports"];
 const focusedPaths = [
-  "/sign-in",
   "/balance",
   "/movements/new",
   "/accounts/1/statement",
@@ -120,6 +124,7 @@ test.describe("keyboard focus on the signage band", () => {
   test("uses a ring color that differs from the band", async ({ page }) => {
     // Arrange
     await page.goto("/home");
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
     // Act
     await page.keyboard.press("Tab");

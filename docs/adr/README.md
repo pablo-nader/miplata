@@ -53,3 +53,4 @@ What becomes easier, harder, or constrained.
 | [0024](0024-web-routing-and-ui-foundation.md) | Web routing and UI foundation | Accepted |
 | [0025](0025-database-schema-implementation.md) | Database schema implementation | Accepted |
 | [0026](0026-public-pages-and-landing-route.md) | Public pages and the landing route | Accepted |
+| [0027](0027-better-auth-integration.md) | Better Auth integration | Accepted |

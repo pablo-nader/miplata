@@ -15,11 +15,16 @@
   "placeholder": {
     "comingSoon": "Esta pantalla llega en una etapa próxima."
   },
-  "screens": {
-    "signIn": {
-      "title": "Entrar",
-      "description": "Entrar con Google."
+  "menu": {
+    "language": "Idioma",
+    "languageNames": {
+      "es": "Español",
+      "en": "English"
     },
+    "languageNotSaved": "No pudimos guardar el idioma. Probá de nuevo.",
+    "signOut": "Cerrar sesión"
+  },
+  "screens": {
     "home": {
       "title": "Inicio",
       "description": "Acá vas a ver tu saldo y tus últimos movimientos."

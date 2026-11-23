@@ -3,10 +3,20 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     include: ["src/**/*.test.ts"],
+    exclude: ["src/**/*.integration.test.ts"],
     coverage: {
       provider: "v8",
       include: ["src/**/*.ts"],
-      exclude: ["src/**/*.test.ts", "src/dev-server.ts", "src/vercel.ts"],
+      exclude: [
+        "src/**/*.test.ts",
+        "src/test/**",
+        "src/dev-server.ts",
+        "src/vercel.ts",
+        "src/shared/compose.ts",
+        "src/shared/auth/create-auth.ts",
+        "src/shared/auth/session-resolver.ts",
+        "src/me/infrastructure/**",
+      ],
       thresholds: { lines: 80, functions: 80, branches: 80, statements: 80 },
     },
   },

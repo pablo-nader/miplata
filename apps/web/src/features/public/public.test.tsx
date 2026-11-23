@@ -1,10 +1,23 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppRoutes } from "../../app/AppRoutes";
 import { type Language, resources } from "../../app/i18n";
 import { renderApp } from "../../test/render";
 import { contactEmail } from "./contact";
+
+const signInSocial = vi.fn(async (_options: unknown) => ({}));
+
+vi.mock("../auth/useSession", () => ({
+  useSession: () => ({ status: "signedOut", user: null, refresh: async () => {} }),
+}));
+vi.mock("../auth/auth-client", () => ({
+  authClient: { signIn: { social: (options: unknown) => signInSocial(options) } },
+}));
+
+beforeEach(() => {
+  signInSocial.mockClear();
+});
 
 const languages: Language[] = ["es", "en"];
 
@@ -16,14 +29,25 @@ describe("landing page", () => {
 
     // Act
     const heading = screen.getByRole("heading", { level: 1 });
-    const signIn = screen.getByRole("link", { name: text.signIn });
+    const signIn = screen.getByRole("button", { name: text.signIn });
 
     // Assert
     expect(heading.textContent).toBe("miPlata");
     expect(screen.getByText(text.tagline)).toBeDefined();
     expect(screen.getByText(text.description)).toBeDefined();
-    expect(signIn.getAttribute("href")).toBe("/sign-in");
+    expect(signIn).toBeDefined();
     for (const point of text.points) expect(screen.getByText(point)).toBeDefined();
+  });
+
+  it("starts the Google sign-in and returns to the home screen", async () => {
+    // Arrange
+    renderApp(<AppRoutes />, "en", "/");
+
+    // Act
+    await userEvent.click(screen.getByRole("button", { name: "Sign in with Google" }));
+
+    // Assert
+    expect(signInSocial).toHaveBeenCalledWith({ provider: "google", callbackURL: "/home" });
   });
 
   it.each(languages)("links the privacy policy and the terms in %s", (language) => {

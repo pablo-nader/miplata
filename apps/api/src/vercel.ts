@@ -1,6 +1,5 @@
-import { createApp } from "./app";
-import { readVersion } from "./version";
+import { composeApp } from "./shared/compose";
 
-const app = createApp(readVersion);
+const app = composeApp();
 
 export default { fetch: app.fetch };
