@@ -19,7 +19,7 @@ Buenos Aires subway signage, in the Grafito palette. Signage is designed to be r
 1. **Readable in one second.** Large balance, clear hierarchy, no decoration competing with numbers.
 2. **Calm, not anxious.** Expenses are never shown in alarm red. Orange marks the action and the expense rule, never a warning about spending.
 3. **One main action per screen**, always in signal orange.
-4. **Color carries meaning, letters carry identity.** Every category badge has a letter, so it still works for color-blind users and when colors repeat.
+4. **Color carries meaning, the icon carries identity.** Every category badge shows an icon, or the first letter of its name when it has none, so it still works for color-blind users and when colors repeat.
 5. **Mobile first**, one-handed: primary actions at the bottom, within thumb reach.
 
 ## Themes
@@ -59,7 +59,7 @@ Deep tones with a **white letter**, identical in both themes.
 Rules:
 - A category color must reach **at least 4.5 : 1 against white** (WCAG AA for text) and **at least 3 : 1 against the dark surface** (WCAG AA for UI components). Check every new color before adding it.
 - Category badges never use `action` orange.
-- When users create more categories than colors, colors repeat; the letter keeps each badge distinct.
+- When users create more categories than colors, colors repeat; the icon or letter keeps each badge distinct.
 - The "add category" badge is not a color: a dashed `muted` ring with a `+` in `ink`.
 
 ## Typography
@@ -91,7 +91,7 @@ Rules:
 
 **Movement row.** Grid of badge (32 px), title with caption below (category · date), amount aligned right. Separated by a 1 px `rule` divider. Income amounts in `income` with a leading `+`; expenses in `ink` with a leading `−`.
 
-**Category badge.** Circle with a white letter in Schibsted Grotesk 800. 32 px in lists, 38 px in pickers. Selected state: a 3 px `surface` gap and a 2 px `ink` ring.
+**Category badge.** Circle in the category color with a white Lucide icon (2 px stroke, about 55% of the badge size). A category without an icon shows the first letter of its name in Schibsted Grotesk 800 instead. 32 px in lists, 38 px in pickers. Selected state: a 3 px `surface` gap and a 2 px `ink` ring. See [ADR 0012](docs/adr/0012-category-icons-with-lucide.md).
 
 **Main action.** Full width at the bottom of the screen, `action` background, `on-action` text, 12 px radius. When it opens a form it carries a round `+` glyph. Only one per screen.
 
@@ -122,4 +122,5 @@ Rules:
 - Target WCAG 2.1 AA in both themes.
 - Text at least 4.5 : 1; large text and UI components at least 3 : 1.
 - Visible focus ring in `ink`, 2 px with 3 px offset. Orange is not used for focus: it reaches only about 2.6 : 1 on white.
-- Meaning never depends on color alone: categories have letters, amounts have signs.
+- Meaning never depends on color alone: categories have icons or letters, amounts have signs.
+- Badge icons are decorative next to the category name; when a badge appears without its name, it carries the name as its accessible label.

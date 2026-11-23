@@ -35,3 +35,5 @@ Impact on users, cost, and technical design.
 | [BD-0006](BD-0006-app-name-miplata.md) | App name: miPlata | Accepted |
 | [BD-0007](BD-0007-visual-direction-transit-signage.md) | Visual direction: transit signage | Accepted |
 | [BD-0008](BD-0008-graphite-palette-with-dark-theme.md) | Graphite palette with light and dark themes | Accepted |
+| [BD-0009](BD-0009-movement-types-and-categories.md) | Movement types and categories | Accepted |
+| [BD-0010](BD-0010-category-icons.md) | Category icons | Accepted |
