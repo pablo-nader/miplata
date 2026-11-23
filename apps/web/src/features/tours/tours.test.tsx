@@ -42,7 +42,13 @@ vi.mock("../auth/useSession", () => ({
 const budgets = TOURS.find((tour) => tour.id === "budgets");
 const home = TOURS.find((tour) => tour.id === "home");
 
-function Page({ lateAnchors = false }: { lateAnchors?: boolean }) {
+function Page({
+  lateAnchors = false,
+  dialogOpen = false,
+}: {
+  lateAnchors?: boolean;
+  dialogOpen?: boolean;
+}) {
   const [late, setLate] = useState(!lateAnchors);
   useEffect(() => {
     const timer = setTimeout(() => setLate(true), 500);
@@ -51,7 +57,9 @@ function Page({ lateAnchors = false }: { lateAnchors?: boolean }) {
   return (
     <main>
       <input aria-label="typing" />
+      {dialogOpen ? <div role="dialog" aria-label="other" /> : null}
       <Link to="/elsewhere">leave</Link>
+      <Link to="/home?period=1">refine</Link>
       <p {...tourAnchor("home-balance")}>balance</p>
       <p {...tourAnchor("home-menu")}>menu</p>
       {late ? <p {...tourAnchor("home-month")}>month</p> : null}
@@ -62,13 +70,26 @@ function Page({ lateAnchors = false }: { lateAnchors?: boolean }) {
 
 function renderAt(
   path: string,
-  options: { state?: unknown; language?: Language; lateAnchors?: boolean } = {},
+  options: {
+    state?: unknown;
+    language?: Language;
+    lateAnchors?: boolean;
+    dialogOpen?: boolean;
+  } = {},
 ) {
   return render(
     <I18nextProvider i18n={createI18n(options.language ?? "es")}>
       <MemoryRouter initialEntries={[{ pathname: path, state: options.state }]}>
         <Routes>
-          <Route path="/home" element={<Page lateAnchors={options.lateAnchors ?? false} />} />
+          <Route
+            path="/home"
+            element={
+              <Page
+                lateAnchors={options.lateAnchors ?? false}
+                dialogOpen={options.dialogOpen ?? false}
+              />
+            }
+          />
           <Route path="/elsewhere" element={<p>elsewhere</p>} />
         </Routes>
         <TourHost />
@@ -253,7 +274,21 @@ describe("closing and replaying", () => {
     expect(home && isSeen("ana", home)).toBe(false);
   });
 
-  it("still starts when the storage is blocked", async () => {
+  it("keeps the tour running when only the query string changes", async () => {
+    // Arrange
+    renderAt("/home");
+    await waitFor(() => expect(drivers).toHaveLength(1), STARTED);
+
+    // Act
+    await userEvent.click(screen.getByRole("link", { name: "refine" }));
+    await idle();
+
+    // Assert
+    expect(drivers).toHaveLength(1);
+    expect(drivers[0]?.destroy).not.toHaveBeenCalled();
+  });
+
+  it("does not start again in the same session after it ended with blocked storage", async () => {
     // Arrange
     vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
       throw new Error("blocked");
@@ -261,14 +296,46 @@ describe("closing and replaying", () => {
     vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
       throw new Error("blocked");
     });
-    renderAt("/home");
+    renderAt("/home", { state: { replayTour: "home" } });
     await waitFor(() => expect(drivers).toHaveLength(1), STARTED);
 
     // Act
-    const close = () => act(() => drivers[0]?.config.onDestroyed());
+    act(() => drivers[0]?.config.onDestroyed());
+    await idle();
 
     // Assert
-    expect(close).not.toThrow();
+    expect(drivers).toHaveLength(1);
+  });
+
+  it("waits while a dialog is open", async () => {
+    // Arrange
+    renderAt("/home", { dialogOpen: true });
+
+    // Act
+    await idle();
+
+    // Assert
+    expect(drivers).toHaveLength(0);
+  });
+
+  it("starts again on a later visit when the storage is blocked", async () => {
+    // Arrange
+    vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new Error("blocked");
+    });
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new Error("blocked");
+    });
+    const first = renderAt("/home");
+    await waitFor(() => expect(drivers).toHaveLength(1), STARTED);
+    act(() => drivers[0]?.config.onDestroyed());
+    first.unmount();
+
+    // Act
+    renderAt("/home");
+
+    // Assert
+    await waitFor(() => expect(drivers).toHaveLength(2), STARTED);
   });
 });
 

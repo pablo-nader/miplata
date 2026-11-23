@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { findAnchor } from "../../ui/tour/anchors";
 import { useSession } from "../auth/useSession";
 import { isSeen, markSeen } from "./seen-store";
-import { isTyping, MIN_STEPS_TO_SHOW, resolveSteps } from "./tour-flow";
+import { isBlocked, MIN_STEPS_TO_SHOW, resolveSteps } from "./tour-flow";
 import { tourForPath } from "./tour-registry";
 import "./tour.css";
 
@@ -35,17 +35,19 @@ export function TourHost() {
   const userId = user?.id ?? null;
   const translate = useRef(t);
   translate.current = t;
-  const replayState = useRef(location.state);
-  replayState.current = location.state;
+  const current = useRef(location);
+  current.current = location;
+  const endedThisSession = useRef(new Set<string>());
 
   const tour = tourForPath(location.pathname);
-  const replay = tour !== undefined && replayRequest(location.state) === tour.id;
-  const pending = tour && userId && (replay || !isSeen(userId, tour)) ? tour : undefined;
-  const visit = location.key;
-  const { pathname, search } = location;
+  const { pathname } = location;
 
   useEffect(() => {
-    if (!pending || !userId || !visit) {
+    if (!tour || !userId) {
+      return;
+    }
+    const replay = replayRequest(current.current.state) === tour.id;
+    if (!replay && (endedThisSession.current.has(tour.id) || isSeen(userId, tour))) {
       return;
     }
     let running: Driver | null = null;
@@ -53,12 +55,15 @@ export function TourHost() {
     let last = -1;
     let stable = 0;
     const startedAt = Date.now();
-    const anchoredTotal = pending.steps.filter((step) => step.anchor !== undefined).length;
+    const anchoredTotal = tour.steps.filter((step) => step.anchor !== undefined).length;
 
-    function begin(tourToRun: NonNullable<typeof pending>, owner: string) {
-      const steps = resolveSteps(tourToRun, (anchor) => findAnchor(anchor));
+    function begin() {
+      const steps = resolveSteps(tour as NonNullable<typeof tour>, (anchor) => findAnchor(anchor));
       if (steps.length < MIN_STEPS_TO_SHOW) {
         return;
+      }
+      if (replay) {
+        navigate(`${pathname}${current.current.search}`, { replace: true, state: null });
       }
       const text = translate.current;
       running = driver({
@@ -87,28 +92,26 @@ export function TourHost() {
           if (stopped) {
             return;
           }
-          markSeen(owner, tourToRun);
-          if (replayRequest(replayState.current)) {
-            navigate(`${pathname}${search}`, { replace: true, state: null });
-          }
+          endedThisSession.current.add((tour as NonNullable<typeof tour>).id);
+          markSeen(userId as string, tour as NonNullable<typeof tour>);
         },
       });
       running.drive();
     }
 
     const timer = window.setInterval(() => {
-      const steps = resolveSteps(pending, (anchor) => findAnchor(anchor));
+      const steps = resolveSteps(tour, (anchor) => findAnchor(anchor));
       const anchored = steps.filter((step) => step.anchor !== undefined).length;
       stable = anchored === last ? stable + 1 : 0;
       last = anchored;
       const complete = anchored === anchoredTotal && stable >= QUICK_POLLS;
       const patient = stable >= PATIENT_POLLS;
       const expired = Date.now() - startedAt > GIVE_UP_MS;
-      if (!(complete || patient || expired) || isTyping(document.activeElement)) {
+      if (!(complete || patient || expired) || isBlocked(document)) {
         return;
       }
       window.clearInterval(timer);
-      begin(pending, userId);
+      begin();
     }, POLL_MS);
 
     return () => {
@@ -116,7 +119,7 @@ export function TourHost() {
       window.clearInterval(timer);
       running?.destroy();
     };
-  }, [pending, userId, visit, navigate, pathname, search]);
+  }, [tour, userId, pathname, navigate]);
 
   return null;
 }

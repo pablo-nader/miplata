@@ -23,6 +23,11 @@ async function stepCount(page: Page) {
   return Number(text.replace("Paso 1 de ", ""));
 }
 
+async function expectNoGuide(page: Page) {
+  await page.waitForTimeout(4500);
+  await expect(popover(page)).toHaveCount(0);
+}
+
 async function seenTours(page: Page) {
   return page.evaluate(() =>
     Object.keys(window.localStorage)
@@ -59,8 +64,7 @@ test("can be closed at any step and does not come back", async ({ page }) => {
   expect(await seenTours(page)).toContain("budgets");
   await page.reload();
   await expect(page.getByRole("heading", { name: "Presupuestos", level: 1 })).toBeVisible();
-  await page.waitForTimeout(1500);
-  await expect(popover(page)).toBeHidden();
+  await expectNoGuide(page);
 });
 
 test("finishes step by step and does not show again on a later visit", async ({ page }) => {
@@ -76,8 +80,7 @@ test("finishes step by step and does not show again on a later visit", async ({ 
 
   // Assert
   await expect(page.getByRole("heading", { name: "Presupuestos", level: 1 })).toBeVisible();
-  await page.waitForTimeout(1500);
-  await expect(popover(page)).toBeHidden();
+  await expectNoGuide(page);
   expect(await seenTours(page)).toContain("budgets");
 });
 
@@ -87,13 +90,19 @@ test("closes with Escape and moves between steps with the arrow keys", async ({ 
   await expect(popover(page)).toBeVisible();
 
   // Act
+  const first = popover(page).getByText(/^Paso 1 de \d$/);
+  const second = popover(page).getByText(/^Paso 2 de \d$/);
   await expect(async () => {
-    await page.keyboard.press("ArrowRight");
-    await expect(popover(page).getByText(/^Paso 2 de \d$/)).toBeVisible({ timeout: 500 });
+    if (await first.isVisible()) {
+      await page.keyboard.press("ArrowRight");
+    }
+    await expect(second).toBeVisible({ timeout: 700 });
   }).toPass();
   await expect(async () => {
-    await page.keyboard.press("ArrowLeft");
-    await expect(popover(page).getByText(/^Paso 1 de \d$/)).toBeVisible({ timeout: 500 });
+    if (await second.isVisible()) {
+      await page.keyboard.press("ArrowLeft");
+    }
+    await expect(first).toBeVisible({ timeout: 700 });
   }).toPass();
   await page.keyboard.press("Escape");
 
