@@ -30,8 +30,8 @@
 
 .miplata-tour .driver-popover-close-btn {
   position: absolute;
-  top: calc(-1 * var(--space-3));
-  right: calc(-1 * var(--space-3));
+  top: var(--space-1);
+  right: var(--space-1);
   display: grid;
   place-items: center;
   width: var(--size-touch-target);

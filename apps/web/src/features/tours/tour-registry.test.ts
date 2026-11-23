@@ -58,7 +58,7 @@ describe("tour registry", () => {
     expect(missing).toEqual([]);
   });
 
-  it("renders every anchor a tour points at", () => {
+  it("declares every anchor a tour points at", () => {
     // Arrange
     const code = Object.values(sources).join("\n");
     const anchors = TOURS.flatMap((tour) => tour.steps.flatMap((step) => step.anchor ?? []));

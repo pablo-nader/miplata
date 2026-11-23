@@ -16,3 +16,10 @@ export function isTyping(active: Element | null) {
     active instanceof HTMLSelectElement
   );
 }
+
+export function isBlocked(doc: Document) {
+  return (
+    isTyping(doc.activeElement) ||
+    doc.querySelector('dialog[open], [role="dialog"], [aria-modal="true"]') !== null
+  );
+}

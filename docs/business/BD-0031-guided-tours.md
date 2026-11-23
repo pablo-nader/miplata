@@ -13,7 +13,7 @@ miPlata is used by the owner, family and friends, and not all of them are comfor
 - **Never in the way.** The highlighted element stays visible; the explanation sits beside it. A step about something that is not on screen (for example an empty list) is left out.
 - **Replay.** The menu has "Ver guías", which lists every tour and replays any of them, and a way to show all of them again.
 - **Remembered on the device.** What a user has already seen is remembered in the browser, separately for each user. A tour seen on the phone shows once more on the computer, and again after clearing the browser data. If the browser does not allow storing it, the tour just shows again.
-- **Tone.** Short, concrete and neutral, in Spanish and English, like the rest of the app. A tour never pushes the user to act.
+- **Tone.** Short, concrete and neutral, in Spanish and English. The Spanish copy is neutral (tuteo) rather than voseo, as the owner asked for neutral Spanish. A tour never pushes the user to act.
 - **When a tour changes.** A tour can be marked as renewed so that everyone sees it once more; this is not done for small wording fixes.
 
 ## Why
