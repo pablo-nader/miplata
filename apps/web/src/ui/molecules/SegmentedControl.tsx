@@ -1,19 +1,27 @@
 import { useId } from "react";
+import { tourAnchor } from "../tour/anchors";
 import "./segmented-control.css";
 
 export type SegmentOption = { value: string; label: string };
 
 type SegmentedControlProps = {
+  anchor?: string;
   label: string;
   options: readonly SegmentOption[];
   value: string;
   onChange: (value: string) => void;
 };
 
-export function SegmentedControl({ label, options, value, onChange }: SegmentedControlProps) {
+export function SegmentedControl({
+  anchor,
+  label,
+  options,
+  value,
+  onChange,
+}: SegmentedControlProps) {
   const name = useId();
   return (
-    <fieldset className="segmented-control">
+    <fieldset className="segmented-control" {...(anchor ? tourAnchor(anchor) : {})}>
       <legend className="visually-hidden">{label}</legend>
       {options.map((option) => (
         <label key={option.value} className="segmented-control__segment">

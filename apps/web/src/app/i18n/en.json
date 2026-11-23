@@ -28,7 +28,8 @@
     "categories": "Categories",
     "toPay": "To pay",
     "recurring": "Recurring",
-    "budgets": "Budgets"
+    "budgets": "Budgets",
+    "guides": "Show guides"
   },
   "screens": {
     "home": {
@@ -1022,5 +1023,227 @@
       "ios": "Tap Share, then “Add to Home Screen”.",
       "browser": "Open the browser menu and choose “Install app”."
     }
+  },
+  "tours": {
+    "progress": "Step {{current}} of {{total}}",
+    "next": "Next",
+    "back": "Back",
+    "done": "Done",
+    "close": "Close guide",
+    "names": {
+      "home": "Home",
+      "new-movement": "New movement",
+      "movements": "Movements",
+      "accounts": "Accounts",
+      "statement": "Card statement",
+      "to-pay": "To pay",
+      "recurring": "Recurring",
+      "budgets": "Budgets",
+      "reports": "Reports",
+      "categories": "Categories"
+    },
+    "home": {
+      "welcome": {
+        "title": "Your money at a glance",
+        "body": "This is Home. Here you see how much you have and what happened this month."
+      },
+      "balance": {
+        "title": "Your balance",
+        "body": "It adds up what you have across all your accounts. Tap it for the detail."
+      },
+      "month": {
+        "title": "Income and spending this month",
+        "body": "Two lines sum up what came in and what went out this month."
+      },
+      "add": {
+        "title": "Record a movement",
+        "body": "Use this button to log an expense, an income or a transfer."
+      },
+      "menu": {
+        "title": "More options",
+        "body": "The menu holds your recurring items, budgets, categories, language and these guides."
+      }
+    },
+    "new-movement": {
+      "type": {
+        "title": "Type of movement",
+        "body": "Choose whether it is an expense, an income or a transfer between your accounts."
+      },
+      "amount": {
+        "title": "Amount",
+        "body": "Type how much it was. For spending and income the currency is chosen just above."
+      },
+      "category": {
+        "title": "Category",
+        "body": "It keeps your spending organized so you can see where the money goes."
+      },
+      "account": {
+        "title": "Account",
+        "body": "Say where it comes from or goes to. With a credit card you can pick installments."
+      },
+      "submit": {
+        "title": "Save",
+        "body": "When you are done, save. You can edit or delete it later."
+      }
+    },
+    "movements": {
+      "intro": {
+        "title": "All your movements",
+        "body": "Here is your history, grouped by day with the total for each day."
+      },
+      "search": {
+        "title": "Search",
+        "body": "Type here to find a movement."
+      },
+      "filters": {
+        "title": "Filters",
+        "body": "Narrow the list with the available filters."
+      },
+      "list": {
+        "title": "A movement",
+        "body": "Tap any of them to view, edit or delete it."
+      },
+      "add": {
+        "title": "New movement",
+        "body": "Record the next one from here."
+      }
+    },
+    "accounts": {
+      "intro": {
+        "title": "Your accounts",
+        "body": "Cash, banks, wallets, cards and people, each with its balance."
+      },
+      "add": {
+        "title": "Add an account",
+        "body": "Create a new account with its opening balance."
+      },
+      "list": {
+        "title": "Your balances",
+        "body": "Tap an account to view or change its details."
+      },
+      "cards": {
+        "title": "Credit cards",
+        "body": "A card opens its statement: what you owe for the period, installments and payment."
+      }
+    },
+    "statement": {
+      "intro": {
+        "title": "Card statement",
+        "body": "Here you see what you owe on this card, period by period."
+      },
+      "period": {
+        "title": "Period",
+        "body": "Switch between the current statement and earlier ones."
+      },
+      "summary": {
+        "title": "What you owe",
+        "body": "The period total, with its purchases, installments and charges."
+      },
+      "actions": {
+        "title": "Charges, matching and payment",
+        "body": "Add a bank charge, compare with your statement or record the payment."
+      }
+    },
+    "to-pay": {
+      "intro": {
+        "title": "What is coming",
+        "body": "Upcoming payments waiting for your confirmation show up here."
+      },
+      "source": {
+        "title": "Where they come from",
+        "body": "They are generated from your recurring items, which you create from the menu."
+      },
+      "list": {
+        "title": "Pending",
+        "body": "Each row is a payment to confirm."
+      },
+      "actions": {
+        "title": "Confirm, adjust or skip",
+        "body": "Confirm the payment if it went as usual, or skip it this month. For variable ones you can adjust the amount."
+      }
+    },
+    "recurring": {
+      "intro": {
+        "title": "Recurring items",
+        "body": "Payments and income that repeat, like rent or a subscription."
+      },
+      "add": {
+        "title": "Add one",
+        "body": "Set the amount, how often it repeats and the date."
+      },
+      "list": {
+        "title": "Your list",
+        "body": "Tap one to edit it. Its buttons let you pause or end it."
+      },
+      "flow": {
+        "title": "They reach To pay",
+        "body": "As the date gets close, each one shows up in To pay for you to confirm."
+      }
+    },
+    "budgets": {
+      "intro": {
+        "title": "Budgets",
+        "body": "A monthly limit per category or group, so you know how much you have spent."
+      },
+      "add": {
+        "title": "New budget",
+        "body": "Pick a category or a group and the limit for the month."
+      },
+      "list": {
+        "title": "Your progress",
+        "body": "The bar shows what you have spent against the limit and warns when you get close."
+      },
+      "home": {
+        "title": "Alerts on Home",
+        "body": "Budgets close to their limit also show up on Home."
+      }
+    },
+    "reports": {
+      "intro": {
+        "title": "Reports",
+        "body": "Here you see where the money goes and how it changes over time."
+      },
+      "tabs": {
+        "title": "Views",
+        "body": "Switch between the different reports."
+      },
+      "currency": {
+        "title": "Currency",
+        "body": "Each report is calculated in one currency at a time."
+      },
+      "filters": {
+        "title": "Period and filters",
+        "body": "Narrow the report by period, account or category."
+      }
+    },
+    "categories": {
+      "intro": {
+        "title": "Categories",
+        "body": "This is how your spending and income are organized."
+      },
+      "tabs": {
+        "title": "Spending and income",
+        "body": "Switch between spending categories and income categories."
+      },
+      "list": {
+        "title": "Groups and categories",
+        "body": "Tap one to rename it, change its icon or deactivate it."
+      },
+      "add": {
+        "title": "Add",
+        "body": "Add your own categories whenever you need them."
+      }
+    }
+  },
+  "guides": {
+    "title": "Guides",
+    "back": "Back to menu",
+    "intro": "Watch the walkthrough of any screen again.",
+    "view": "Show",
+    "viewNamed": "Show the {{name}} guide",
+    "needsCard": "You need a credit card to see it.",
+    "reset": "Show all again",
+    "resetDone": "Done. Each guide will show again when you open its screen.",
+    "resetFailed": "We could not reset the guides. Try again."
   }
 }

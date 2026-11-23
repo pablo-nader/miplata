@@ -27,6 +27,7 @@ import { ChargeFormContainer } from "../features/statements/ChargeFormContainer"
 import { PayStatementContainer } from "../features/statements/PayStatementContainer";
 import { ReconcileContainer } from "../features/statements/ReconcileContainer";
 import { StatementContainer } from "../features/statements/StatementContainer";
+import { GuidesContainer } from "../features/tours/GuidesContainer";
 
 export function AppRoutes() {
   return (
@@ -78,6 +79,7 @@ export function AppRoutes() {
           <Route path="recurring/:recurringId/edit" element={<RecurringFormContainer />} />
           <Route path="menu" element={<MenuContainer />} />
           <Route path="menu/language" element={<LanguageContainer />} />
+          <Route path="guides" element={<GuidesContainer />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

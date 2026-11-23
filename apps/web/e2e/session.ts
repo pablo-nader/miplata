@@ -1,9 +1,11 @@
 import type { Page } from "@playwright/test";
+import { markToursSeen } from "./tours-seen";
 
 const now = new Date().toISOString();
 const later = new Date(Date.now() + 86_400_000).toISOString();
 
 export async function mockSignedIn(page: Page, locale: "es" | "en" = "es") {
+  await markToursSeen(page, "user-1");
   await page.route("**/api/auth/get-session", (route) =>
     route.fulfill({
       contentType: "application/json",

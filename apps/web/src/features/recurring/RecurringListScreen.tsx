@@ -7,6 +7,7 @@ import { EmptyState } from "../../ui/molecules/EmptyState";
 import { MovementList, MovementRow } from "../../ui/molecules/MovementRow";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
+import { tourAnchor } from "../../ui/tour/anchors";
 import "../accounts/screen-note.css";
 import { RowAction } from "./RowAction";
 import "./to-pay-screen.css";
@@ -93,40 +94,42 @@ export function RecurringListScreen({
         </p>
       ) : null}
       {rows.length > 0 ? (
-        <MovementList>
-          {rows.map((row) => (
-            <MovementRow
-              key={row.id}
-              badge={<CategoryBadge {...row.badge} />}
-              title={row.title}
-              caption={row.caption}
-              tag={row.status}
-              amount={
-                row.amount ? (
-                  <MoneyAmount {...row.amount} />
-                ) : (
-                  <span className="to-pay__none">{messages.variable}</span>
-                )
-              }
-              to={row.to}
-              footer={
-                row.panel ??
-                (row.actions.length > 0
-                  ? row.actions.map((action) => (
-                      <RowAction
-                        key={action.key}
-                        quiet
-                        label={action.label}
-                        name={action.name}
-                        busy={busy}
-                        onClick={action.onClick}
-                      />
-                    ))
-                  : null)
-              }
-            />
-          ))}
-        </MovementList>
+        <div {...tourAnchor("recurring-list")}>
+          <MovementList>
+            {rows.map((row) => (
+              <MovementRow
+                key={row.id}
+                badge={<CategoryBadge {...row.badge} />}
+                title={row.title}
+                caption={row.caption}
+                tag={row.status}
+                amount={
+                  row.amount ? (
+                    <MoneyAmount {...row.amount} />
+                  ) : (
+                    <span className="to-pay__none">{messages.variable}</span>
+                  )
+                }
+                to={row.to}
+                footer={
+                  row.panel ??
+                  (row.actions.length > 0
+                    ? row.actions.map((action) => (
+                        <RowAction
+                          key={action.key}
+                          quiet
+                          label={action.label}
+                          name={action.name}
+                          busy={busy}
+                          onClick={action.onClick}
+                        />
+                      ))
+                    : null)
+                }
+              />
+            ))}
+          </MovementList>
+        </div>
       ) : null}
     </>
   );

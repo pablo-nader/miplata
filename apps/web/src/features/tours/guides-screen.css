@@ -1,0 +1,44 @@
+.guides-screen__intro {
+  margin: 0;
+  padding: 0 var(--space-4);
+  color: var(--color-muted);
+}
+
+.guides-screen__list {
+  display: grid;
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  list-style: none;
+}
+
+.guides-screen__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--size-touch-target);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.guides-screen__text {
+  display: grid;
+  flex: 1;
+}
+
+.guides-screen__name {
+  font-weight: 600;
+}
+
+.guides-screen__note {
+  color: var(--color-muted);
+  font-size: var(--font-size-caption);
+}
+
+.guides-screen__view {
+  width: auto;
+  padding-inline: var(--space-4);
+}
+
+.guides-screen__reset {
+  padding: var(--space-2) var(--space-4) var(--space-4);
+}

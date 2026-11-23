@@ -1,0 +1,116 @@
+.driver-popover.miplata-tour {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: min(22rem, calc(100vw - 2 * var(--space-4)));
+  max-height: calc(100dvh - 2 * var(--space-4));
+  overflow-y: auto;
+  padding: var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  box-shadow: 0 0 0 2px var(--color-ink);
+}
+
+.miplata-tour .driver-popover-title {
+  padding-right: var(--size-touch-target);
+  font-family: var(--font-display);
+  font-size: var(--font-size-title);
+  font-weight: 800;
+  line-height: 24px;
+}
+
+.miplata-tour .driver-popover-description {
+  margin-top: var(--space-2);
+  color: var(--color-muted);
+  font-size: var(--font-size-body);
+  line-height: 20px;
+}
+
+.miplata-tour .driver-popover-close-btn {
+  position: absolute;
+  top: calc(-1 * var(--space-3));
+  right: calc(-1 * var(--space-3));
+  display: grid;
+  place-items: center;
+  width: var(--size-touch-target);
+  height: var(--size-touch-target);
+  border-radius: var(--radius-control);
+  color: var(--color-ink);
+  font-size: var(--font-size-action);
+}
+
+.miplata-tour .driver-popover-close-btn:hover,
+.miplata-tour .driver-popover-close-btn:focus-visible {
+  color: var(--color-ink);
+}
+
+.miplata-tour .driver-popover-footer {
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.miplata-tour .driver-popover-progress-text {
+  color: var(--color-muted);
+  font-size: var(--font-size-caption);
+  font-weight: 700;
+}
+
+.miplata-tour .driver-popover-footer-btn,
+.miplata-tour .driver-popover-prev-btn,
+.miplata-tour .driver-popover-next-btn {
+  min-width: var(--size-touch-target);
+  min-height: var(--size-touch-target);
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-control);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  font-weight: 700;
+  text-shadow: none;
+}
+
+.miplata-tour .driver-popover-prev-btn {
+  background: var(--color-field);
+  color: var(--color-ink);
+}
+
+.miplata-tour .driver-popover-next-btn {
+  background: var(--color-action);
+  color: var(--color-on-action);
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+
+.miplata-tour .driver-popover-footer-btn:focus-visible,
+.miplata-tour .driver-popover-close-btn:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+.driver-popover.miplata-tour .driver-popover-arrow-side-top {
+  border-bottom-color: var(--color-surface);
+}
+
+.driver-popover.miplata-tour .driver-popover-arrow-side-bottom {
+  border-top-color: var(--color-surface);
+}
+
+.driver-popover.miplata-tour .driver-popover-arrow-side-left {
+  border-right-color: var(--color-surface);
+}
+
+.driver-popover.miplata-tour .driver-popover-arrow-side-right {
+  border-left-color: var(--color-surface);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .driver-popover.miplata-tour,
+  .driver-overlay,
+  .driver-active-element {
+    transition: none;
+    animation: none;
+  }
+}

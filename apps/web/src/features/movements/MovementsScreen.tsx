@@ -10,6 +10,7 @@ import { EmptyState } from "../../ui/molecules/EmptyState";
 import { MovementList, MovementRow } from "../../ui/molecules/MovementRow";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
+import { tourAnchor } from "../../ui/tour/anchors";
 import "../accounts/screen-note.css";
 import type { DayGroup, RowData } from "./present-movement";
 import "./movements-screen.css";
@@ -104,7 +105,7 @@ export function MovementsScreen({
   return (
     <>
       <ScreenHeader title={title} menu={menu} />
-      <div className="movements-screen__search">
+      <div className="movements-screen__search" {...tourAnchor("movements-search")}>
         <Search aria-hidden="true" />
         <input
           type="search"
@@ -115,7 +116,7 @@ export function MovementsScreen({
           onChange={(event) => search.onChange(event.target.value)}
         />
       </div>
-      <div className="movements-screen__chips">
+      <div className="movements-screen__chips" {...tourAnchor("movements-filters")}>
         {chips.map((chip) => (
           <FilterChip
             key={chip.key}
@@ -160,8 +161,13 @@ export function MovementsScreen({
           description={messages.emptyDescription}
         />
       ) : null}
-      {groups.map((group) => (
-        <section key={group.date} className="movements-screen__day" aria-label={group.label}>
+      {groups.map((group, index) => (
+        <section
+          key={group.date}
+          className="movements-screen__day"
+          aria-label={group.label}
+          {...(index === 0 ? tourAnchor("movements-list") : {})}
+        >
           <h2 className="movements-screen__day-head">
             <span>{group.label}</span>
             <span>

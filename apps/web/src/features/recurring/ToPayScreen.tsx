@@ -8,6 +8,7 @@ import { EmptyState } from "../../ui/molecules/EmptyState";
 import { MovementList, MovementRow } from "../../ui/molecules/MovementRow";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
+import { tourAnchor } from "../../ui/tour/anchors";
 import "../accounts/screen-note.css";
 import { RowAction } from "./RowAction";
 import "./to-pay-screen.css";
@@ -93,8 +94,12 @@ export function ToPayScreen({
           {failure}
         </p>
       ) : null}
-      {sections.map((section) => (
-        <section key={section.key} aria-label={section.label}>
+      {sections.map((section, index) => (
+        <section
+          key={section.key}
+          aria-label={section.label}
+          {...(index === 0 ? tourAnchor("to-pay-list") : {})}
+        >
           <SectionLabel as="h2">{section.label}</SectionLabel>
           <MovementList>
             {section.rows.map((row) => (

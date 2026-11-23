@@ -3,6 +3,7 @@ import { type KeyboardEvent, type ReactNode, useId } from "react";
 import { Link } from "react-router-dom";
 import { SegmentedControl, type SegmentOption } from "../../ui/molecules/SegmentedControl";
 import type { NavAction } from "../../ui/organisms/nav";
+import { tourAnchor } from "../../ui/tour/anchors";
 import "./reports.css";
 
 export type ReportTab = { id: string; label: string };
@@ -96,7 +97,12 @@ export function ReportsScreen({
           <Menu aria-hidden="true" />
         </Link>
       </header>
-      <div className="reports-tabs" role="tablist" aria-label={tabsLabel}>
+      <div
+        className="reports-tabs"
+        role="tablist"
+        aria-label={tabsLabel}
+        {...tourAnchor("reports-tabs")}
+      >
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -115,12 +121,13 @@ export function ReportsScreen({
         ))}
       </div>
       <SegmentedControl
+        anchor="reports-currency"
         label={currency.label}
         options={currency.options}
         value={currency.value}
         onChange={currency.onChange}
       />
-      <div className="reports-filters">
+      <div className="reports-filters" {...tourAnchor("reports-filters")}>
         <fieldset className="reports-stepper">
           <legend className="visually-hidden">{period.label}</legend>
           <button type="button" aria-label={period.previous} onClick={period.onPrevious}>

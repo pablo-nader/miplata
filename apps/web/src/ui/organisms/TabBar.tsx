@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { AddButton } from "../atoms/AddButton";
+import { tourAnchor } from "../tour/anchors";
 import type { NavAction, NavItem } from "./nav";
 import "./tab-bar.css";
 
@@ -22,7 +23,7 @@ export function TabBar({ label, items, action }: TabBarProps) {
   return (
     <nav className="tab-bar" aria-label={label}>
       {tabs(items.slice(0, half))}
-      <span className="tab-bar__add">
+      <span className="tab-bar__add" {...tourAnchor("nav-new-movement")}>
         <AddButton to={action.to} label={action.label} />
       </span>
       {tabs(items.slice(half))}

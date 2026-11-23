@@ -8,6 +8,7 @@ import { EmptyState } from "../../ui/molecules/EmptyState";
 import { MovementList, MovementRow } from "../../ui/molecules/MovementRow";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
+import { tourAnchor } from "../../ui/tour/anchors";
 import "./accounts-screen.css";
 import "./screen-note.css";
 
@@ -84,8 +85,12 @@ export function AccountsScreen({
         />
       ) : null}
       {status === "ready"
-        ? sections.map((section) => (
-            <section key={section.key} aria-label={section.label}>
+        ? sections.map((section, index) => (
+            <section
+              key={section.key}
+              aria-label={section.label}
+              {...(index === 0 ? tourAnchor("accounts-list") : {})}
+            >
               {section.add ? (
                 <div className="accounts-screen__heading">
                   <SectionLabel as="h2">{section.label}</SectionLabel>

@@ -7,6 +7,7 @@ import { SectionLabel } from "../../ui/atoms/SectionLabel";
 import { EmptyState } from "../../ui/molecules/EmptyState";
 import { SegmentedControl, type SegmentOption } from "../../ui/molecules/SegmentedControl";
 import type { NavAction } from "../../ui/organisms/nav";
+import { tourAnchor } from "../../ui/tour/anchors";
 import "../placeholder/placeholder-screen.css";
 import "./categories-screen.css";
 
@@ -57,7 +58,7 @@ export function CategoriesScreen({ title, back, tabs, body }: CategoriesScreenPr
         </Link>
         <h1 className="placeholder-screen__title">{title}</h1>
       </header>
-      <div className="categories-screen__tabs">
+      <div className="categories-screen__tabs" {...tourAnchor("categories-tabs")}>
         <SegmentedControl
           label={tabs.label}
           options={tabs.options}
@@ -78,8 +79,12 @@ export function CategoriesScreen({ title, back, tabs, body }: CategoriesScreenPr
       ) : null}
       {body.status === "ready" ? (
         <>
-          {body.sections.map((section) => (
-            <section key={section.id} className="categories-screen__section">
+          {body.sections.map((section, index) => (
+            <section
+              key={section.id}
+              className="categories-screen__section"
+              {...(index === 0 ? tourAnchor("categories-list") : {})}
+            >
               {section.title ? (
                 <div className="categories-screen__section-header">
                   <SectionLabel as="h2">{section.title}</SectionLabel>
@@ -108,7 +113,7 @@ export function CategoriesScreen({ title, back, tabs, body }: CategoriesScreenPr
                     </Link>
                   </li>
                 ))}
-                <li>
+                <li {...tourAnchor("categories-add")}>
                   <Link className="categories-screen__row" to={section.add.to}>
                     <AddCategoryBadge />
                     <span className="categories-screen__name">{section.add.label}</span>

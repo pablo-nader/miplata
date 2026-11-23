@@ -7,6 +7,7 @@ import { SectionLabel } from "../../ui/atoms/SectionLabel";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import type { NavAction } from "../../ui/organisms/nav";
+import { tourAnchor } from "../../ui/tour/anchors";
 import "./statement-screen.css";
 
 export type PeriodChip = { key: string; label: string; selected: boolean; onSelect: () => void };
@@ -94,7 +95,7 @@ export function StatementScreen(props: StatementScreenProps) {
   return (
     <div className="statement-screen">
       <ScreenHeader title={props.title} back={props.back} />
-      <fieldset className="statement-screen__chips">
+      <fieldset className="statement-screen__chips" {...tourAnchor("statement-period")}>
         <legend className="visually-hidden">{props.periodsLabel}</legend>
         {props.periods.map((chip) => (
           <FilterChip
@@ -105,7 +106,7 @@ export function StatementScreen(props: StatementScreenProps) {
           />
         ))}
       </fieldset>
-      <section className="statement">
+      <section className="statement" {...tourAnchor("statement-summary")}>
         <div className="statement__head">
           <small>{props.caption}</small>
           <strong>{props.total}</strong>
@@ -179,7 +180,7 @@ export function StatementScreen(props: StatementScreenProps) {
       <p className="statement-screen__edit">
         <Link to={props.editCard.to}>{props.editCard.label}</Link>
       </p>
-      <div className="statement-screen__actions">
+      <div className="statement-screen__actions" {...tourAnchor("statement-actions")}>
         <div className="statement-screen__buttons">
           <ButtonLink
             variant="ghost"

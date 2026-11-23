@@ -11,6 +11,7 @@ import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { SegmentedControl } from "../../ui/molecules/SegmentedControl";
 import { SelectField, type SelectOption } from "../../ui/molecules/SelectField";
 import type { NavAction } from "../../ui/organisms/nav";
+import { tourAnchor } from "../../ui/tour/anchors";
 import {
   type FormErrorKey,
   type FormState,
@@ -210,6 +211,7 @@ export function MovementFormScreen(props: MovementFormScreenProps) {
       <ScreenHeader title={title} back={back} />
       <form className="movement-form" onSubmit={handleSubmit} noValidate>
         <SegmentedControl
+          anchor="movement-type"
           label={copy.typeLabel}
           value={values.type}
           options={(["expense", "income", "transfer"] as const).map((type) => ({
@@ -278,14 +280,16 @@ export function MovementFormScreen(props: MovementFormScreenProps) {
               value={values.currency}
               onChange={(currency) => onChange({ currency })}
             />
-            <AmountInput
-              large
-              label={copy.amount}
-              value={values.amount}
-              error={errors.amount}
-              onChange={(value) => onChange({ amount: value })}
-            />
-            <div className="movement-form__category">
+            <div {...tourAnchor("movement-amount")}>
+              <AmountInput
+                large
+                label={copy.amount}
+                value={values.amount}
+                error={errors.amount}
+                onChange={(value) => onChange({ amount: value })}
+              />
+            </div>
+            <div className="movement-form__category" {...tourAnchor("movement-category")}>
               {props.categoryPicker}
               {props.categoryError ? (
                 <p className="movement-form__error" role="alert">
@@ -293,28 +297,30 @@ export function MovementFormScreen(props: MovementFormScreenProps) {
                 </p>
               ) : null}
             </div>
-            <FieldGroup label={copy.account}>
-              <SelectField
-                label={copy.account}
-                value={values.accountId ?? ""}
-                options={props.entryAccounts}
-                error={errors.account}
-                onChange={(value) => onChange({ accountId: value || null })}
-              />
-              {props.installments ? (
-                <>
-                  <SelectField
-                    label={copy.installments}
-                    value={String(values.installments)}
-                    options={props.installments.options}
-                    onChange={(value) => onChange({ installments: Number(value) })}
-                  />
-                  {props.installments.hint ? (
-                    <p className="movement-form__hint">{props.installments.hint}</p>
-                  ) : null}
-                </>
-              ) : null}
-            </FieldGroup>
+            <div {...tourAnchor("movement-account")}>
+              <FieldGroup label={copy.account}>
+                <SelectField
+                  label={copy.account}
+                  value={values.accountId ?? ""}
+                  options={props.entryAccounts}
+                  error={errors.account}
+                  onChange={(value) => onChange({ accountId: value || null })}
+                />
+                {props.installments ? (
+                  <>
+                    <SelectField
+                      label={copy.installments}
+                      value={String(values.installments)}
+                      options={props.installments.options}
+                      onChange={(value) => onChange({ installments: Number(value) })}
+                    />
+                    {props.installments.hint ? (
+                      <p className="movement-form__hint">{props.installments.hint}</p>
+                    ) : null}
+                  </>
+                ) : null}
+              </FieldGroup>
+            </div>
           </>
         )}
         <FieldGroup label={copy.description}>
@@ -372,7 +378,7 @@ export function MovementFormScreen(props: MovementFormScreenProps) {
           </p>
         ) : null}
         {props.offlineMessage !== null ? <OfflineNote message={props.offlineMessage} /> : null}
-        <div className="movement-form__submit">
+        <div className="movement-form__submit" {...tourAnchor("movement-submit")}>
           <Button type="submit" disabled={props.busy || props.offlineMessage !== null}>
             {props.busy ? copy.saving : copy.submit}
           </Button>
