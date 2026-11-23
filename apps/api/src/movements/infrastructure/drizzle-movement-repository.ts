@@ -48,11 +48,12 @@ function existsPosting(userId: string, conditions: SQL[]): SQL {
 }
 
 function mainAmountCondition(userId: string, query: MovementQuery): SQL | null {
-  const { minAmountMinor, maxAmountMinor } = query;
+  const { minAmountMinor, maxAmountMinor, currency } = query;
   if (minAmountMinor === undefined && maxAmountMinor === undefined) {
     return null;
   }
   const bounds = [
+    ...(currency === undefined ? [] : [sql`${posting.currency} = ${currency}`]),
     ...(minAmountMinor === undefined
       ? []
       : [sql`abs(${posting.amountMinor}) >= ${minAmountMinor}`]),
@@ -67,7 +68,9 @@ function listConditions(userId: string, query: MovementQuery): SQL[] {
   const amount = mainAmountCondition(userId, query);
   const conditions: (SQL | undefined)[] = [
     eq(movement.userId, userId),
-    query.q ? sql`${movement.description} ilike ${`%${escapeLike(query.q)}%`}` : undefined,
+    query.q
+      ? sql`immutable_unaccent(lower(${movement.description})) like immutable_unaccent(lower(${`%${escapeLike(query.q)}%`}))`
+      : undefined,
     query.from ? gte(movement.occurredOn, query.from) : undefined,
     query.to ? lte(movement.occurredOn, query.to) : undefined,
     query.type ? eq(movement.type, query.type) : undefined,

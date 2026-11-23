@@ -15,6 +15,13 @@
       "when": 1795464039368,
       "tag": "0001_institution_logos",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795465681018,
+      "tag": "0002_accent_insensitive_search",
+      "breakpoints": true
     }
   ]
 }

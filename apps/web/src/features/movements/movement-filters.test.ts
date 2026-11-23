@@ -87,6 +87,28 @@ describe("filters", () => {
     });
   });
 
+  it("reads the amount range in the selected currency and sends that currency", () => {
+    // Arrange
+    const filters = { ...emptyFilters(), currency: "USD" as const, min: "10,50", max: "20" };
+
+    // Act
+    const query = toQuery(filters, "");
+
+    // Assert
+    expect(query).toEqual({ currency: "USD", minAmountMinor: 1_050, maxAmountMinor: 2_000 });
+  });
+
+  it("pins an amount range without a currency to pesos", () => {
+    // Arrange
+    const filters = { ...emptyFilters(), min: "100" };
+
+    // Act
+    const query = toQuery(filters, "");
+
+    // Assert
+    expect(query).toEqual({ currency: "ARS", minAmountMinor: 10_000 });
+  });
+
   it("sends nothing for empty filters and ignores unreadable amounts", () => {
     // Arrange
     const filters = { ...emptyFilters(), min: "abc", max: "" };
@@ -149,8 +171,8 @@ describe("active filter chips", () => {
       "Hogar",
       "Alquiler",
       "ARS",
-      "Desde 10",
-      "Hasta 20",
+      "Desde ARS 10",
+      "Hasta ARS 20",
     ]);
     expect(chips[1]?.clear).toEqual({ accountId: "" });
   });

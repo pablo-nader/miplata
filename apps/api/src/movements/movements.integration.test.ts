@@ -802,6 +802,82 @@ describe("editing and deleting", () => {
   });
 });
 
+describe("accent-insensitive search", () => {
+  let user: User;
+
+  beforeAll(async () => {
+    user = await newUser();
+    await record(
+      user,
+      expense(user, {
+        occurredOn: "2026-12-01",
+        description: "Café con leche",
+        amountMinor: 2_500_00,
+      }),
+    );
+    await record(
+      user,
+      expense(user, {
+        occurredOn: "2026-12-02",
+        description: "Niño feliz",
+        amountMinor: 400_00,
+      }),
+    );
+  });
+
+  async function list(query: string) {
+    const page = await ok(await call(user.cookie, "GET", `/movements?${query}`));
+    return (page.items as Json[]).map((item) => item.description as string);
+  }
+
+  it.each([
+    ["cafe", ["Café con leche"]],
+    ["CAFÉ", ["Café con leche"]],
+    ["Cafe", ["Café con leche"]],
+    ["leche", ["Café con leche"]],
+    ["ni%C3%B1o", ["Niño feliz"]],
+    ["NINO", ["Niño feliz"]],
+    ["zzz", []],
+  ])("searches %s ignoring accents and case", async (text, expected) => {
+    // Arrange
+    const query = `q=${text}&from=2026-12-01&to=2026-12-31`;
+
+    // Act
+    const descriptions = await list(query);
+
+    // Assert
+    expect(descriptions).toEqual(expected);
+  });
+
+  it("combines the accent-insensitive search with other filters", async () => {
+    // Arrange
+    const query = "q=cafe&type=expense&currency=ARS&minAmountMinor=100000&from=2026-12-01";
+
+    // Act
+    const descriptions = await list(query);
+
+    // Assert
+    expect(descriptions).toEqual(["Café con leche"]);
+  });
+
+  it("never finds the movements of another user", async () => {
+    // Arrange
+    const stranger = await newUser();
+    await record(
+      stranger,
+      expense(stranger, { occurredOn: "2026-12-02", description: "Café ajeno", amountMinor: 1_00 }),
+    );
+
+    // Act
+    const mine = await list("q=cafe");
+    const theirs = await ok(await call(stranger.cookie, "GET", "/movements?q=cafe"));
+
+    // Assert
+    expect(mine).not.toContain("Café ajeno");
+    expect((theirs.items as Json[]).map((item) => item.description)).toEqual(["Café ajeno"]);
+  });
+});
+
 describe("listing and filtering", () => {
   let user: User;
 
@@ -910,6 +986,20 @@ describe("listing and filtering", () => {
 
     // Assert
     expect(descriptions).toEqual(expected);
+  });
+
+  it("applies the amount range in the selected currency", async () => {
+    // Arrange
+    const dollars = "currency=USD&minAmountMinor=1000&maxAmountMinor=3000";
+    const pesos = "currency=ARS&minAmountMinor=1000&maxAmountMinor=3000";
+
+    // Act
+    const inDollars = await list(dollars);
+    const inPesos = await list(pesos);
+
+    // Assert
+    expect(inDollars).toEqual(["Dollar thing"]);
+    expect(inPesos).toEqual([]);
   });
 
   it("filters by the group of the category", async () => {

@@ -183,7 +183,10 @@ export const movement = pgTable(
       .on(t.recurringOccurrenceId)
       .where(sql`${t.recurringOccurrenceId} is not null`),
     index("movement_user_category_idx").on(t.userId, t.categoryId),
-    index("movement_description_trgm_idx").using("gin", sql`${t.description} gin_trgm_ops`),
+    index("movement_description_search_idx").using(
+      "gin",
+      sql`immutable_unaccent(lower()) gin_trgm_ops`,
+    ),
   ],
 );
 

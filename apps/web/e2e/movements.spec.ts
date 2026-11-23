@@ -131,6 +131,32 @@ test("searches, edits and deletes a movement", async ({ page }) => {
   await expect(page.getByText("Plomero")).toHaveCount(0);
 });
 
+test("finds a movement without accents and clears the search and filters in one tap", async ({
+  page,
+}) => {
+  // Arrange
+  await page.goto("/movements/new");
+  await page.getByLabel("Cuenta", { exact: true }).selectOption({ label: "Billetera" });
+  await page.getByLabel("Monto").fill("2.500");
+  await pickCategory(page, "Supermercado");
+  await page.getByLabel("Descripción").fill("Café con leche");
+  await page.getByRole("button", { name: "Guardar gasto" }).click();
+  await expect(page).toHaveURL(/\/home$/);
+  await page.goto("/movements");
+
+  // Act
+  await page.getByRole("searchbox", { name: "Buscar por descripción" }).fill("CAFE");
+
+  // Assert
+  await expect(page.getByRole("link", { name: /Café con leche/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Quitar filtro Búsqueda/ })).toBeVisible();
+  await page.getByRole("button", { name: "Limpiar todo" }).click();
+  await expect(page.getByRole("searchbox", { name: "Buscar por descripción" })).toHaveValue("");
+  await expect(page.getByRole("button", { name: /Quitar filtro/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Limpiar todo" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /Café con leche/ })).toBeVisible();
+});
+
 test("records a dollar purchase as an exchange transfer that is not an expense", async ({
   page,
 }) => {
