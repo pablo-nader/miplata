@@ -34,4 +34,5 @@ What becomes easier, harder, or constrained.
 | [0005](0005-per-user-data-isolation.md) | Per-user data isolation enforced in the API | Accepted |
 | [0006](0006-agent-driven-delivery-workflow.md) | Agent-driven delivery workflow | Accepted |
 | [0007](0007-no-code-comments.md) | No code comments | Accepted |
-| [0008](0008-engineering-practices.md) | Engineering practices baseline | Proposed |
+| [0008](0008-engineering-practices.md) | Engineering practices baseline | Accepted |
+| [0009](0009-language-policy.md) | Language policy | Accepted |

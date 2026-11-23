@@ -8,7 +8,7 @@ React + Vite, Hono, Drizzle, Neon Postgres, Better Auth with Google, Vercel. All
 ## Code
 - No code comments. Only Arrange / Act / Assert markers in tests and method docs of at most two lines. No standing exceptions: ask the owner before any comment-style tool directive (`@ts-expect-error`, `biome-ignore`, ...). See ADR 0007.
 - Every user-owned table has `user_id`. Repositories require `userId`. The user id comes only from the server-side session. See ADR 0005.
-- Generated artifacts (code, UI copy, docs, commits) are in English unless the owner asks otherwise.
+- All code and documentation are always in English. Conversations with the owner are always in Spanish. See ADR 0009.
 
 ## Delivery
 1. Work on a branch, never directly on `main`.
