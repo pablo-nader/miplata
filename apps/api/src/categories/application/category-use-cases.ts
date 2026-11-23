@@ -1,4 +1,5 @@
 import {
+  addDays,
   type CategoriesResponse,
   type CategoryDto,
   type CategoryType,
@@ -8,7 +9,6 @@ import {
   MOST_USED_WINDOW_DAYS,
   type UpdateCategoryRequest,
 } from "@miplata/shared";
-import { addDays } from "../../recurring/domain/generation";
 import { buildCatalog, checkPlacement } from "../domain/catalog";
 import { type CategoryRepository, fail, type Outcome, succeed } from "./category-repository";
 

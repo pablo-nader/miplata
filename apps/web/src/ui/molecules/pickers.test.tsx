@@ -46,7 +46,6 @@ const selectorCopy = {
   placeholder: "Type",
   closeLabel: "Close",
   noResults: "No matches",
-  selectedLabel: "Selected",
   addLabel: "Add category",
 };
 
@@ -106,8 +105,8 @@ describe("CategoryPicker", () => {
     // Act
     await userEvent.click(screen.getByRole("button", { name: "Search" }));
     const dialog = screen.getByRole("dialog", { name: "Choose" });
-    const hasGroup = within(dialog).queryByText("Misc") !== null;
-    const hasEmptyGroup = within(dialog).queryByText("Empty") !== null;
+    const hasGroup = within(dialog).queryByRole("group", { name: "Misc" }) !== null;
+    const hasEmptyGroup = within(dialog).queryByRole("group", { name: "Empty" }) !== null;
     await userEvent.click(within(dialog).getByRole("option", { name: "Gym" }));
 
     // Assert
@@ -146,8 +145,8 @@ describe("CategoryPicker", () => {
       .map((option) => option.textContent);
 
     // Assert
-    expect(byGroup).toEqual(["GGroceriesSelected", "DDining out"]);
-    expect(selected).toEqual(["GGroceriesSelected"]);
+    expect(byGroup).toEqual(["GGroceries", "DDining out"]);
+    expect(selected).toEqual(["GGroceries"]);
   });
 
   it("tells when nothing matches", async () => {
@@ -225,6 +224,36 @@ describe("CategoryPicker", () => {
 
     // Assert
     expect(onSelect).toHaveBeenCalledWith("out");
+  });
+
+  it("does nothing on Enter while the search field is empty", async () => {
+    // Arrange
+    const onSelect = renderPicker();
+    await userEvent.click(screen.getByRole("button", { name: "Search" }));
+
+    // Act
+    await userEvent.keyboard("{Enter}");
+
+    // Assert
+    expect(onSelect).not.toHaveBeenCalled();
+    expect(screen.getByRole("dialog")).toBeDefined();
+  });
+
+  it("keeps Tab inside the dialog and still closes with Escape when focus is on the page", async () => {
+    // Arrange
+    renderPicker({ onAdd: vi.fn() });
+    await userEvent.click(screen.getByRole("button", { name: "Search" }));
+    (document.activeElement as HTMLElement).blur();
+
+    // Act
+    await userEvent.keyboard("{Tab}");
+    const inside = screen.getByRole("dialog").contains(document.activeElement);
+    (document.activeElement as HTMLElement).blur();
+    await userEvent.keyboard("{Escape}");
+
+    // Assert
+    expect(inside).toBe(true);
+    expect(screen.queryByRole("dialog")).toBeNull();
   });
 
   it("shows the first letter when a category has no icon", () => {

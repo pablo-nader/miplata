@@ -8,8 +8,8 @@ export function useMostUsedCategories(type: CategoryType): readonly string[] | u
   useEffect(() => {
     let current = true;
     void categoriesApi.mostUsed(type).then((result) => {
-      if (current && result.ok) {
-        setLoaded({ type, ids: result.value.categoryIds });
+      if (current) {
+        setLoaded({ type, ids: result.ok ? result.value.categoryIds : [] });
       }
     });
     return () => {

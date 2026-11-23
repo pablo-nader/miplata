@@ -703,7 +703,7 @@ describe("category picker container", () => {
         .getAllByRole("option")
         .map((option) => option.textContent),
     ).toEqual(["Mantenimiento"]);
-    expect(within(dialog).getByText("Vivienda")).toBeDefined();
+    expect(within(dialog).getByRole("group", { name: "Vivienda" })).toBeDefined();
   });
 
   it("opens with the search field focused, moves with the arrows and closes with Escape", async () => {

@@ -202,6 +202,9 @@ export function MovementFormContainer() {
   );
 
   function change(patch: Partial<FormState>) {
+    if (patch.personId !== undefined || patch.forOther === false) {
+      setNewPerson(null);
+    }
     setForm((current) => (current ? applyChange(current, patch, accounts) : current));
     setErrors({});
     setFailure(null);

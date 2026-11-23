@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { I18nextProvider } from "react-i18next";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
@@ -500,6 +500,38 @@ describe("creating a person from the form", () => {
     // Assert
     expect(await screen.findByText("No pudimos crear la persona. Probá de nuevo.")).toBeDefined();
     expect((screen.getByLabelText("Nombre de la persona") as HTMLInputElement).value).toBe("Sofi");
+  });
+
+  it("moves focus to the name field when the option is chosen", async () => {
+    // Arrange
+    stubApi({ ...lookupHandlers });
+    await startForOther();
+
+    // Act
+    await userEvent.selectOptions(screen.getByLabelText("Persona"), "+ Nueva persona");
+
+    // Assert
+    await waitFor(() =>
+      expect(document.activeElement).toBe(screen.getByLabelText("Nombre de la persona")),
+    );
+  });
+
+  it("drops the draft when the switch is turned off or an existing person is chosen", async () => {
+    // Arrange
+    stubApi({ ...lookupHandlers });
+    await startForOther();
+    await userEvent.selectOptions(screen.getByLabelText("Persona"), "+ Nueva persona");
+
+    // Act
+    await userEvent.click(screen.getByRole("switch", { name: "Es de otra persona" }));
+    await userEvent.click(screen.getByRole("switch", { name: "Es de otra persona" }));
+    const afterSwitch = screen.queryByLabelText("Nombre de la persona");
+    await userEvent.selectOptions(screen.getByLabelText("Persona"), "+ Nueva persona");
+    await userEvent.selectOptions(screen.getByLabelText("Persona"), "acc-juan");
+
+    // Assert
+    expect(afterSwitch).toBeNull();
+    expect(screen.queryByLabelText("Nombre de la persona")).toBeNull();
   });
 
   it("closes the inline form on cancel", async () => {
