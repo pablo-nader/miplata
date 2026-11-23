@@ -40,3 +40,4 @@ Impact on users, cost, and technical design.
 | [BD-0011](BD-0011-accounts-and-transfers.md) | Accounts and transfers | Accepted |
 | [BD-0012](BD-0012-institution-logos.md) | Institution logos | Accepted |
 | [BD-0013](BD-0013-currencies-and-exchange.md) | Currencies and exchange | Accepted |
+| [BD-0014](BD-0014-credit-card-statements-and-installments.md) | Credit card statements and installments | Accepted |
