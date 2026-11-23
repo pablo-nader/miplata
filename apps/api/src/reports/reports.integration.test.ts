@@ -430,3 +430,58 @@ describe("committed amounts", () => {
     ]);
   });
 });
+
+describe("amounts that never count", () => {
+  it("leaves a purchase made entirely for another person out of the drill-down", async () => {
+    // Arrange
+    const user = await newUser();
+    await record(user, expense(user, { person: { personId: user.juan, ownAmountMinor: 0 } }));
+
+    // Act
+    const movements = await ok(
+      await get(user, `/spending/movements?month=2026-11&categoryId=${user.food}`),
+    );
+    const spending = await ok(await get(user, "/spending?month=2026-11"));
+
+    // Assert
+    expect(movements.items).toEqual([]);
+    expect(spending.totalMinor).toBe(0);
+  });
+
+  it("matches nothing when the account filter is a person", async () => {
+    // Arrange
+    const user = await newUser();
+    await record(user, expense(user, { person: { personId: user.juan, ownAmountMinor: 400_00 } }));
+
+    // Act
+    const report = await ok(await get(user, `/spending?month=2026-11&accountId=${user.juan}`));
+
+    // Assert
+    expect(report.totalMinor).toBe(0);
+  });
+
+  it("combines the account and category filters across a year boundary", async () => {
+    // Arrange
+    const user = await newUser();
+    await record(user, expense(user, { occurredOn: "2026-12-05", amountMinor: 120_00 }));
+    await record(user, expense(user, { occurredOn: "2027-01-05", amountMinor: 60_00 }));
+    await record(
+      user,
+      expense(user, { occurredOn: "2027-01-05", accountId: user.bank, amountMinor: 999_00 }),
+    );
+    const filters = `accountId=${user.cash}&categoryId=${user.food}`;
+
+    // Act
+    const changes = await ok(await get(user, `/changes?month=2027-01&${filters}`));
+
+    // Assert
+    expect(changes.categories).toEqual([
+      {
+        categoryId: user.food,
+        currentMinor: 60_00,
+        previousAverageMinor: 40_00,
+        percentChange: 50,
+      },
+    ]);
+  });
+});

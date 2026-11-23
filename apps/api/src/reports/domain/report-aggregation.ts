@@ -93,12 +93,9 @@ export function changesReport(
   const previousMonths = [-3, -2, -1].map((offset) => addMonths(month, offset));
   const categoryIds = [...new Set(expenses.map((row) => row.categoryId))];
   const totalOf = (categoryId: string, target: YearMonth) =>
-    Math.max(
-      0,
-      sumBy(
-        expenses.filter((row) => row.categoryId === categoryId && row.month === target),
-        (row) => row.totalMinor,
-      ),
+    sumBy(
+      expenses.filter((row) => row.categoryId === categoryId && row.month === target),
+      (row) => row.totalMinor,
     );
   const categories = categoryIds
     .map((categoryId) => {
