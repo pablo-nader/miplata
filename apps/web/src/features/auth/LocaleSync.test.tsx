@@ -37,9 +37,15 @@ describe("LocaleSync", () => {
     expect(document.documentElement.lang).toBe("en");
   });
 
-  it("keeps the detected language while signed out", () => {
+  it("does nothing when the interface already matches the user locale", () => {
     // Arrange
     const i18n = createI18n("en");
+    const change = vi.spyOn(i18n, "changeLanguage");
+    state = {
+      status: "signedIn",
+      user: { id: "1", name: "Ana", email: "a@b.c", image: null, locale: "en" },
+      refresh,
+    };
 
     // Act
     render(
@@ -49,6 +55,6 @@ describe("LocaleSync", () => {
     );
 
     // Assert
-    expect(i18n.language).toBe("en");
+    expect(change).not.toHaveBeenCalled();
   });
 });

@@ -114,13 +114,18 @@ describe("MenuContainer", () => {
     expect(screen.queryByText("root")).toBeNull();
   });
 
-  it("saves rapid language changes in order", async () => {
+  it("waits for the first save before sending the next language", async () => {
     // Arrange
     const sent: string[] = [];
+    let release: () => void = () => {};
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
     vi.stubGlobal(
       "fetch",
       vi.fn(async (_url: string, init: { body: string }) => {
         sent.push(JSON.parse(init.body).locale);
+        if (sent.length === 1) await gate;
         return new Response("{}", { status: 200 });
       }),
     );
@@ -129,8 +134,11 @@ describe("MenuContainer", () => {
     // Act
     await userEvent.click(screen.getByRole("radio", { name: "English" }));
     await userEvent.click(screen.getByRole("radio", { name: "Español" }));
+    const beforeRelease = [...sent];
+    release();
 
     // Assert
+    expect(beforeRelease).toEqual(["en"]);
     await waitFor(() => expect(sent).toEqual(["en", "es"]));
   });
 

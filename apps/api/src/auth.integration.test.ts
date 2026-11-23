@@ -5,6 +5,7 @@ import {
   category,
   categoryGroup,
   eq,
+  seedUserDefaults,
   user,
 } from "@miplata/db";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
@@ -13,9 +14,13 @@ import { createAuthHarness } from "./test/auth-harness";
 type Harness = Awaited<ReturnType<typeof createAuthHarness>>;
 
 let harness: Harness;
+const seeded: string[] = [];
 
 beforeAll(async () => {
-  harness = await createAuthHarness();
+  harness = await createAuthHarness(async (db, userId) => {
+    seeded.push(userId);
+    await seedUserDefaults(db, userId);
+  });
 });
 
 afterAll(async () => {
@@ -262,14 +267,13 @@ describe("first sign-in", () => {
   it("does not seed again on a later sign-in of the same user", async () => {
     // Arrange
     const userId = await harness.signUpWithGoogle("again@example.com");
-    const before = await harness.db.select().from(category).where(eq(category.userId, userId));
 
     // Act
     await harness.cookieFor(userId);
-    const after = await harness.db.select().from(category).where(eq(category.userId, userId));
+    await harness.cookieFor(userId);
 
     // Assert
-    expect(after).toHaveLength(before.length);
+    expect(seeded.filter((id) => id === userId)).toHaveLength(1);
   });
 
   it("seeds a user that is missing defaults when a session is created", async () => {
