@@ -9,7 +9,7 @@
     "pnpm": ">=9.12"
   },
   "scripts": {
-    "prepare": "lefthook install",
+    "prepare": "lefthook install || true",
     "dev": "pnpm --parallel --filter @miplata/api --filter @miplata/web dev",
     "lint": "biome check . && pnpm lint:arch",
     "lint:arch": "depcruise apps/api/src --config .dependency-cruiser.json",
