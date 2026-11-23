@@ -153,6 +153,30 @@ describe("MovementsContainer", () => {
     expect(screen.queryByRole("button", { name: "Quitar filtro Gasto" })).toBeNull();
   });
 
+  it("shows the search as a removable chip and clears everything in one tap", async () => {
+    // Arrange
+    stubApi({
+      ...lookupHandlers,
+      [month]: listOf([coto]),
+      "GET /api/movements?q=cafe&from=2026-11-01&to=2026-11-30&limit=30&offset=0": listOf([]),
+      "GET /api/movements?limit=30&offset=0": listOf([coto, dollars]),
+    });
+    renderApp(<MovementsContainer />, "es");
+    await screen.findByText("Coto");
+    const search = screen.getByRole("searchbox", { name: "Buscar por descripción" });
+
+    // Act
+    await userEvent.type(search, "cafe");
+    await screen.findByRole("button", { name: "Quitar filtro Búsqueda: “cafe”" });
+    await userEvent.click(screen.getByRole("button", { name: "Limpiar todo" }));
+
+    // Assert
+    expect(await screen.findByText("Compra de dólares")).toBeDefined();
+    expect((search as HTMLInputElement).value).toBe("");
+    expect(screen.queryByRole("button", { name: "Quitar filtro Búsqueda: “cafe”" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Limpiar todo" })).toBeNull();
+  });
+
   it("loads the next page", async () => {
     // Arrange
     stubApi({

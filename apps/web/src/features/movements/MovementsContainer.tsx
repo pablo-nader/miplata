@@ -117,6 +117,9 @@ export function MovementsContainer() {
     label: dayLabel(group.date, today, locale, t),
   }));
 
+  const trimmedSearch = searchText.trim();
+  const anyActive = chips.length > 0 || trimmedSearch !== "";
+
   function clearAll() {
     setFilters(emptyFilters());
     setSearchText("");
@@ -129,6 +132,23 @@ export function MovementsContainer() {
       locale={locale}
       search={{ label: t("movements.search"), value: searchText, onChange: setSearchText }}
       chips={[
+        ...(trimmedSearch
+          ? [
+              {
+                key: "search",
+                label: t("movements.filters.searchChip", { text: trimmedSearch }),
+                selected: true,
+                kind: "active" as const,
+                ariaLabel: t("movements.filters.remove", {
+                  label: t("movements.filters.searchChip", { text: trimmedSearch }),
+                }),
+                onClick: () => {
+                  setSearchText("");
+                  setQ("");
+                },
+              },
+            ]
+          : []),
         ...chips.map((chip) => ({
           key: chip.key,
           label: chip.label,
@@ -137,6 +157,17 @@ export function MovementsContainer() {
           ariaLabel: t("movements.filters.remove", { label: chip.label }),
           onClick: () => setFilters({ ...filters, ...chip.clear }),
         })),
+        ...(anyActive
+          ? [
+              {
+                key: "clear-all",
+                label: t("movements.filters.clearAll"),
+                selected: false,
+                kind: "clear" as const,
+                onClick: clearAll,
+              },
+            ]
+          : []),
         {
           key: "toggle",
           label: t("movements.filters.title"),

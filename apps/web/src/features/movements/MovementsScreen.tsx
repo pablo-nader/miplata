@@ -1,4 +1,4 @@
-import { List, Search, SlidersHorizontal, X } from "lucide-react";
+import { FilterX, List, Search, SlidersHorizontal, X } from "lucide-react";
 import type { ReactNode } from "react";
 import { AccountBadge } from "../../ui/atoms/AccountBadge";
 import { Button } from "../../ui/atoms/Button";
@@ -18,7 +18,7 @@ export type ChipData = {
   label: string;
   selected: boolean;
   onClick: () => void;
-  kind: "active" | "toggle";
+  kind: "active" | "toggle" | "clear";
   ariaLabel?: string;
 };
 
@@ -124,6 +124,8 @@ export function MovementsScreen({
             icon={
               chip.kind === "toggle" ? (
                 <SlidersHorizontal aria-hidden="true" />
+              ) : chip.kind === "clear" ? (
+                <FilterX aria-hidden="true" />
               ) : (
                 <X aria-hidden="true" />
               )

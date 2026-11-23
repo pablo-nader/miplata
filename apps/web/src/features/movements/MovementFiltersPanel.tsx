@@ -5,6 +5,7 @@ import { Button } from "../../ui/atoms/Button";
 import { Field } from "../../ui/molecules/Field";
 import { SelectField, type SelectGroup, type SelectOption } from "../../ui/molecules/SelectField";
 import { displayName } from "../accounts/account-display";
+import { amountCurrency } from "./movement-filters";
 import "./movements-screen.css";
 
 export type UiFilters = {
@@ -141,13 +142,13 @@ export function MovementFiltersPanel({
       <div className="movements-filters__row">
         <Field
           inputMode="decimal"
-          label={t("movements.filters.min")}
+          label={t("movements.filters.min", { currency: amountCurrency(value) })}
           value={value.min}
           onChange={(event) => set({ min: event.target.value })}
         />
         <Field
           inputMode="decimal"
-          label={t("movements.filters.max")}
+          label={t("movements.filters.max", { currency: amountCurrency(value) })}
           value={value.max}
           onChange={(event) => set({ max: event.target.value })}
         />

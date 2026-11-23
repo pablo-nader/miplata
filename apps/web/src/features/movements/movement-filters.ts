@@ -1,4 +1,4 @@
-import type { Account, CategoriesResponse } from "@miplata/shared";
+import type { Account, CategoriesResponse, Currency } from "@miplata/shared";
 import { categoryLabel } from "@miplata/shared";
 import type { TFunction } from "i18next";
 import { displayName } from "../accounts/account-display";
@@ -28,16 +28,23 @@ export function emptyFilters(): UiFilters {
   return { ...defaultFilters("2000-01"), from: "", to: "" };
 }
 
+export function amountCurrency(ui: UiFilters): Currency {
+  return ui.currency || "ARS";
+}
+
 export function isInvertedRange(ui: UiFilters): boolean {
-  const min = ui.min.trim() ? parseAmountMinor(ui.min, "ARS") : null;
-  const max = ui.max.trim() ? parseAmountMinor(ui.max, "ARS") : null;
+  const currency = amountCurrency(ui);
+  const min = ui.min.trim() ? parseAmountMinor(ui.min, currency) : null;
+  const max = ui.max.trim() ? parseAmountMinor(ui.max, currency) : null;
   const dates = ui.from !== "" && ui.to !== "" && ui.from > ui.to;
   return dates || (min !== null && max !== null && min > max);
 }
 
 export function toQuery(ui: UiFilters, q: string): MovementFilters {
-  const min = ui.min.trim() ? parseAmountMinor(ui.min, "ARS") : null;
-  const max = ui.max.trim() ? parseAmountMinor(ui.max, "ARS") : null;
+  const currency = amountCurrency(ui);
+  const min = ui.min.trim() ? parseAmountMinor(ui.min, currency) : null;
+  const max = ui.max.trim() ? parseAmountMinor(ui.max, currency) : null;
+  const amountBounded = min !== null || max !== null;
   return {
     ...(q.trim() ? { q: q.trim() } : {}),
     ...(ui.from ? { from: ui.from } : {}),
@@ -47,7 +54,7 @@ export function toQuery(ui: UiFilters, q: string): MovementFilters {
     ...(ui.personId ? { personId: ui.personId } : {}),
     ...(ui.groupId ? { groupId: ui.groupId } : {}),
     ...(ui.categoryId ? { categoryId: ui.categoryId } : {}),
-    ...(ui.currency ? { currency: ui.currency } : {}),
+    ...(ui.currency || amountBounded ? { currency } : {}),
     ...(min !== null ? { minAmountMinor: min } : {}),
     ...(max !== null ? { maxAmountMinor: max } : {}),
   };
@@ -117,17 +124,18 @@ export function activeChips(ui: UiFilters, ctx: ChipContext): ActiveChip[] {
   if (ui.currency) {
     chips.push({ key: "currency", label: ui.currency, clear: { currency: "" } });
   }
-  if (ui.min.trim() && parseAmountMinor(ui.min, "ARS") !== null) {
+  const currency = amountCurrency(ui);
+  if (ui.min.trim() && parseAmountMinor(ui.min, currency) !== null) {
     chips.push({
       key: "min",
-      label: t("movements.filters.minChip", { amount: ui.min.trim() }),
+      label: t("movements.filters.minChip", { amount: ui.min.trim(), currency }),
       clear: { min: "" },
     });
   }
-  if (ui.max.trim() && parseAmountMinor(ui.max, "ARS") !== null) {
+  if (ui.max.trim() && parseAmountMinor(ui.max, currency) !== null) {
     chips.push({
       key: "max",
-      label: t("movements.filters.maxChip", { amount: ui.max.trim() }),
+      label: t("movements.filters.maxChip", { amount: ui.max.trim(), currency }),
       clear: { max: "" },
     });
   }

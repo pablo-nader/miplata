@@ -45,17 +45,18 @@ describe("migrations applied to an empty database", () => {
     expect(result.rows.map((row) => row.table_name)).toEqual(expected);
   });
 
-  it("enable pg_trgm and the trigram index on movement.description", async () => {
+  it("enable pg_trgm, unaccent and the accent-insensitive trigram index on movement.description", async () => {
     // Arrange
     const query = `select
-      (select count(*) from pg_extension where extname = 'pg_trgm') as extension,
-      (select indexdef from pg_indexes where indexname = 'movement_description_trgm_idx') as index`;
+      (select count(*) from pg_extension where extname in ('pg_trgm', 'unaccent')) as extension,
+      (select indexdef from pg_indexes where indexname = 'movement_description_search_idx') as index`;
 
     // Act
     const result = await database.pool.query(query);
 
     // Assert
-    expect(result.rows[0].extension).toBe("1");
+    expect(result.rows[0].extension).toBe("2");
+    expect(result.rows[0].index).toContain("immutable_unaccent");
     expect(result.rows[0].index).toContain("gin_trgm_ops");
   });
 
