@@ -1,6 +1,6 @@
 # 0015. Approved screen designs
 
-- Status: Accepted
+- Status: Accepted; its preview rule is superseded by [0035](0035-no-ui-previews.md)
 - Date: 2026-11-23
 - Amends: [0014](0014-ui-preview-approval.md)
 

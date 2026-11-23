@@ -20,7 +20,7 @@ Read [DESIGN.md](DESIGN.md) before building or changing any screen. Use only the
 3. Before opening a pull request, two fresh agents with no prior context review the change. Open the pull request only when both pass with no warnings.
 4. All CI checks must pass. Fix CI failures and merge conflicts.
 5. Rebase onto `main` instead of merging, to keep history linear.
-6. Merge to `main` is automatic once CI and the dual review pass; it deploys to production. Exception: a pull request with user interface that is not in the approved mockups (`design/mockups/screens.html`), or departs from them, waits for the owner to approve a preview (Vercel preview URL plus phone and desktop screenshots, light and dark, in Spanish). Screens in the approved mockups are pre-approved. See ADR 0014 and ADR 0015.
+6. Merge to `main` is automatic once CI and the dual review pass; it deploys to production. No previews: never prepare one or ask the owner to approve one, for any pull request. The approved mockups (`design/mockups/screens.html`) and `DESIGN.md` stay the design reference for reviewers. See ADR 0035.
 7. Conventional Commits with the AI co-author trailer. Pull request descriptions end with an AI attribution line.
 
 ## Decisions
@@ -35,4 +35,4 @@ Read [DESIGN.md](DESIGN.md) before building or changing any screen. Use only the
 - Each implementation stage runs as its own session and delivers its own pull request.
 - Stages with no pending dependencies run in parallel.
 - Each stage uses the cheapest model that can do the work.
-- The assistant turns on auto-merge and Auto-fix on its own pull requests and merges them once CI is green, never leaving the merge to the owner (except for the preview approval in rule 6).
+- The assistant turns on auto-merge and Auto-fix on its own pull requests and merges them once CI is green, never leaving the merge to the owner.
