@@ -8,7 +8,7 @@ Machine-readable tokens: [design/tokens.json](design/tokens.json). Brand sources
 
 Buenos Aires subway signage, in the Grafito palette. Signage is designed to be read in a second while moving, which is exactly how a movement gets recorded: on the phone, right after paying.
 
-- The **signage band** is a charcoal panel that holds the month balance.
+- The **signage band** is a charcoal panel that holds the total balance.
 - **Line rules** under the balance: teal for money in, orange for money out.
 - Each **category is a line**: a round badge with a letter, in its own color.
 - **Movements read like a list of stations.**
@@ -76,7 +76,7 @@ Rules:
 
 - All digits use `font-variant-numeric: tabular-nums` so amounts align.
 - Both faces are open source (OFL) and are self-hosted with the app; no runtime request to Google Fonts.
-- Money format follows `es-AR`: `$ 1.250.000`, `− $ 48.300`, `+ $ 1.250.000`. The minus sign is U+2212.
+- Money format follows `es-AR`: `$ 1.250.000`, `− $ 48.300`, `+ $ 1.250.000`. The minus sign is U+2212. Dollars use the `US$` prefix: `US$ 1.000`.
 
 ## Spacing, radius and size
 
@@ -87,7 +87,7 @@ Rules:
 
 ## Components
 
-**Signage band.** `band` background, `on-band` text. Contains the brand row (mark, name, month), the balance label and amount, and the two line rules (3 px top border, `line-income` and `action`) with "In" and "Out" totals.
+**Signage band.** `band` background, `on-band` text. Contains the brand row (mark, name, month), the total balance in pesos with the total in dollars below it in caption size (only when it is not zero), and the two line rules (3 px top border, `line-income` and `action`) with the month's "In" and "Out" totals. The balance is a button that opens the balance detail screen, with one row per account and currency. Pesos and dollars are never added together (see [BD-0013](docs/business/BD-0013-currencies-and-exchange.md)).
 
 **Movement row.** Grid of badge (32 px), title with caption below (category · date), amount aligned right. Separated by a 1 px `rule` divider. Income amounts in `income` with a leading `+`; expenses in `ink` with a leading `−`.
 

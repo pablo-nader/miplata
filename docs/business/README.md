@@ -39,3 +39,4 @@ Impact on users, cost, and technical design.
 | [BD-0010](BD-0010-category-icons.md) | Category icons | Accepted |
 | [BD-0011](BD-0011-accounts-and-transfers.md) | Accounts and transfers | Accepted |
 | [BD-0012](BD-0012-institution-logos.md) | Institution logos | Accepted |
+| [BD-0013](BD-0013-currencies-and-exchange.md) | Currencies and exchange | Accepted |
