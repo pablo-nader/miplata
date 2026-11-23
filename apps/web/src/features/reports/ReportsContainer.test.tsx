@@ -323,6 +323,7 @@ describe("committed report", () => {
     // Assert
     expect(await screen.findByText("Cuotas $ 30.000 · Recurrentes $ 5.000")).toBeTruthy();
     expect(screen.getByText("$ 35.000")).toBeTruthy();
+    expect(screen.getByText(/Diciembre.* · ARS/)).toBeTruthy();
     expect(calls.map((call) => call.key)).toContain(
       "GET /api/reports/committed?from=2026-12&months=6&currency=ARS",
     );
@@ -372,6 +373,32 @@ describe("tabs", () => {
     expect(second.getAttribute("aria-selected")).toBe("true");
     expect(first.getAttribute("tabindex")).toBe("-1");
     expect(document.activeElement).toBe(second);
+  });
+
+  it("jump to the last and first tab with End and Home", async () => {
+    // Arrange
+    stubApi({
+      ...base,
+      "GET /api/reports/spending?month=2026-11&currency=ARS": { body: spending },
+      "GET /api/reports/committed?from=2026-12&months=6&currency=ARS": {
+        body: { currency: "ARS", months: [] },
+      },
+    });
+    open();
+    const first = await screen.findByRole("tab", { name: "En qué se va" });
+    first.focus();
+
+    // Act
+    await userEvent.keyboard("{End}");
+    const last = screen.getByRole("tab", { name: "Comprometido" });
+    const lastSelected = last.getAttribute("aria-selected");
+    await userEvent.keyboard("{Home}");
+
+    // Assert
+    expect(lastSelected).toBe("true");
+    expect(screen.getByRole("tab", { name: "En qué se va" }).getAttribute("aria-selected")).toBe(
+      "true",
+    );
   });
 
   it("renders in English", async () => {

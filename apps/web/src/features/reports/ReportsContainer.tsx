@@ -68,11 +68,12 @@ export function ReportsContainer() {
     empty: t(`reports.${tab}.empty`),
   };
   const Panel = PANELS[tab];
+  const shownMonth = tab === "committed" ? shiftMonth(month, 1) : month;
 
   return (
     <ReportsScreen
       title={t("screens.reports.title")}
-      subtitle={`${formatMonthLabel(month, locale)} · ${currency}`}
+      subtitle={`${formatMonthLabel(shownMonth, locale)} · ${currency}`}
       tabsLabel={t("reports.tabsLabel")}
       tabs={TABS.map((id) => ({ id, label: t(`reports.${id}.tab`) }))}
       activeTab={tab}
@@ -92,7 +93,7 @@ export function ReportsContainer() {
       }}
       period={{
         label: t(`reports.period.${tab}`),
-        value: formatMonthLabel(tab === "committed" ? shiftMonth(month, 1) : month, locale),
+        value: formatMonthLabel(shownMonth, locale),
         previous: t("reports.period.previous"),
         next: t("reports.period.next"),
         onPrevious: () => setMonth((value) => shiftMonth(value, -1)),
