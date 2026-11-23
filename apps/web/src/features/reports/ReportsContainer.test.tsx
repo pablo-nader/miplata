@@ -151,6 +151,46 @@ describe("spending report", () => {
   });
 });
 
+describe("category catalog", () => {
+  it("does not label rows until the catalog loads and offers a retry when it fails", async () => {
+    // Arrange
+    stubApi({
+      ...base,
+      "GET /api/categories": { status: 500, body: { error: "boom" } },
+      "GET /api/reports/spending?month=2026-11&currency=ARS": { body: spending },
+    });
+
+    // Act
+    open();
+
+    // Assert
+    expect(await screen.findByRole("button", { name: "Reintentar" })).toBeTruthy();
+    expect(screen.queryByText(/Categoría eliminada/)).toBeNull();
+  });
+});
+
+describe("movements drill-down errors", () => {
+  it("shows the load failure and retries the movements request", async () => {
+    // Arrange
+    const key = `GET /api/reports/spending/movements?month=2026-11&currency=ARS&categoryId=${rent}`;
+    const { calls } = stubApi({
+      ...base,
+      "GET /api/reports/spending?month=2026-11&currency=ARS": { body: spending },
+      [key]: { status: 500, body: { error: "boom" } },
+    });
+    open();
+    await userEvent.click(await screen.findByRole("button", { name: /Vivienda/ }));
+    await userEvent.click(await screen.findByRole("button", { name: /Alquiler/ }));
+
+    // Act
+    const retry = await screen.findByRole("button", { name: "Reintentar" });
+    await userEvent.click(retry);
+
+    // Assert
+    await waitFor(() => expect(calls.filter((call) => call.key === key).length).toBeGreaterThan(1));
+  });
+});
+
 describe("filters", () => {
   it("reloads with the other currency, an account and a category", async () => {
     // Arrange
