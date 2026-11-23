@@ -1,10 +1,10 @@
 # 0008. Engineering practices baseline
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-23
 
 ## Context
-Automatic merge to production (see [0006](0006-agent-driven-delivery-workflow.md)) makes automated quality gates the main protection. These practices were proposed and are pending the owner's explicit confirmation.
+Automatic merge to production (see [0006](0006-agent-driven-delivery-workflow.md)) makes automated quality gates the main protection.
 
 ## Decision
 - Store money as integer minor units (cents) or Postgres `numeric`, never as floating point.
@@ -17,7 +17,11 @@ Automatic merge to production (see [0006](0006-agent-driven-delivery-workflow.md
 - pnpm workspaces monorepo: `apps/web`, `apps/api`, `packages/shared`.
 
 ## Alternatives considered
-To be recorded per practice when confirmed.
+- Floating point for money: rejected, it produces rounding errors such as `0.1 + 0.2 = 0.30000000000000004`.
+- ESLint plus Prettier: rejected in favor of Biome, a single faster tool for lint and formatting.
+- Separate repositories for web and API: rejected, a monorepo keeps shared types in one place.
+- Integration tests against mocks or an in-memory database: rejected, they miss real Postgres behavior.
 
 ## Consequences
-Each practice is confirmed or rejected during the design phase; accepted ones move to their own ADR or update this one to Accepted.
+- CI enforces every practice on each pull request, so no change reaches production without passing them.
+- More setup before the first feature ships.
