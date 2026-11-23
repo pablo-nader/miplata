@@ -225,6 +225,22 @@ describe("first sign-in", () => {
     expect(after).toHaveLength(before.length);
   });
 
+  it("seeds a user that is missing defaults when a session is created", async () => {
+    // Arrange
+    const [row] = await harness.db
+      .insert(user)
+      .values({ name: "Legacy", email: "legacy@example.com" })
+      .returning({ id: user.id });
+    const userId = (row as { id: string }).id;
+
+    // Act
+    await harness.cookieFor(userId);
+    const categories = await harness.db.select().from(category).where(eq(category.userId, userId));
+
+    // Assert
+    expect(categories.length).toBeGreaterThan(0);
+  });
+
   it("keeps each user's defaults separate", async () => {
     // Arrange
     const first = await harness.signUpWithGoogle("sep-1@example.com");
