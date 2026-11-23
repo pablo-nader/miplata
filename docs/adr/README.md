@@ -45,3 +45,4 @@ What becomes easier, harder, or constrained.
 | [0016](0016-data-model.md) | Data model | Accepted |
 | [0017](0017-project-structure.md) | Project structure | Accepted |
 | [0018](0018-ci-cd-pipeline.md) | CI/CD pipeline | Accepted |
+| [0019](0019-hosting-region.md) | Hosting region: São Paulo | Accepted |
