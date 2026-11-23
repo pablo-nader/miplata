@@ -246,10 +246,11 @@ export function drizzleMovementRepository(db: Database): MovementRepository {
         );
       const overrides: Record<string, { closingDate: string; dueDate: string }> = {};
       for (const row of rows) {
-        overrides[row.periodMonth.slice(0, 7)] = {
-          closingDate: row.closingDate,
-          dueDate: row.dueDate,
-        };
+        const period = row.periodMonth.slice(0, 7);
+        const usable = row.closingDate.slice(0, 7) === period && row.dueDate > row.closingDate;
+        if (usable) {
+          overrides[period] = { closingDate: row.closingDate, dueDate: row.dueDate };
+        }
       }
       return overrides as StatementOverrides;
     },

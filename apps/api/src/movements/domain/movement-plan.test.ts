@@ -358,6 +358,21 @@ describe("planning a transfer", () => {
     expect(outcome).toEqual({ ok: false, violation });
   });
 
+  it("rejects an exchange inside a person's account", () => {
+    // Arrange
+    const both = { ...juan, currencies: bank.currencies };
+    const request = transfer({
+      from: { accountId: JUAN, currency: "ARS", amountMinor: 100_00 },
+      to: { accountId: JUAN, currency: "USD", amountMinor: 1_00 },
+    });
+
+    // Act
+    const outcome = planTransfer(request, { from: both, to: both, keepInactive: new Set() });
+
+    // Assert
+    expect(outcome).toEqual({ ok: false, violation: "transfer_same_account" });
+  });
+
   it("rejects an inactive account", () => {
     // Arrange
     const dormant = { ...bank, isActive: false };

@@ -194,6 +194,7 @@ describe("recording expenses and income", () => {
     ["an impossible date", { occurredOn: "2026-02-31" }],
     ["an unsupported currency", { currency: "EUR" }],
     ["zero installments", { installments: 0 }],
+    ["an amount above the limit", { amountMinor: 1_000_000_000_001 }],
   ])("rejects %s", async (_label, changes) => {
     // Arrange
     const user = await newUser();
@@ -382,6 +383,24 @@ describe("card purchases", () => {
     expect(january.totals[0].outMinor).toBe(300_00);
   });
 
+  it("ignores a stored statement with inconsistent dates instead of failing", async () => {
+    // Arrange
+    const user = await newUser();
+    await record(user, expense(user, { accountId: user.visa, occurredOn: "2026-11-10" }));
+    await harness.pool.query("update statement set due_date = closing_date where user_id = $1", [
+      user.userId,
+    ]);
+
+    // Act
+    const created = await record(
+      user,
+      expense(user, { accountId: user.visa, occurredOn: "2026-11-12" }),
+    );
+
+    // Assert
+    expect(created.installments[0].periodMonth).toBe("2026-11");
+  });
+
   it("rejects installments on a card without closing and due days", async () => {
     // Arrange
     const user = await newUser();
@@ -483,6 +502,23 @@ describe("transfers and exchange", () => {
 
     // Assert
     expect(response.reason).toBe(reason);
+  });
+
+  it("rejects an exchange inside a person's account", async () => {
+    // Arrange
+    const user = await newUser();
+    const body = {
+      type: "transfer",
+      occurredOn: "2026-11-10",
+      from: { accountId: user.juan, currency: "ARS", amountMinor: 1_00 },
+      to: { accountId: user.juan, currency: "USD", amountMinor: 1_00 },
+    };
+
+    // Act
+    const response = await ok(await call(user.cookie, "POST", "/movements", body), 400);
+
+    // Assert
+    expect(response.reason).toBe("transfer_same_account");
   });
 
   it("treats a loan to a person as a transfer that is not an expense", async () => {
@@ -651,6 +687,27 @@ describe("editing and deleting", () => {
     expect(edited.type).toBe("transfer");
     expect(await count("installment", user.userId)).toBe(0);
     expect(await count("posting", user.userId)).toBe(2);
+  });
+
+  it("lets an edit keep an account and a category that were deactivated afterwards", async () => {
+    // Arrange
+    const user = await newUser();
+    const created = await record(user, expense(user));
+    await ok(await call(user.cookie, "POST", `/accounts/${user.cash}/deactivate`));
+    await harness.pool.query("update category set is_active = false where id = $1", [user.food]);
+
+    // Act
+    const edited = await call(
+      user.cookie,
+      "PUT",
+      `/movements/${created.id}`,
+      expense(user, { description: "Fixed typo" }),
+    );
+    const fresh = await call(user.cookie, "POST", "/movements", expense(user));
+
+    // Assert
+    expect(edited.status).toBe(200);
+    expect(fresh.status).toBe(400);
   });
 
   it("deletes a movement with its postings and installments and restores the balance", async () => {
@@ -856,19 +913,25 @@ describe("listing and filtering", () => {
     expect(second.hasMore).toBe(false);
   });
 
-  it.each(["limit=0", "limit=101", "offset=-1", "type=gift", "from=2026-13-01", "accountId=nope"])(
-    "rejects the query %s",
-    async (query) => {
-      // Arrange
-      const path = `/movements?${query}`;
+  it.each([
+    "limit=0",
+    "limit=101",
+    "offset=-1",
+    "type=gift",
+    "from=2026-13-01",
+    "accountId=nope",
+    "from=2026-12-01&to=2026-11-01",
+    "minAmountMinor=10&maxAmountMinor=5",
+  ])("rejects the query %s", async (query) => {
+    // Arrange
+    const path = `/movements?${query}`;
 
-      // Act
-      const response = await call(user.cookie, "GET", path);
+    // Act
+    const response = await call(user.cookie, "GET", path);
 
-      // Assert
-      expect(response.status).toBe(400);
-    },
-  );
+    // Assert
+    expect(response.status).toBe(400);
+  });
 
   it("rejects a malformed month in the summary", async () => {
     // Arrange
