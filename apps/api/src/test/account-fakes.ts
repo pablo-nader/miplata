@@ -5,6 +5,7 @@ import type {
   InstitutionRepository,
   NewAccount,
 } from "../accounts/application/accounts";
+import { inMemoryMovements } from "./movement-fakes";
 
 type StoredAccount = Account & { userId: string; posted: Map<Currency, number> };
 
@@ -121,5 +122,6 @@ export function unusedAccountDependencies() {
       institutions: inMemoryInstitutions([]),
     },
     people: repository,
+    movements: inMemoryMovements().repository,
   };
 }

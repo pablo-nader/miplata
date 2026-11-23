@@ -57,3 +57,4 @@ What becomes easier, harder, or constrained.
 | [0028](0028-custom-domain.md) | Custom domain: miplata.enargentina.online | Accepted |
 | [0029](0029-categories-api-and-screen.md) | Categories API and screen | Accepted |
 | [0030](0030-accounts-and-people-api.md) | Accounts and people API | Accepted |
+| [0031](0031-movements-api.md) | Movements API | Accepted |

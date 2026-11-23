@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createApp } from "../../app";
 import type { CategoryRepository } from "../../categories/application/category-repository";
 import { inMemoryAccounts, inMemoryInstitutions } from "../../test/account-fakes";
+import { inMemoryMovements } from "../../test/movement-fakes";
 
 const unusedCategories = new Proxy({} as CategoryRepository, {
   get: () => async () => {
@@ -23,6 +24,7 @@ function buildApp() {
     accounts: { accounts: store.repository, everyAccount: store.repository, institutions },
     people: people.repository,
     categories: unusedCategories,
+    movements: inMemoryMovements().repository,
   });
   return { app, store };
 }
