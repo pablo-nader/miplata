@@ -1,5 +1,6 @@
 import {
   authAccount,
+  category,
   type Database,
   eq,
   seedUserDefaults,
@@ -49,8 +50,25 @@ export function createAuth({ db, env, seedDefaults = seedUserDefaults }: CreateA
             try {
               await seedDefaults(db, created.id);
             } catch (error) {
-              await db.delete(user).where(eq(user.id, created.id));
+              await db
+                .delete(user)
+                .where(eq(user.id, created.id))
+                .catch(() => undefined);
               throw error;
+            }
+          },
+        },
+      },
+      session: {
+        create: {
+          after: async (created) => {
+            const [existing] = await db
+              .select({ id: category.id })
+              .from(category)
+              .where(eq(category.userId, created.userId))
+              .limit(1);
+            if (!existing) {
+              await seedDefaults(db, created.userId);
             }
           },
         },
