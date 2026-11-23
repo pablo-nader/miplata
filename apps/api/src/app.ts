@@ -16,6 +16,9 @@ import { meRoutes } from "./me/http/me-routes";
 import type { MovementRepository } from "./movements/application/movement-repository";
 import { movementRoutes } from "./movements/http/movement-routes";
 import { peopleRoutes } from "./people/http/people-routes";
+import type { ReportRepository } from "./reports/application/report-repository";
+import type { RecurringCommitments } from "./reports/application/report-use-cases";
+import { reportRoutes } from "./reports/http/report-routes";
 import type { SessionResolver } from "./shared/auth/auth-middleware";
 
 export type AppDependencies = {
@@ -27,6 +30,8 @@ export type AppDependencies = {
   accounts: AccountRoutesDependencies;
   people: AccountRepository;
   movements: MovementRepository;
+  reports: ReportRepository;
+  recurringCommitments?: RecurringCommitments;
 };
 
 export function createApp({
@@ -38,6 +43,8 @@ export function createApp({
   accounts,
   people,
   movements,
+  reports,
+  recurringCommitments,
 }: AppDependencies) {
   return new Hono()
     .basePath("/api")
@@ -57,7 +64,8 @@ export function createApp({
         accounts: accounts.everyAccount,
         categories,
       }),
-    );
+    )
+    .route("/reports", reportRoutes(resolveSession, { reports, recurring: recurringCommitments }));
 }
 
 export type AppType = ReturnType<typeof createApp>;
