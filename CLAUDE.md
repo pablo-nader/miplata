@@ -30,3 +30,9 @@ Read [DESIGN.md](DESIGN.md) before building or changing any screen. Use only the
 
 ## Boundaries
 - Never create accounts or handle credentials or secrets. The owner creates accounts and enters secrets in GitHub and Vercel.
+
+## Stages
+- Each implementation stage runs as its own session and delivers its own pull request.
+- Stages with no pending dependencies run in parallel.
+- Each stage uses the cheapest model that can do the work.
+- The assistant turns on auto-merge and Auto-fix on its own pull requests and merges them once CI is green, never leaving the merge to the owner (except for the preview approval in rule 6).
