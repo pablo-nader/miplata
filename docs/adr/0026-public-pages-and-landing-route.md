@@ -11,7 +11,8 @@
 - `/` is the public landing page: the approved sign-in screen plus a short description of the app and footer links. The signed-in home screen moves to `/home`.
 - `/privacy` and `/terms` are static pages. All three public routes render in a layout with a single main landmark and a footer with links to both legal pages and a language switch.
 - Legal text lives in the `es` and `en` translation files, as arrays of sections, so the missing-key test covers it. The public contact email is one constant in the code.
-- The sign-in button does nothing until the authentication stage wires it. That stage also redirects signed-in visitors from `/` to `/home`.
+- The sign-in button links to the `/sign-in` placeholder until the authentication stage wires it. That stage also redirects signed-in visitors from `/` to `/home`.
+- Unknown paths still redirect to `/`, now the landing page; the authentication stage sends signed-in visitors on to `/home`.
 - The pages need no API and are served by the existing Vercel rewrite to `index.html`.
 - The language switch changes the language for the current visit only; the stored profile language of [0013](0013-internationalization.md) applies once users can sign in.
 
