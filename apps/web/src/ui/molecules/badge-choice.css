@@ -1,0 +1,28 @@
+.badge-choice {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--space-1);
+  min-width: var(--size-touch-target);
+  min-height: var(--size-touch-target);
+  padding: var(--space-1);
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: var(--font-size-caption);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--motion-press) ease-out;
+}
+
+.badge-choice:active {
+  transform: scale(0.98);
+}
+
+.badge-choice__caption {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

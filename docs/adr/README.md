@@ -55,3 +55,4 @@ What becomes easier, harder, or constrained.
 | [0026](0026-public-pages-and-landing-route.md) | Public pages and the landing route | Accepted |
 | [0027](0027-better-auth-integration.md) | Better Auth integration | Accepted |
 | [0028](0028-custom-domain.md) | Custom domain: miplata.enargentina.online | Accepted |
+| [0029](0029-categories-api-and-screen.md) | Categories API and screen | Accepted |

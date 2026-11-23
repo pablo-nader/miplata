@@ -1,8 +1,12 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { RedirectIfSignedIn } from "../features/auth/RedirectIfSignedIn";
 import { RequireAuth } from "../features/auth/RequireAuth";
+import { CategoriesContainer } from "../features/categories/CategoriesContainer";
+import { CategoryEditorContainer } from "../features/categories/CategoryEditorContainer";
+import { GroupEditorContainer } from "../features/categories/GroupEditorContainer";
 import { HomeContainer } from "../features/home/HomeContainer";
 import { MenuContainer } from "../features/menu/MenuContainer";
+import { NewMovementContainer } from "../features/movements/NewMovementContainer";
 import { PlaceholderContainer } from "../features/placeholder/PlaceholderContainer";
 import { LandingContainer } from "../features/public/LandingContainer";
 import { LegalContainer } from "../features/public/LegalContainer";
@@ -34,10 +38,12 @@ export function AppRoutes() {
         </Route>
         <Route element={<FocusedLayout />}>
           <Route path="balance" element={<PlaceholderContainer focused screen="balance" />} />
-          <Route
-            path="movements/new"
-            element={<PlaceholderContainer focused screen="newMovement" />}
-          />
+          <Route path="movements/new" element={<NewMovementContainer />} />
+          <Route path="categories" element={<CategoriesContainer />} />
+          <Route path="categories/new" element={<CategoryEditorContainer mode="new" />} />
+          <Route path="categories/groups/new" element={<GroupEditorContainer mode="new" />} />
+          <Route path="categories/groups/:groupId" element={<GroupEditorContainer mode="edit" />} />
+          <Route path="categories/:categoryId" element={<CategoryEditorContainer mode="edit" />} />
           <Route
             path="accounts/:accountId/statement"
             element={<PlaceholderContainer focused screen="statement" />}

@@ -50,6 +50,17 @@ describe("MenuContainer", () => {
     expect(spanish.checked).toBe(true);
   });
 
+  it("links to the categories screen", () => {
+    // Arrange
+    renderMenu("es");
+
+    // Act
+    const link = screen.getByRole("link", { name: "Categorías" });
+
+    // Assert
+    expect(link.getAttribute("href")).toBe("/categories");
+  });
+
   it("persists the chosen language through the api and translates the screen", async () => {
     // Arrange
     const fetchMock = vi.fn(async () => new Response("{}", { status: 200 }));

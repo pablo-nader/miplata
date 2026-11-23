@@ -1,3 +1,4 @@
+import { CATEGORY_ICON_NAMES } from "@miplata/shared";
 import * as lucide from "lucide-react";
 import { describe, expect, it } from "vitest";
 import { categoryIcons, resolveCategoryIcon } from "./category-icons";
@@ -58,6 +59,17 @@ function lucideExport(name: string): unknown {
 }
 
 describe("category icons", () => {
+  it("offers exactly the names the api accepts", () => {
+    // Arrange
+    const offered = Object.keys(categoryIcons).sort();
+
+    // Act
+    const accepted = [...CATEGORY_ICON_NAMES].sort();
+
+    // Assert
+    expect(offered).toEqual(accepted);
+  });
+
   it.each(defaultNames)("default icon %s exists in the installed Lucide version", (name) => {
     // Arrange
     const exported = lucideExport(name);
