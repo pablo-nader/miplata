@@ -1,7 +1,10 @@
 import {
   categoriesResponseSchema,
   categorySchema,
+  categoryTypeSchema,
   createCategoryRequestSchema,
+  type IsoDate,
+  mostUsedCategoriesResponseSchema,
   updateCategoryRequestSchema,
 } from "@miplata/shared";
 import { Hono } from "hono";
@@ -15,17 +18,35 @@ import {
   createCategory,
   deleteCategory,
   listCategories,
+  mostUsedCategoryIds,
   setCategoryActive,
   updateCategory,
 } from "../application/category-use-cases";
 import { isValidId } from "./path-id";
 
-export function categoriesRoutes(resolveSession: SessionResolver, repository: CategoryRepository) {
+export function categoriesRoutes(
+  resolveSession: SessionResolver,
+  repository: CategoryRepository,
+  today: () => IsoDate,
+) {
   return new Hono<{ Variables: AuthVariables }>()
     .use(authMiddleware(resolveSession))
     .get("/", async (c) => {
       const catalog = await listCategories(repository, c.get("userId"));
       return c.json(categoriesResponseSchema.parse(catalog));
+    })
+    .get("/most-used", async (c) => {
+      const type = categoryTypeSchema.safeParse(c.req.query("type"));
+      if (!type.success) {
+        return c.json({ error: "invalid_request" }, 400);
+      }
+      const categoryIds = await mostUsedCategoryIds(
+        repository,
+        c.get("userId"),
+        type.data,
+        today(),
+      );
+      return c.json(mostUsedCategoriesResponseSchema.parse({ categoryIds }));
     })
     .post("/", async (c) => {
       const body = createCategoryRequestSchema.safeParse(await c.req.json().catch(() => null));

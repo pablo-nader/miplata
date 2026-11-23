@@ -67,7 +67,7 @@ export function createApp({
     .on(["GET", "POST"], "/auth/*", (c) => authHandler(c.req.raw))
     .route("/", healthRoutes(readVersion))
     .route("/me", meRoutes(resolveSession, users))
-    .route("/categories", categoriesRoutes(resolveSession, categories))
+    .route("/categories", categoriesRoutes(resolveSession, categories, today))
     .route("/category-groups", categoryGroupsRoutes(resolveSession, categories))
     .route("/accounts", accountRoutes(resolveSession, accounts))
     .route("/institutions", institutionRoutes(resolveSession, accounts.institutions))

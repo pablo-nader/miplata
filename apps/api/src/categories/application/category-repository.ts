@@ -35,6 +35,12 @@ export type CategoryRepository = {
     name: string,
   ): Promise<CategoryGroupDto | "name_taken" | null>;
   deleteGroup(userId: string, groupId: string): Promise<"deleted" | "not_found" | "not_empty">;
+  mostUsedCategoryIds(
+    userId: string,
+    type: CategoryType,
+    since: string,
+    limit: number,
+  ): Promise<string[]>;
 };
 
 export type Outcome<Value, Reason extends string> =

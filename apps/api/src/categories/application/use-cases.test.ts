@@ -37,6 +37,7 @@ function repositoryWith(overrides: Partial<CategoryRepository> = {}): CategoryRe
     insertGroup: vi.fn(async () => groupRow),
     renameGroup: vi.fn(async () => groupRow),
     deleteGroup: vi.fn(async () => "deleted" as const),
+    mostUsedCategoryIds: vi.fn(async () => []),
     ...overrides,
   };
 }

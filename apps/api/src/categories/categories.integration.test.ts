@@ -64,6 +64,109 @@ async function insertMovement(userId: string, categoryId: string) {
   );
 }
 
+async function insertMovementOn(
+  userId: string,
+  categoryId: string,
+  date: string,
+  type = "expense",
+) {
+  await harness.pool.query(
+    "insert into movement (user_id, type, occurred_on, category_id) values ($1, $2, $3, $4)",
+    [userId, type, date, categoryId],
+  );
+}
+
+async function mostUsed(person: Person | null, type = "expense") {
+  const response = await call(person, "GET", `/categories/most-used?type=${type}`);
+  return { response, ids: ((await response.json()) as { categoryIds: string[] }).categoryIds };
+}
+
+describe("GET /api/categories/most-used", () => {
+  it("ranks the user's categories by movements in the last 90 days and ignores older ones", async () => {
+    // Arrange
+    const person = await newPerson();
+    const catalog = await catalogOf(person);
+    const [first, second, third] = catalog.expenseGroups.flatMap((group) => group.categories);
+    const [a, b, c] = [first, second, third] as CategoryDto[];
+    await insertMovementOn(person.id, (b as CategoryDto).id, "2026-11-01");
+    await insertMovementOn(person.id, (b as CategoryDto).id, "2026-10-01");
+    await insertMovementOn(person.id, (c as CategoryDto).id, "2026-11-02");
+    await insertMovementOn(person.id, (a as CategoryDto).id, "2026-08-24");
+    await insertMovementOn(person.id, (a as CategoryDto).id, "2026-08-24");
+    await insertMovementOn(person.id, (a as CategoryDto).id, "2026-08-24");
+
+    // Act
+    const { response, ids } = await mostUsed(person);
+
+    // Assert
+    expect(response.status).toBe(200);
+    expect(ids).toEqual([(b as CategoryDto).id, (c as CategoryDto).id]);
+  });
+
+  it("returns at most four, only for the requested type and only active categories", async () => {
+    // Arrange
+    const person = await newPerson();
+    const catalog = await catalogOf(person);
+    const expenses = catalog.expenseGroups.flatMap((group) => group.categories).slice(0, 6);
+    for (const [index, item] of expenses.entries()) {
+      for (let times = 0; times <= 6 - index; times += 1) {
+        await insertMovementOn(person.id, item.id, "2026-11-10");
+      }
+    }
+    await call(person, "POST", `/categories/${(expenses[0] as CategoryDto).id}/deactivate`);
+    const salary = catalog.income[0] as CategoryDto;
+    await insertMovementOn(person.id, salary.id, "2026-11-10", "income");
+
+    // Act
+    const expense = await mostUsed(person);
+    const income = await mostUsed(person, "income");
+
+    // Assert
+    expect(expense.ids).toEqual(expenses.slice(1, 5).map((item) => item.id));
+    expect(income.ids).toEqual([salary.id]);
+  });
+
+  it("returns an empty list for a user without movements", async () => {
+    // Arrange
+    const person = await newPerson();
+
+    // Act
+    const { ids } = await mostUsed(person);
+
+    // Assert
+    expect(ids).toEqual([]);
+  });
+
+  it("never counts another user's movements", async () => {
+    // Arrange
+    const owner = await newPerson();
+    const stranger = await newPerson();
+    const mine = (await catalogOf(owner)).expenseGroups.flatMap((group) => group.categories)[0];
+    await insertMovementOn(owner.id, (mine as CategoryDto).id, "2026-11-10");
+
+    // Act
+    const asOwner = await mostUsed(owner);
+    const asStranger = await mostUsed(stranger);
+
+    // Assert
+    expect(asOwner.ids).toEqual([(mine as CategoryDto).id]);
+    expect(asStranger.ids).toEqual([]);
+  });
+
+  it("answers 401 without a session and 400 for an unknown type", async () => {
+    // Arrange
+    const person = await newPerson();
+
+    // Act
+    const anonymous = await call(null, "GET", "/categories/most-used?type=expense");
+    const invalid = await call(person, "GET", "/categories/most-used?type=nope");
+
+    // Assert
+    expect(anonymous.status).toBe(401);
+    expect(invalid.status).toBe(400);
+  });
+});
+
 describe("GET /api/categories", () => {
   it("returns the seeded defaults grouped, with translation keys and no custom names", async () => {
     // Arrange
