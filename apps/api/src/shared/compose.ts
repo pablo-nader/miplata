@@ -1,4 +1,7 @@
-import { createDb } from "@miplata/db";
+import { createDb, type Database } from "@miplata/db";
+import { ACCOUNT_TYPES, MONEY_ACCOUNT_TYPES } from "@miplata/shared";
+import { drizzleAccountRepository } from "../accounts/infrastructure/drizzle-account-repository";
+import { drizzleInstitutionRepository } from "../accounts/infrastructure/drizzle-institution-repository";
 import { createApp } from "../app";
 import { drizzleCategoryRepository } from "../categories/infrastructure/drizzle-category-repository";
 import { drizzleUserProfileRepository } from "../me/infrastructure/drizzle-user-profile-repository";
@@ -16,5 +19,17 @@ export function composeApp(env: Env = parseEnv(process.env)) {
     resolveSession: sessionResolverFor(auth),
     users: drizzleUserProfileRepository(db),
     categories: drizzleCategoryRepository(db),
+    ...accountDependencies(db),
   });
+}
+
+export function accountDependencies(db: Database) {
+  return {
+    accounts: {
+      accounts: drizzleAccountRepository(db, MONEY_ACCOUNT_TYPES),
+      everyAccount: drizzleAccountRepository(db, ACCOUNT_TYPES),
+      institutions: drizzleInstitutionRepository(db),
+    },
+    people: drizzleAccountRepository(db, ["person"]),
+  };
 }

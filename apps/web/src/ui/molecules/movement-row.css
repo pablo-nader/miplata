@@ -50,3 +50,19 @@
   font-size: var(--font-size-caption);
   font-weight: 400;
 }
+
+.movement-row--link {
+  display: block;
+  padding: 0;
+}
+
+.movement-row__link {
+  display: grid;
+  grid-template-columns: var(--size-badge) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--size-touch-target);
+  padding: 9px var(--space-4);
+  color: inherit;
+  text-decoration: none;
+}

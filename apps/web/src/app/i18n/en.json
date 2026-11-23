@@ -284,6 +284,9 @@
       "investments": "Investment returns",
       "refunds": "Refunds",
       "other": "Other"
+    },
+    "account": {
+      "cash": "Cash"
     }
   },
   "categories": {
@@ -414,5 +417,86 @@
       "wallet": "Wallet",
       "trophy": "Trophy"
     }
+  },
+  "accounts": {
+    "add": "Add",
+    "addLabel": "Add account",
+    "sections": {
+      "money": "Money",
+      "cards": "Cards",
+      "people": "People",
+      "inactive": "Inactive"
+    },
+    "types": {
+      "cash": "Cash",
+      "bank": "Bank",
+      "wallet": "Wallet",
+      "credit_card": "Card",
+      "person": "Person"
+    },
+    "currencyNames": {
+      "ARS": "Pesos",
+      "USD": "Dollars"
+    },
+    "bothCurrencies": "ARS and USD",
+    "cardDays": "Closes on {{closing}} · due on {{due}}",
+    "debtNote": "total debt",
+    "owesYou": "Owes you",
+    "youOwe": "You owe",
+    "bothWays": "Balances both ways",
+    "settled": "Settled",
+    "loading": "Loading…",
+    "loadFailed": "We could not load your accounts.",
+    "retry": "Try again",
+    "emptyTitle": "No accounts yet",
+    "emptyDescription": "Add cash, a bank, a wallet, a card or a person.",
+    "form": {
+      "newTitle": "New account",
+      "editTitle": "Edit account",
+      "back": "Back to accounts",
+      "type": "Type",
+      "institution": "Bank or wallet",
+      "otherInstitution": "Other",
+      "name": "Name",
+      "nameOptional": "Name (optional)",
+      "currencies": "Currencies",
+      "openingBalance": "Opening balance",
+      "openingDebt": "Current debt",
+      "openingPerson": "Opening balance",
+      "closingDay": "Closing day",
+      "dueDay": "Due day",
+      "save": "Save account",
+      "saveChanges": "Save changes",
+      "saving": "Saving…",
+      "nameRequired": "Enter a name or pick an institution.",
+      "currencyRequired": "Pick at least one currency.",
+      "amountInvalid": "Enter a valid amount.",
+      "dayInvalid": "Enter a day between 1 and 31.",
+      "saveFailed": "We could not save the account. Try again.",
+      "currencyInUse": "You cannot remove a currency that already has movements.",
+      "notFound": "We could not find that account.",
+      "personHint": "Positive: they owe you. Negative: you owe them.",
+      "nameTooLong": "The name can have up to 60 characters."
+    },
+    "actions": {
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
+      "delete": "Delete",
+      "confirmDeactivateTitle": "Deactivate {{name}}?",
+      "confirmDeactivateBody": "It stops showing in the balance and when picking an account. Its movements are kept and you can reactivate it anytime.",
+      "confirmDeleteTitle": "Delete {{name}}?",
+      "confirmDeleteBody": "It is deleted for good. This cannot be undone.",
+      "hasMovements": "This account has movements, so it can only be deactivated.",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "failed": "We could not complete the action. Try again.",
+      "inUse": "This account already has movements: it cannot be deleted, only deactivated."
+    }
+  },
+  "balance": {
+    "loadFailed": "We could not load the balance.",
+    "currencyHeading": "{{name}} · {{amount}}",
+    "debt": "Card · debt",
+    "empty": "There are no accounts with a balance yet."
   }
 }

@@ -1,0 +1,65 @@
+.account-form {
+  display: grid;
+  gap: var(--space-2);
+  padding-bottom: var(--space-4);
+}
+
+.account-form__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.account-form__currency {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.account-form__currency-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.account-form__error {
+  margin: 0;
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.account-form__hint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--font-size-caption);
+}
+
+.account-form__submit {
+  padding: var(--space-2) var(--space-4) 0;
+}
+
+.account-form__manage {
+  display: grid;
+  gap: var(--space-2);
+  padding: 0 var(--space-4) var(--space-6);
+}
+
+.account-form__confirm {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--color-field);
+}
+
+.account-form__confirm-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-action);
+  font-weight: 800;
+}
+
+.account-form__confirm p {
+  margin: 0;
+  color: var(--color-muted);
+}

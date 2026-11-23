@@ -15,7 +15,7 @@ type BalanceProps = {
 
 type TotalProps = { label: string; amount: MoneyAmountProps };
 
-type SignageBandProps = {
+export type SignageBandProps = {
   brandName: string;
   menu: NavAction;
   balance?: BalanceProps;

@@ -1,7 +1,8 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SessionState } from "../features/auth/useSession";
+import { stubEmptyApi } from "../test/fake-api";
 import { renderApp } from "../test/render";
 import { AppRoutes } from "./AppRoutes";
 import { resources } from "./i18n";
@@ -29,9 +30,14 @@ const routes = [
   ["/menu", "menu"],
 ] as const;
 
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+
 describe("AppRoutes", () => {
   beforeEach(() => {
     state = signedIn;
+    stubEmptyApi();
   });
 
   it.each(routes)("renders %s in Spanish", (path, key) => {
