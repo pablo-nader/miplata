@@ -22,7 +22,12 @@ import { adjustStatement, updateStatementDates } from "./statements-api";
 import { useStatementData } from "./useStatementData";
 
 const CURRENCIES: Currency[] = ["ARS", "USD"];
-const DATES_FAILURES = new Set(["closing_outside_period", "due_before_closing", "invalid_date"]);
+const DATES_FAILURES = new Set([
+  "closing_outside_period",
+  "due_before_closing",
+  "invalid_date",
+  "card_without_schedule",
+]);
 const KNOWN_FAILURES = new Set([
   "bank_total_missing",
   "category_inactive",
@@ -162,6 +167,7 @@ export function StatementContainer() {
   async function adjust(current: StatementDetail, currency: Currency) {
     setBusy(currency);
     setFailure(null);
+    setDatesSaved(false);
     const result = await adjustStatement(current.id, { currency });
     setBusy(null);
     if (result.ok) {

@@ -764,6 +764,32 @@ describe("charges", () => {
     expect(await ok(response, 409)).toEqual({ error: "statement_movement" });
   });
 
+  it("tells the movements endpoint which statement a payment belongs to and hides it from others", async () => {
+    // Arrange
+    const user = await newUser();
+    const stranger = await newUser();
+    await record(user, purchase(user, { amountMinor: 200_00 }));
+    const november = await statementOf(user, "2026-11");
+    await ok(
+      await call(user.cookie, "POST", `/statements/${november.id}/payments`, {
+        fromAccountId: user.bank,
+        occurredOn: "2026-12-05",
+        arsMinor: 40_00,
+      }),
+      201,
+    );
+    const movementId = (await ok(await call(user.cookie, "GET", "/movements?type=transfer")))
+      .items[0].id;
+
+    // Act
+    const own = await ok(await call(user.cookie, "GET", `/movements/${movementId}`));
+    const foreign = await call(stranger.cookie, "GET", `/movements/${movementId}`);
+
+    // Assert
+    expect(own.statement).toMatchObject({ id: november.id, periodMonth: "2026-11" });
+    expect(foreign.status).toBe(404);
+  });
+
   it("tells the movements endpoint which statement a charge belongs to", async () => {
     // Arrange
     const user = await newUser();
