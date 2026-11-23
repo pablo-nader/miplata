@@ -59,3 +59,4 @@ What becomes easier, harder, or constrained.
 | [0030](0030-accounts-and-people-api.md) | Accounts and people API | Accepted |
 | [0031](0031-movements-api.md) | Movements API | Accepted |
 | [0032](0032-reports-api.md) | Reports API | Accepted |
+| [0033](0033-statements-api.md) | Statements API | Accepted |
