@@ -2,6 +2,7 @@ import { DESCRIPTION_MAX_LENGTH } from "@miplata/shared";
 import type { FormEvent, ReactNode } from "react";
 import { Button } from "../../ui/atoms/Button";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { MoneyField } from "../../ui/molecules/MoneyField";
 import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { SegmentedControl } from "../../ui/molecules/SegmentedControl";
@@ -93,12 +94,12 @@ export function RecurringFormScreen({
           }
         />
         <FieldGroup label={copy.amount}>
-          <Field
-            inputMode="decimal"
+          <MoneyField
             label={copy.amount}
+            currency={values.currency}
             value={values.amount}
             error={errors.amount}
-            onChange={(event) => onChange({ amount: event.target.value })}
+            onValueChange={(amount) => onChange({ amount })}
           />
           {values.amountMode === "variable" ? (
             <p className="movement-form__hint">{copy.amountHint}</p>

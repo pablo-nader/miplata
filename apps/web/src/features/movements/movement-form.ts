@@ -9,6 +9,7 @@ import {
   rateFromAmounts,
   type TransferRequest,
 } from "@miplata/shared";
+import { minorToCanonical } from "../../ui/format/money-input";
 
 export const NEW_PERSON_OPTION = "__new_person__";
 
@@ -75,7 +76,7 @@ export function emptyForm(today: string, type: FormType = "expense"): FormState 
 }
 
 export function units(minor: number): string {
-  return minor % 100 === 0 ? String(minor / 100) : (minor / 100).toFixed(2).replace(".", ",");
+  return minorToCanonical(minor);
 }
 
 export function formFromMovement(movement: Movement): FormState {

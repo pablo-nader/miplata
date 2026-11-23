@@ -9,6 +9,7 @@ import {
   type StatementDatesRequest,
   type StatementTotals,
 } from "@miplata/shared";
+import { minorToCanonical } from "../../ui/format/money-input";
 
 export type ChargeForm = {
   categoryId: string | null;
@@ -25,8 +26,7 @@ export type ChargeBuilt =
   | { ok: false; errors: Partial<Record<ChargeErrorKey, true>> };
 
 export function units(amountMinor: number): string {
-  const text = (amountMinor / 100).toFixed(2).replace(".", ",");
-  return text.endsWith(",00") ? text.slice(0, -3) : text;
+  return minorToCanonical(amountMinor);
 }
 
 export function emptyChargeForm(closingDate: string, currency: Currency = "ARS"): ChargeForm {

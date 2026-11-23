@@ -253,6 +253,7 @@ function AccountForm({ institutions, account }: AccountFormProps) {
         error: errors?.currencies ? t("accounts.form.currencyRequired") : undefined,
         rows: CURRENCY_LIST.map((currency) => ({
           key: currency,
+          currency,
           label: t(`accounts.currencyNames.${currency}`),
           enabled: form.currencies[currency].enabled,
           onToggle: (enabled) => setCurrency(currency, { enabled }),

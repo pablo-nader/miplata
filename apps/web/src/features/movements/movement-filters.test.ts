@@ -2,6 +2,7 @@ import type { CategoriesResponse } from "@miplata/shared";
 import { describe, expect, it } from "vitest";
 import { createI18n } from "../../app/i18n";
 import { makeAccount } from "../../test/fake-api";
+import { SPACE } from "../../ui/format/money";
 import {
   activeChips,
   defaultFilters,
@@ -171,8 +172,8 @@ describe("active filter chips", () => {
       "Hogar",
       "Alquiler",
       "ARS",
-      "Desde ARS 10",
-      "Hasta ARS 20",
+      `Desde $${SPACE}10`,
+      `Hasta $${SPACE}20`,
     ]);
     expect(chips[1]?.clear).toEqual({ accountId: "" });
   });

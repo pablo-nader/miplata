@@ -1,3 +1,4 @@
+import type { Currency } from "@miplata/shared";
 import type { FormEvent } from "react";
 import { Button } from "../../ui/atoms/Button";
 import { FilterChip } from "../../ui/atoms/Chip";
@@ -8,7 +9,8 @@ import {
   type PickerSection,
 } from "../../ui/molecules/CategoryPicker";
 import { ConfirmPanel } from "../../ui/molecules/ConfirmPanel";
-import { Field, FieldGroup } from "../../ui/molecules/Field";
+import { FieldGroup } from "../../ui/molecules/Field";
+import { MoneyField } from "../../ui/molecules/MoneyField";
 import { OfflineNote } from "../../ui/molecules/OfflineNote";
 import { ScreenHeader } from "../../ui/molecules/ScreenHeader";
 import { SegmentedControl, type SegmentOption } from "../../ui/molecules/SegmentedControl";
@@ -53,6 +55,7 @@ export type BudgetFormScreenProps = {
   limit: {
     label: string;
     value: string;
+    currency: Currency;
     onChange: (value: string) => void;
     error?: string | undefined;
   };
@@ -138,11 +141,11 @@ export function BudgetFormScreen({
           <SectionLabel as="h2">{currency.label}</SectionLabel>
           <Choices label={currency.label} options={currency.options} />
         </section>
-        <Field
+        <MoneyField
           label={limit.label}
           value={limit.value}
-          inputMode="decimal"
-          onChange={(event) => limit.onChange(event.target.value)}
+          currency={limit.currency}
+          onValueChange={limit.onChange}
           {...(limit.error ? { error: limit.error } : {})}
         />
         {errorMessage ? (

@@ -1,0 +1,18 @@
+.money-input {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  min-width: 0;
+  width: 100%;
+}
+
+.money-input__symbol {
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.money-input__field {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+}

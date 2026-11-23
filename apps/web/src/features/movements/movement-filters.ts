@@ -1,6 +1,7 @@
 import type { Account, CategoriesResponse, Currency } from "@miplata/shared";
 import { categoryLabel } from "@miplata/shared";
 import type { TFunction } from "i18next";
+import { formatMoney, localeForLanguage } from "../../ui/format/money";
 import { displayName } from "../accounts/account-display";
 import { allCategories } from "../categories/catalog";
 import type { UiFilters } from "./MovementFiltersPanel";
@@ -84,6 +85,11 @@ function periodLabel(ui: UiFilters, locale: string): string {
   return `${ui.from || "…"} – ${ui.to || "…"}`;
 }
 
+function chipAmount(text: string, currency: Currency, locale: string): string {
+  const minor = parseAmountMinor(text, currency) ?? 0;
+  return formatMoney(minor / 100, currency, localeForLanguage(locale));
+}
+
 export function activeChips(ui: UiFilters, ctx: ChipContext): ActiveChip[] {
   const { t, locale, accounts, catalog } = ctx;
   const chips: ActiveChip[] = [];
@@ -128,14 +134,14 @@ export function activeChips(ui: UiFilters, ctx: ChipContext): ActiveChip[] {
   if (ui.min.trim() && parseAmountMinor(ui.min, currency) !== null) {
     chips.push({
       key: "min",
-      label: t("movements.filters.minChip", { amount: ui.min.trim(), currency }),
+      label: t("movements.filters.minChip", { amount: chipAmount(ui.min, currency, locale) }),
       clear: { min: "" },
     });
   }
   if (ui.max.trim() && parseAmountMinor(ui.max, currency) !== null) {
     chips.push({
       key: "max",
-      label: t("movements.filters.maxChip", { amount: ui.max.trim(), currency }),
+      label: t("movements.filters.maxChip", { amount: chipAmount(ui.max, currency, locale) }),
       clear: { max: "" },
     });
   }

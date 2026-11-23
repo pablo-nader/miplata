@@ -161,7 +161,7 @@ describe("formFromRecurring", () => {
 
     // Assert
     expect(form).toMatchObject({
-      amount: "415,50",
+      amount: "415.50",
       endsOn: "2027-01-01",
       description: "",
       dayOfMonth: "5",

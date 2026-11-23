@@ -1,7 +1,8 @@
-import { DESCRIPTION_MAX_LENGTH } from "@miplata/shared";
+import { type Currency, DESCRIPTION_MAX_LENGTH } from "@miplata/shared";
 import type { FormEvent } from "react";
 import { Button } from "../../ui/atoms/Button";
 import { FilterChip } from "../../ui/atoms/Chip";
+import { MoneyInput } from "../../ui/atoms/MoneyInput";
 import { ConfirmPanel } from "../../ui/molecules/ConfirmPanel";
 import { Field, FieldGroup } from "../../ui/molecules/Field";
 import { OfflineNote } from "../../ui/molecules/OfflineNote";
@@ -23,7 +24,7 @@ export type ChargeFormScreenProps = {
   currency: {
     label: string;
     options: { value: string; label: string }[];
-    value: string;
+    value: Currency;
     onChange: (value: string) => void;
   };
   amount: {
@@ -77,14 +78,13 @@ export function ChargeFormScreen(props: ChargeFormScreenProps) {
           </fieldset>
         ) : null}
         <div className="statement-form__amount">
-          <input
+          <MoneyInput
             className="statement-form__amount-input"
-            inputMode="decimal"
             aria-label={props.amount.label}
             aria-invalid={props.amount.error ? true : undefined}
-            placeholder="0"
+            currency={props.currency.value}
             value={props.amount.value}
-            onChange={(event) => props.amount.onChange(event.target.value)}
+            onValueChange={props.amount.onChange}
           />
           {props.amount.error ? (
             <p className="statement-form__error" role="alert">

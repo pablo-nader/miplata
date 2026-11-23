@@ -10,6 +10,7 @@ import {
   type UpdateAccountRequest,
   type UpdatePersonRequest,
 } from "@miplata/shared";
+import { minorToCanonical } from "../../ui/format/money-input";
 
 export const CURRENCY_LIST: readonly Currency[] = ["ARS", "USD"];
 
@@ -60,7 +61,7 @@ export function emptyForm(type: AccountType = "bank"): FormState {
 
 function amountText(openingMinor: number, type: AccountType): string {
   const entered = toEntered(openingMinor, type);
-  return entered === 0 ? "" : String(entered / 100);
+  return entered === 0 ? "" : minorToCanonical(entered);
 }
 
 export function formFromAccount(account: Account, name: string): FormState {

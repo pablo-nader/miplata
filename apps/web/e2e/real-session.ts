@@ -9,14 +9,14 @@ const databaseUrl =
 
 export async function signInAsNewUser(
   context: BrowserContext,
-  options: { freshTours?: boolean } = {},
+  options: { freshTours?: boolean; locale?: "es" | "en" } = {},
 ) {
   const client = new pg.Client({ connectionString: databaseUrl });
   await client.connect();
   try {
     const created = await client.query(
-      'insert into "user" (name, email, email_verified) values ($1, $2, true) returning id',
-      ["E2E Person", `${randomUUID()}@example.com`],
+      'insert into "user" (name, email, email_verified, locale) values ($1, $2, true, $3) returning id',
+      ["E2E Person", `${randomUUID()}@example.com`, options.locale ?? "es"],
     );
     const userId = created.rows[0].id as string;
     if (!options.freshTours) {

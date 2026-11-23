@@ -1,5 +1,7 @@
+import type { Currency } from "@miplata/shared";
 import { Button } from "../../ui/atoms/Button";
 import { Field } from "../../ui/molecules/Field";
+import { MoneyField } from "../../ui/molecules/MoneyField";
 import { SelectField, type SelectOption } from "../../ui/molecules/SelectField";
 import "./to-pay-screen.css";
 
@@ -17,6 +19,7 @@ export type AdjustCopy = {
 
 export type AdjustPanelProps = {
   copy: AdjustCopy;
+  currency: Currency;
   values: AdjustValues;
   accounts: SelectOption[];
   errors: { amount?: string; date?: string };
@@ -29,6 +32,7 @@ export type AdjustPanelProps = {
 
 export function AdjustPanel({
   copy,
+  currency,
   values,
   accounts,
   errors,
@@ -40,12 +44,12 @@ export function AdjustPanel({
 }: AdjustPanelProps) {
   return (
     <section className="adjust-panel" aria-label={copy.title}>
-      <Field
-        inputMode="decimal"
+      <MoneyField
         label={copy.amount}
         value={values.amount}
+        currency={currency}
         error={errors.amount}
-        onChange={(event) => onChange({ amount: event.target.value })}
+        onValueChange={(amount) => onChange({ amount })}
       />
       <SelectField
         label={copy.account}

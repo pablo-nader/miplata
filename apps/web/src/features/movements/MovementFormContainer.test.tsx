@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createI18n } from "../../app/i18n";
 import { makeAccount, stubApi } from "../../test/fake-api";
 import { lookupHandlers, makeMovement } from "../../test/fake-movements";
+import { SPACE } from "../../ui/format/money";
 import { MovementFormContainer } from "./MovementFormContainer";
 
 beforeEach(() => {
@@ -251,7 +252,7 @@ describe("recording a transfer", () => {
     await userEvent.type(screen.getByLabelText("Descripción"), "Compra de dólares");
 
     // Assert
-    expect(screen.getByRole("status").textContent).toContain("Cotización $ 1.230 por dólar");
+    expect(screen.getByRole("status").textContent).toContain(`Cotización $${SPACE}1.230 por dólar`);
     expect(screen.getByText(/No cuenta como gasto ni ingreso/)).toBeDefined();
     await userEvent.click(screen.getByRole("button", { name: "Guardar transferencia" }));
     await screen.findByText("home screen");

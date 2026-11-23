@@ -19,8 +19,8 @@ describe("prefilling a movement from the address", () => {
       toAccountId: null,
       fromCurrency: "USD",
       toCurrency: "USD",
-      fromAmount: "150,50",
-      toAmount: "150,50",
+      fromAmount: "150.50",
+      toAmount: "150.50",
     });
   });
 

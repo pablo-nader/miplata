@@ -13,8 +13,8 @@ import {
 describe("units", () => {
   it.each([
     [150_000, "1500"],
-    [150_050, "1500,50"],
-    [150_005, "1500,05"],
+    [150_050, "1500.50"],
+    [150_005, "1500.05"],
     [0, "0"],
   ])("writes %d minor units as %j", (minor, expected) => {
     // Arrange
@@ -92,7 +92,7 @@ describe("buildCharge", () => {
     expect(form).toEqual({
       categoryId: "interest",
       currency: "USD",
-      amount: "12,50",
+      amount: "12.50",
       description: "",
       date: "2026-11-20",
     });

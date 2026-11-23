@@ -179,7 +179,7 @@ describe("creating an account", () => {
 
     // Act
     await userEvent.click(screen.getByRole("button", { name: "Galicia" }));
-    await userEvent.type(screen.getByLabelText("Saldo inicial · ARS"), "abc");
+    await userEvent.type(screen.getByLabelText("Saldo inicial · ARS"), "-");
     await userEvent.click(screen.getByRole("button", { name: "Guardar cuenta" }));
 
     // Assert
