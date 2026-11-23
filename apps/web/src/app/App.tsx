@@ -1,5 +1,6 @@
 import { I18nextProvider } from "react-i18next";
-import { HomeContainer } from "../features/home/HomeContainer";
+import { BrowserRouter } from "react-router-dom";
+import { AppRoutes } from "./AppRoutes";
 import { createI18n, detectLanguage, syncDocumentLanguage } from "./i18n";
 
 const language = detectLanguage(navigator.languages);
@@ -9,7 +10,9 @@ syncDocumentLanguage(language);
 export function App() {
   return (
     <I18nextProvider i18n={i18n}>
-      <HomeContainer />
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
     </I18nextProvider>
   );
 }

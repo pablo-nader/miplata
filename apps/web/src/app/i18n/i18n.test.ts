@@ -62,15 +62,16 @@ describe("detectLanguage", () => {
 });
 
 describe("createI18n", () => {
-  it("translates with interpolation in the selected language", () => {
+  it("translates keys in the selected language", () => {
     // Arrange
-    const instance = createI18n("en");
+    const english = createI18n("en");
+    const spanish = createI18n("es");
 
     // Act
-    const text = instance.t("health.version", { version: "1.0.0" });
+    const texts = [english.t("nav.home"), spanish.t("nav.home")];
 
     // Assert
-    expect(text).toBe("Version 1.0.0");
+    expect(texts).toEqual(["Home", "Inicio"]);
   });
 });
 

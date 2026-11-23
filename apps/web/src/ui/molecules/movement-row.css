@@ -1,0 +1,52 @@
+.movement-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.movement-row {
+  display: grid;
+  grid-template-columns: var(--size-badge) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px var(--space-4);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.movement-row__text {
+  display: grid;
+  min-width: 0;
+}
+
+.movement-row__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  font-weight: 600;
+}
+
+.movement-row__title-text,
+.movement-row__caption {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.movement-row__caption {
+  color: var(--color-muted);
+  font-size: var(--font-size-caption);
+  line-height: 16px;
+}
+
+.movement-row__amount {
+  display: grid;
+  justify-items: end;
+  font-weight: 700;
+}
+
+.movement-row__note {
+  color: var(--color-muted);
+  font-size: var(--font-size-caption);
+  font-weight: 400;
+}

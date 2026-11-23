@@ -1,0 +1,81 @@
+.signage-band {
+  display: grid;
+  gap: 10px;
+  padding: 18px var(--space-4) var(--space-4);
+  padding-top: calc(18px + env(safe-area-inset-top, 0px));
+  padding-left: max(var(--space-4), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--space-4), env(safe-area-inset-right, 0px));
+  background: var(--color-band);
+  color: var(--color-on-band);
+}
+
+.signage-band__top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.signage-band__brand {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-title);
+  font-weight: 800;
+  line-height: 24px;
+}
+
+.signage-band__menu {
+  display: grid;
+  place-items: center;
+  width: var(--size-touch-target);
+  height: var(--size-touch-target);
+  margin-left: auto;
+  border-radius: var(--radius-round);
+  color: inherit;
+}
+
+.signage-band__menu svg {
+  width: 20px;
+  height: 20px;
+}
+
+.signage-band__balance {
+  display: grid;
+  gap: 1px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.signage-band__balance-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-caption);
+}
+
+.signage-band__balance-label svg {
+  width: 12px;
+  height: 12px;
+}
+
+.signage-band__balance-amount {
+  font-family: var(--font-display);
+  font-size: var(--font-size-balance);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 37px;
+}
+
+.signage-band__dollars {
+  font-size: var(--font-size-caption);
+}
+
+.signage-band__rules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.signage-band__total {
+  display: block;
+  font-size: var(--font-size-body);
+}

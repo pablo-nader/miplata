@@ -1,39 +1,20 @@
-import markUrl from "@brand/mark-inverse.svg";
-
-export type StatusKind = "loading" | "ok" | "unavailable";
+import { Wallet } from "lucide-react";
+import { EmptyState } from "../../ui/molecules/EmptyState";
+import type { NavAction } from "../../ui/organisms/nav";
+import { SignageBand } from "../../ui/organisms/SignageBand";
 
 type HomeScreenProps = {
-  appName: string;
-  statusLabel: string;
-  statusText: string;
-  statusKind: StatusKind;
-  versionText: string | null;
+  brandName: string;
+  menu: NavAction;
+  emptyTitle: string;
+  emptyDescription: string;
 };
 
-export function HomeScreen({
-  appName,
-  statusLabel,
-  statusText,
-  statusKind,
-  versionText,
-}: HomeScreenProps) {
+export function HomeScreen({ brandName, menu, emptyTitle, emptyDescription }: HomeScreenProps) {
   return (
-    <main className="home">
-      <header className="home__band">
-        <img className="home__mark" src={markUrl} alt="" width={48} height={48} />
-        <h1 className="home__name">{appName}</h1>
-      </header>
-      <div className="home__rules" aria-hidden="true">
-        <span className="home__rule home__rule--income" />
-        <span className="home__rule home__rule--expense" />
-      </div>
-      <section className="home__status" aria-label={statusLabel}>
-        <span className={`home__dot home__dot--${statusKind}`} aria-hidden="true" />
-        <p className="home__status-text" role="status">
-          {statusText}
-        </p>
-        {versionText ? <p className="home__version">{versionText}</p> : null}
-      </section>
-    </main>
+    <>
+      <SignageBand brandName={brandName} menu={menu} />
+      <EmptyState icon={<Wallet />} title={emptyTitle} description={emptyDescription} />
+    </>
   );
 }

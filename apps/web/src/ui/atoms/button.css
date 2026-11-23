@@ -1,0 +1,46 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: var(--size-touch-target);
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-control);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--motion-press) ease-out;
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.button svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.button--main {
+  background: var(--color-action);
+  color: var(--color-on-action);
+  font-family: var(--font-display);
+  font-size: var(--font-size-action);
+  font-weight: 800;
+  line-height: 20px;
+}
+
+.button--ghost {
+  background: var(--color-field);
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--font-size-body);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
