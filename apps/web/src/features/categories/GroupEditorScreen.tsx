@@ -8,6 +8,7 @@ import type { NavAction } from "../../ui/organisms/nav";
 import "../placeholder/placeholder-screen.css";
 import "./category-editor-screen.css";
 import type { ConfirmView } from "./CategoryEditorScreen";
+import { useRestoreFocus } from "./useRestoreFocus";
 
 type GroupEditorScreenProps = {
   title: string;
@@ -33,6 +34,8 @@ export function GroupEditorScreen({
   remove,
   confirm,
 }: GroupEditorScreenProps) {
+  const heading = useRestoreFocus(confirm !== null);
+
   function submit(event: FormEvent) {
     event.preventDefault();
     save.onSubmit();
@@ -44,9 +47,11 @@ export function GroupEditorScreen({
         <Link className="placeholder-screen__back" to={back.to} aria-label={back.label}>
           <ArrowLeft aria-hidden="true" />
         </Link>
-        <h1 className="placeholder-screen__title">{title}</h1>
+        <h1 ref={heading} tabIndex={-1} className="placeholder-screen__title">
+          {title}
+        </h1>
       </header>
-      <form className="category-editor" onSubmit={submit} noValidate>
+      <form className="category-editor" onSubmit={submit} noValidate hidden={confirm !== null}>
         <div className="category-editor__actions">
           <Field
             label={name.label}
@@ -70,7 +75,7 @@ export function GroupEditorScreen({
       {confirm ? <ConfirmPanel {...confirm} /> : null}
       {remove && !confirm ? (
         <div className="category-editor__secondary">
-          <Button variant="ghost" onClick={remove.onClick}>
+          <Button variant="ghost" disabled={save.busy} onClick={remove.onClick}>
             {remove.label}
           </Button>
         </div>

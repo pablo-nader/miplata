@@ -35,6 +35,9 @@ export function ConfirmPanel({
       role="alertdialog"
       aria-labelledby={titleId}
       tabIndex={-1}
+      onKeyDown={(event) => {
+        if (event.key === "Escape" && !busy) onCancel();
+      }}
     >
       <h2 id={titleId} className="confirm-panel__title">
         {title}

@@ -10,10 +10,13 @@ export type CatalogState =
 export function useCategories() {
   const [state, setState] = useState<CatalogState>({ status: "loading" });
   const mounted = useRef(true);
+  const latest = useRef(0);
 
   const load = useCallback(async () => {
+    latest.current += 1;
+    const ticket = latest.current;
     const result = await categoriesApi.list();
-    if (mounted.current) {
+    if (mounted.current && ticket === latest.current) {
       setState(result.ok ? { status: "ready", catalog: result.value } : { status: "error" });
     }
   }, []);

@@ -1,6 +1,6 @@
 import type { CategoryDto } from "@miplata/shared";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 import { CategoriesScreen, type CategoryRowView } from "./CategoriesScreen";
 import { colorOf, useLabel } from "./catalog";
 import { useCategories } from "./useCategories";
@@ -9,7 +9,8 @@ export function CategoriesContainer() {
   const { t } = useTranslation();
   const label = useLabel();
   const { state, reload } = useCategories();
-  const [tab, setTab] = useState<"expense" | "income">("expense");
+  const [search, setSearch] = useSearchParams();
+  const tab = search.get("tab") === "income" ? "income" : "expense";
 
   const row = (item: CategoryDto): CategoryRowView => ({
     id: item.id,
@@ -76,7 +77,8 @@ export function CategoriesContainer() {
           { value: "income", label: t("categories.tabs.income") },
         ],
         value: tab,
-        onChange: (value) => setTab(value === "income" ? "income" : "expense"),
+        onChange: (value) =>
+          setSearch(value === "income" ? { tab: "income" } : {}, { replace: true }),
       }}
       body={body}
     />

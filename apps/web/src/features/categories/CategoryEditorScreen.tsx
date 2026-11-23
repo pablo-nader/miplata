@@ -11,6 +11,7 @@ import { type IconOption, IconPicker } from "../../ui/molecules/IconPicker";
 import type { NavAction } from "../../ui/organisms/nav";
 import "../placeholder/placeholder-screen.css";
 import "./category-editor-screen.css";
+import { useRestoreFocus } from "./useRestoreFocus";
 
 export type ConfirmView = {
   title: string;
@@ -19,6 +20,7 @@ export type ConfirmView = {
   cancelLabel: string;
   onConfirm: () => void;
   onCancel: () => void;
+  busy: boolean;
 };
 
 type CategoryEditorScreenProps = {
@@ -70,6 +72,8 @@ export function CategoryEditorScreen({
   actions,
   confirm,
 }: CategoryEditorScreenProps) {
+  const heading = useRestoreFocus(confirm !== null);
+
   function submit(event: FormEvent) {
     event.preventDefault();
     save.onSubmit();
@@ -81,9 +85,11 @@ export function CategoryEditorScreen({
         <Link className="placeholder-screen__back" to={back.to} aria-label={back.label}>
           <ArrowLeft aria-hidden="true" />
         </Link>
-        <h1 className="placeholder-screen__title">{title}</h1>
+        <h1 ref={heading} tabIndex={-1} className="placeholder-screen__title">
+          {title}
+        </h1>
       </header>
-      <form className="category-editor" onSubmit={submit} noValidate>
+      <form className="category-editor" onSubmit={submit} noValidate hidden={confirm !== null}>
         <div className="category-editor__name">
           <CategoryBadge
             name={preview.name}
@@ -145,7 +151,12 @@ export function CategoryEditorScreen({
       {actions.length > 0 && !confirm ? (
         <div className="category-editor__secondary">
           {actions.map((action) => (
-            <Button key={action.label} variant="ghost" onClick={action.onClick}>
+            <Button
+              key={action.label}
+              variant="ghost"
+              disabled={save.busy}
+              onClick={action.onClick}
+            >
               {action.label}
             </Button>
           ))}

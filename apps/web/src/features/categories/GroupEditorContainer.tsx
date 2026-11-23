@@ -89,6 +89,7 @@ function GroupEditorForm({ group }: FormProps) {
               cancelLabel: t("categories.confirm.cancel"),
               onConfirm: () => void finish(categoriesApi.removeGroup(group.id)),
               onCancel: () => setConfirming(false),
+              busy,
             }
           : null
       }

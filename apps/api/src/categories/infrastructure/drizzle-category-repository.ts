@@ -155,10 +155,22 @@ export function drizzleCategoryRepository(db: Database): CategoryRepository {
       ) {
         return "name_taken";
       }
+      const moved =
+        patch.groupId === undefined
+          ? undefined
+          : nextSortOrder(
+              (
+                await db
+                  .select({ sortOrder: category.sortOrder })
+                  .from(category)
+                  .where(and(eq(category.userId, userId), eq(category.groupId, patch.groupId)))
+              ).map((item) => item.sortOrder),
+            );
       try {
         const [row] = await db
           .update(category)
           .set({
+            ...(moved !== undefined ? { sortOrder: moved } : {}),
             ...(patch.name !== undefined ? { name: patch.name, nameKey: null } : {}),
             ...(patch.icon !== undefined ? { icon: patch.icon } : {}),
             ...(patch.color !== undefined ? { color: patch.color } : {}),

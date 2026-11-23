@@ -117,6 +117,20 @@ describe("categories screen", () => {
     expect(backend.categories.find((item) => item.name === "Mi alquiler")?.nameKey).toBeNull();
   });
 
+  it("opens on the income tab when asked to", async () => {
+    // Arrange
+    renderAt("/categories?tab=income");
+
+    // Act
+    const salary = await screen.findByRole("link", { name: "Sueldo" });
+
+    // Assert
+    expect(salary).toBeDefined();
+    expect((screen.getByRole("radio", { name: "Ingresos" }) as HTMLInputElement).checked).toBe(
+      true,
+    );
+  });
+
   it("marks inactive categories", async () => {
     // Arrange
     const target = backend.categories.find((item) => item.nameKey === "defaults.category.rent");
@@ -308,6 +322,37 @@ describe("editing a category", () => {
     // Assert
     expect(await screen.findByRole("heading", { name: "Categorías" })).toBeDefined();
     expect(requestsTo("PATCH")).toHaveLength(0);
+  });
+
+  it("returns to the income tab after saving an income category", async () => {
+    // Arrange
+    renderAt("/categories?tab=income");
+    await userEvent.click(await screen.findByRole("link", { name: "Sueldo" }));
+    await userEvent.click(await screen.findByRole("button", { name: "Color 2" }));
+
+    // Act
+    await userEvent.click(screen.getByRole("button", { name: "Guardar" }));
+
+    // Assert
+    expect(await screen.findByRole("link", { name: "Sueldo" })).toBeDefined();
+    expect((screen.getByRole("radio", { name: "Ingresos" }) as HTMLInputElement).checked).toBe(
+      true,
+    );
+  });
+
+  it("hides the form while a confirmation is open and brings focus back on cancel", async () => {
+    // Arrange
+    renderAt("/categories");
+    await userEvent.click(await screen.findByRole("link", { name: "Alquiler" }));
+    await userEvent.click(await screen.findByRole("button", { name: "Eliminar" }));
+    const hidden = screen.getByLabelText("Nombre").closest("form")?.hidden;
+
+    // Act
+    await userEvent.click(screen.getByRole("button", { name: "Cancelar" }));
+
+    // Assert
+    expect(hidden).toBe(true);
+    expect(document.activeElement).toBe(screen.getByRole("heading", { name: "Editar categoría" }));
   });
 
   it("explains when the category no longer exists", async () => {

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { CategoryPicker, type PickerItem, type PickerSection } from "./CategoryPicker";
@@ -107,6 +107,23 @@ describe("CategoryPicker", () => {
     expect(hasEmptySection).toBe(false);
     expect(onSelect).toHaveBeenCalledWith("gym");
     expect(screen.getByRole("button", { name: "All" }).getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("keeps keyboard focus on the toggle when expanding and collapsing", async () => {
+    // Arrange
+    renderPicker();
+
+    // Act
+    await userEvent.click(screen.getByRole("button", { name: "All" }));
+    await waitFor(() =>
+      expect(document.activeElement).toBe(screen.getByRole("button", { name: "Fewer" })),
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Fewer" }));
+
+    // Assert
+    await waitFor(() =>
+      expect(document.activeElement).toBe(screen.getByRole("button", { name: "All" })),
+    );
   });
 
   it("shows the first letter when a category has no icon", () => {
@@ -222,6 +239,27 @@ describe("ConfirmPanel", () => {
     // Assert
     expect(focused).toBe(panel);
     expect(onConfirm).toHaveBeenCalledOnce();
+    expect(onCancel).toHaveBeenCalledOnce();
+  });
+
+  it("cancels with Escape unless busy", async () => {
+    // Arrange
+    const onCancel = vi.fn();
+    render(
+      <ConfirmPanel
+        title="t"
+        body="b"
+        confirmLabel="Confirm"
+        cancelLabel="Cancel"
+        onConfirm={() => {}}
+        onCancel={onCancel}
+      />,
+    );
+
+    // Act
+    await userEvent.keyboard("{Escape}");
+
+    // Assert
     expect(onCancel).toHaveBeenCalledOnce();
   });
 
