@@ -52,6 +52,7 @@ export function MenuContainer() {
       toPay={{ to: "/to-pay", label: t("menu.toPay") }}
       recurring={{ to: "/recurring", label: t("menu.recurring") }}
       categories={{ to: "/categories", label: t("menu.categories") }}
+      budgets={{ to: "/budgets", label: t("menu.budgets") }}
       language={{
         label: t("menu.language"),
         options: [

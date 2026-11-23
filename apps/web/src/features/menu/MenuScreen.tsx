@@ -1,4 +1,13 @@
-import { ArrowLeft, ChevronRight, Clock, Languages, LogOut, Repeat, Tags } from "lucide-react";
+import {
+  ArrowLeft,
+  ChevronRight,
+  Clock,
+  Languages,
+  LogOut,
+  Repeat,
+  Tags,
+  Target,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../../ui/atoms/Button";
 import { SegmentedControl, type SegmentOption } from "../../ui/molecules/SegmentedControl";
@@ -13,6 +22,7 @@ type MenuScreenProps = {
   toPay: NavAction;
   recurring: NavAction;
   categories: NavAction;
+  budgets: NavAction;
   language: {
     label: string;
     options: readonly SegmentOption[];
@@ -30,6 +40,7 @@ export function MenuScreen({
   toPay,
   recurring,
   categories,
+  budgets,
   language,
   errorMessage,
   signOut,
@@ -49,6 +60,7 @@ export function MenuScreen({
             [toPay, Clock],
             [recurring, Repeat],
             [categories, Tags],
+            [budgets, Target],
           ] as const
         ).map(([action, Icon]) => (
           <li key={action.to} className="menu-screen__row">
